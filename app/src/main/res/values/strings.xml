@@ -1,0 +1,88 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="it">
+    <string name="app_name">JustInTrain Orari Trenitalia</string>
+    <string name="copy_right">Copyrights © %1$d</string>
+
+    <string name="changelog_header_version">"Versione "</string>
+    <string name="changelog_row_prefix_bug">[b]Bug:[/b]</string>
+    <string name="changelog_row_prefix_improvement">[b]Nuovo:[/b]</string>
+
+    <!-- Favourites Journey Activity -->
+
+
+    <string name="btn_search">Cerca</string>
+    <string name="hint_departure">Partenza</string>
+    <string name="hint_arrival">Arrivo</string>
+    <string name="title_departure_time">Ora partenza</string>
+    <string name="platform_title">Binario</string>
+    <string name="lasting_time_title">Durata</string>
+    <string name="delay">ritardo</string>
+    <string name="changesList">cambio</string>
+    <string name="change_title">Cambio</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="action_refresh">AGGIORNA</string>
+    <string name="action_end">TERMINA</string>
+    <string name="hint_select"><u>Seleziona</u></string>
+    <string name="hint_time">Ora</string>
+    <string name="hint_date">Data</string>
+
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
+    <string name="title_favourite_journeys">Tratte Preferite</string>
+    <string name="subtitle_favourite_journeys">Scorri a destra o sinistra per i dettagli</string>
+    <string name="btn_favourite_journeys">Cerca e aggiungi una tratta ai Preferiti!</string>
+    <string name="notification">Notifica</string>
+    <string name="minus_hour">-1 h</string>
+    <string name="plus_hour">+1 h</string>
+    <string name="minus_day">-1 gg</string>
+    <string name="plus_day">+1 gg</string>
+    <string name="search">Cerca</string>
+
+    <string name="app_id">ca-app-pub-8963908741443055~4285788324</string>
+    <string name="banner_favourites_id">ca-app-pub-8963908741443055/5762521525</string>
+    <string name="banner_test_favourites_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <string name="banner_results_id">ca-app-pub-8963908741443055/2455801525</string>
+    <string name="banner_test_results_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <string name="banner_details_id">ca-app-pub-8963908741443055/3932534720</string>
+    <string name="banner_test_details_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <string name="static_shortcut_disabled_message">Non ancora disponibile</string>
+    <string name="static_shortcut_long_label">Cerca</string>
+    <string name="static_shortcut_short_label">Cerca</string>
+    <string name="tut1_title1">Percorri sempre la stessa tratta?</string>
+    <string name="tut1_title2">Aggiungila ai Preferiti!</string>
+    <string name="tut2_title1">Cercala con uno swipe</string>
+    <string name="tut3_title1">Rimani informato sul tuo treno</string>
+    <string name="lbl_in_station">IN STAZIONE</string>
+    <string name="fermata_straordinaria">Fermata Straordinaria</string>
+    <string name="p">P</string>
+    <string name="a">A</string>
+    <string name="visto_a">Visto a</string>
+    <string name="a2">a</string>
+    <string name="da">Da</string>
+
+    <string name="about_page_description" translatable="false">Descrizione</string>
+    <string name="about_contact_us">Comunica feedback e suggerimenti</string>
+    <string name="about_instagram">Instagram</string>
+    <string name="about_facebook">Facebook</string>
+    <string name="about_play_store">Vota sul Play Store!</string>
+    <string name="about_youtube">Youtube</string>
+    <string name="about_twitter">Twitter</string>
+    <string name="about_github">GitHub</string>
+    <string name="about_website">Sito Web</string>
+    <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '    -->
+    <string name="changelog">• <b>WOW!</b> Ora puoi aggiungere fino a 3 treni preferiti per ciascuna direzione di una tratta! Usali per i treni che prendi più spesso, in questo modo avrai un\'esperienza ancora più rapida!\n\n• <b>Bug fix</b> Quando c\'erano dei cambi risultava impossibile condividere il treno. Ora non più!\n\n
+    </string>
+    <string name="play_store_native_url">market://details?id=</string>
+    <string name="play_store_web_url">https://play.google.com/store/apps/details?id=</string>
+    <string name="font_path_bold">fonts/rooneysans-bold.ttf</string>
+    <string name="font_path_standard">fonts/rooneysans-light.ttf</string>
+    <string name="font_path_standard_italic">fonts/rooneysans-light-italic.ttf</string>
+    <string name="font_path_numbers_standard">fonts/proximanovasoft-regular.ttf</string>
+    <string name="font_path_numbers_bold">fonts/proximanovasoft-bold.ttf</string>
+</resources>
+        <!--•
+        <b></b>\n\n
+        -->

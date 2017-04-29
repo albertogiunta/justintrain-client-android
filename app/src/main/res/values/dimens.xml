@@ -1,0 +1,91 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <!--<dimen name="activity_horizontal_margin">16dp</dimen>-->
+    <!--<dimen name="activity_vertical_margin">16dp</dimen>-->
+
+    <!-- MISCELLANEOUS -->
+    <dimen name="activity_horizontal_margin">0dp</dimen>
+    <dimen name="activity_vertical_margin">0dp</dimen>
+    <dimen name="card_margin_horizontal">-3dp</dimen>
+
+
+    <!-- AUTOCOMPLETE LIST -->
+
+    <!-- SEARCH -->
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="iatv_station_width">270dp</dimen>
+
+    <dimen name="text_size_bigger">32sp</dimen>
+    <dimen name="text_size_big_plus">28sp</dimen>
+    <dimen name="text_size_big">24sp</dimen>
+    <dimen name="text_size_default_plus">20sp</dimen>
+    <dimen name="text_size_default">18sp</dimen>
+    <dimen name="text_size_default_minus">16sp</dimen>
+    <dimen name="text_size_smaller">14sp</dimen>
+    <dimen name="text_size_even_smaller">11sp</dimen>
+
+    <dimen name="btn_clear_tf_side">24dp</dimen>
+    <dimen name="btn_swap_stations_side">48dp</dimen>
+    <dimen name="btn_clear_station_tf_margin">10dp</dimen>
+    <dimen name="btn_time_picker_padding">12dp</dimen>
+
+    <dimen name="basic_card_elevation">4dp</dimen>
+    <dimen name="card_corner_radius">4dp</dimen>
+    <dimen name="journey_item_elevation">2dp</dimen>
+
+    <dimen name="divider">1dp</dimen>
+
+    <dimen name="ic_small">12dp</dimen>
+    <dimen name="ic_default">16dp</dimen>
+    <dimen name="ic_big">24dp</dimen>
+
+    <!--TEXT SIZES-->
+    <dimen name="elevation_smaller">2dp</dimen>
+    <dimen name="elevation_small">3dp</dimen>
+    <dimen name="elevation_default">5dp</dimen>
+    <dimen name="elevation_big">7dp</dimen>
+    <dimen name="radius_default">5dp</dimen>
+    <dimen name="radius_big">10dp</dimen>
+
+    <!--HEIGTHS-->
+    <dimen name="item_height_bigger">75dp</dimen>
+    <dimen name="item_height_big">70dp</dimen>
+    <dimen name="item_height_default">60dp</dimen>
+    <dimen name="item_height_small">50dp</dimen>
+    <dimen name="item_height_smaller">40dp</dimen>
+    <dimen name="item_height_very_small">36dp</dimen>
+
+    <dimen name="item_autocomplete_height">@dimen/item_height_default</dimen>
+    <dimen name="btn_height_default">@dimen/item_height_small</dimen>
+    <dimen name="btn_height_big">@dimen/item_height_big</dimen>
+    <dimen name="thin_card_height">@dimen/item_height_default</dimen>
+    <dimen name="item_load_more_height">@dimen/item_height_default</dimen>
+    <dimen name="item_suggestion_height">@dimen/item_height_bigger</dimen>
+    <dimen name="item_favourite_journey">@dimen/item_height_big</dimen>
+    <dimen name="item_journey_details">@dimen/item_height_smaller</dimen>
+
+    <!--MARGINS-->
+    <dimen name="margin_very_big">40dp</dimen>
+    <dimen name="margin_bigger">36dp</dimen>
+    <dimen name="margin_big">24dp</dimen>
+    <dimen name="margin_default_plus">20dp</dimen>
+    <dimen name="margin_default">16dp</dimen>
+    <dimen name="margin_default_minus">12dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_smallish">6dp</dimen>
+    <dimen name="margin_smaller">4dp</dimen>
+    <dimen name="basic_horizontal_margin">16dp</dimen>
+    <dimen name="basic_vertical_margin">16dp</dimen>
+
+    <dimen name="about_icon_size">34dp</dimen>
+    <dimen name="about_icon_padding">8dp</dimen>
+    <dimen name="about_text_padding">8dp</dimen>
+    <dimen name="about_group_text_padding">16dp</dimen>
+    <dimen name="about_separator_height">0.5dp</dimen>
+
+    <dimen name="about_description_text_size">16sp</dimen>
+    <dimen name="about_item_text_size">16sp</dimen>
+    <dimen name="about_group_item_text_size">18sp</dimen>
+
+</resources>

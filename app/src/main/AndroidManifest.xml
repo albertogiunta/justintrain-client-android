@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.jaus.albertogiunta.justintrain_oraritreni">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <application
+            android:name="com.jaus.albertogiunta.justintrain_oraritreni.MyApplication"
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan|adjustResize">
+        <activity
+                android:name="com.jaus.albertogiunta.justintrain_oraritreni.tutorial.IntroActivity"
+                android:label="Intro Just In Train"
+                android:theme="@style/AppThemeNoShadowActionbar"
+                android:screenOrientation="portrait"
+                />
+        <activity
+                android:name="com.jaus.albertogiunta.justintrain_oraritreni.journeyFavourites.FavouriteJourneysActivity"
+                android:label="JustInTrain Orari Trenitalia"
+                android:screenOrientation="portrait"
+                >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.app.shortcuts"
+                    android:resource="@xml/shortcuts"/>
+        </activity>
+        <activity
+                android:name="com.jaus.albertogiunta.justintrain_oraritreni.journeySearch.JourneySearchActivity"
+                android:label="Cerca tratta"
+                android:theme="@style/AppThemeNoShadowActionbar"
+                android:screenOrientation="portrait"
+                >
+        </activity>
+        <activity
+                android:name="com.jaus.albertogiunta.justintrain_oraritreni.journeySearch.StationSearchActivity"
+                android:launchMode="singleTop"
+                android:label="Cerca stazione"
+                android:screenOrientation="portrait"
+                >
+            <meta-data
+                    android:name="android.app.searchable"
+                    android:resource="@xml/searchable"/>
+        </activity>
+        <activity
+                android:name="com.jaus.albertogiunta.justintrain_oraritreni.journeyResults.JourneyResultsActivity"
+                android:label="Soluzioni"
+                android:theme="@style/AppThemeNoShadowActionbar"
+                android:screenOrientation="portrait"
+                >
+            <intent-filter>
+                <action android:name="com.jaus.albertogiunta.justintrain_oraritreni.OPEN_DYNAMIC_SHORTCUT"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name="com.jaus.albertogiunta.justintrain_oraritreni.trainDetails.TrainDetailsActivity"
+                android:label="Dettagli Soluzione"
+                android:screenOrientation="portrait"
+                android:launchMode="singleTop"
+                />
+
+        <activity
+                android:name="com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.SettingsActivity"
+                android:label="Impostazioni"
+                android:screenOrientation="portrait"
+                />
+        <activity
+                android:name="com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.AboutActivity"
+                android:label="Info e Feedback"
+                android:screenOrientation="portrait"
+                />
+        <activity
+                android:name="com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.LicencesActivity"
+                android:label="Licenze"
+                android:screenOrientation="portrait"
+                />
+
+        <!--//////////////////////////////////////////////////////-->
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_icon"
+                android:resource="@drawable/ic_notification2"/>
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_color"
+                android:resource="@color/btn_dark_cyan"/>
+
+        <service
+                android:name="com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService"
+                android:exported="false">
+        </service>
+        <service
+                android:name=".notification.AppFCMService"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+                android:name=".notification.AppFirebaseInstanceIDService"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

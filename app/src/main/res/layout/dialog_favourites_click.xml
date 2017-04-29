@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:locale="it"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    <TextView
+            android:id="@+id/tv_header1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apri schermata di ricerca"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_default"
+            android:textStyle="bold"
+            fontPath="@string/font_path_bold"
+            android:textColor="@color/btn_cyan"
+            />
+
+    <RelativeLayout
+            android:id="@+id/rl_search_ar"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/tv_header1"
+            android:background="?selectableItemBackground"
+            >
+        <TextView
+                android:id="@+id/tv_search_ar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_centerVertical="true"
+                android:textSize="@dimen/text_size_default"
+                tools:text="Da X a Y"
+                />
+    </RelativeLayout>
+
+    <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider"
+            android:layout_below="@id/rl_search_ar"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:background="@color/bg_grey_lighter"
+            />
+
+    <RelativeLayout
+            android:id="@+id/rl_search_ra"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/divider"
+            android:background="?selectableItemBackground"
+            >
+        <TextView
+                android:id="@+id/tv_search_ra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_centerVertical="true"
+                android:textSize="@dimen/text_size_default"
+                tools:text="Da X a Y"
+                />
+    </RelativeLayout>
+
+
+    <TextView
+            android:id="@+id/tv_header2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_search_ra"
+            android:text="Altro"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_default"
+            android:textStyle="bold"
+            fontPath="@string/font_path_bold"
+            android:textColor="@color/btn_cyan"
+            />
+
+    <RelativeLayout
+            android:id="@+id/rl_remove_from_favourites"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/tv_header2"
+            android:background="?selectableItemBackground"
+            >
+        <TextView
+                android:id="@+id/tv_remove_from_favourites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_centerVertical="true"
+                android:textSize="@dimen/text_size_default"
+                android:text="Rimuovi tratta dai preferiti"
+                />
+    </RelativeLayout>
+
+</RelativeLayout>

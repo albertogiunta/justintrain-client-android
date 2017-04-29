@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:locale="it"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_load_more_height"
+        >
+
+    <ImageButton
+            android:id="@+id/btn_search_after"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_chevron_down"
+            android:visibility="visible"
+            />
+
+    <RelativeLayout
+            android:id="@+id/rl_search_after_loading_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            >
+        <ProgressBar
+                android:id="@+id/search_after_loading_spinner"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="24dp"
+                android:indeterminateTint="@color/btn_dark_cyan"
+                android:indeterminateTintMode="src_atop"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Carico più soluzioni..."
+                android:textStyle="bold"
+                fontPath="@string/font_path_bold"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/txt_grey"
+                />
+    </RelativeLayout>
+
+</RelativeLayout>

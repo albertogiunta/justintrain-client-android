@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:card_view="http://schemas.android.com/tools"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:locale="it"
+        android:id="@+id/cv_fav_journey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        card_view:cardElevation="6dp"
+        card_view:cardCornerRadius="0dp"
+        card_view:contentPadding="@dimen/margin_smaller"
+        app:cardElevation="2dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="@dimen/margin_default_minus"
+        android:layout_marginStart="@dimen/margin_default_minus"
+        >
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+        <ImageView
+                android:id="@+id/btn_pin"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:background="@drawable/border_filled_3_leftside_blue"
+                android:tint="@color/btn_light_cyan"
+                app:srcCompat="@drawable/ic_pin"
+                android:visibility="visible"
+                android:contentDescription="Setta tra notifiche"
+                />
+
+        <Button
+                android:id="@+id/btn_solution_time"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                android:background="@drawable/border_filled_3_rightside_white"
+                android:textAlignment="center"
+                android:text="7:28 - 8:13"
+                android:clickable="true"
+                fontPath="@string/font_path_numbers_standard"
+                />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

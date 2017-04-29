@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height_default"
+        android:background="?android:attr/selectableItemBackground"
+        tools:background="#7777"
+        >
+
+    <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:padding="8dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/margin_default"
+            tools:src="@drawable/about_icon_email"
+            />
+
+    <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/iv_icon"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_default"
+            android:textSize="@dimen/text_size_default"
+            tools:text="Visita il sito web"
+            />
+
+    <TextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/iv_icon"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_below="@id/tv_title"
+            android:textColor="@color/txt_grey"
+            tools:text="Sottotitolo di visita il sito web"
+            />
+
+</RelativeLayout>

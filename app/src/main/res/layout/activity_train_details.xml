@@ -1,0 +1,159 @@
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".trainDetails.TrainDetailsActivity"
+        tools:locale="it"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_gradient"
+            />
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp"
+            >
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+            <ProgressBar
+                    android:id="@+id/loading_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:indeterminateTint="@color/btn_dark_cyan"
+                    android:indeterminateTintMode="src_atop"
+                    android:visibility="visible"
+                    />
+
+            <RelativeLayout
+                    android:id="@+id/rl_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    >
+
+                <TextView
+                        android:id="@+id/tv_error_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:padding="@dimen/margin_default_plus"
+                        tools:text="Messaggio"
+                        android:textSize="@dimen/text_size_default_plus"
+                        android:textStyle="italic"
+                        />
+
+                <Button
+                        android:id="@+id/btn_error_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_error_message"
+                        android:layout_centerHorizontal="true"
+                        android:backgroundTint="@color/btn_dark_cyan"
+                        tools:text="Testo"
+                        android:textColor="@color/txt_white"
+                        />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_train_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/rl_header_2"
+                    android:background="@drawable/bg_gradient"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    tools:listitem="@layout/item_train_details"
+                    />
+
+        </RelativeLayout>
+
+        <ImageButton
+                android:id="@+id/btn_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btn_height_default"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_default"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginEnd="85dp"
+                android:background="@drawable/border_filled_5"
+                android:clickable="true"
+                android:elevation="@dimen/elevation_default"
+                app:srcCompat="@drawable/ic_refresh"
+                android:contentDescription="Aggiorna soluzioni"
+                />
+
+        <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/btn_share_single"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_marginBottom="@dimen/margin_smallish"
+                app:fab_elevationCompat="@dimen/elevation_default"
+                fab:fab_colorNormal="@color/btn_cyan"
+                fab:fab_colorPressed="#9fd4ef"
+                fab:fab_colorRipple="#b7cfda"
+                fab:fab_shadowColor="#000"
+                android:visibility="gone"
+                />
+
+        <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/btn_share_multiple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_marginBottom="@dimen/margin_smallish"
+                app:fab_elevationCompat="4dp"
+                fab:menu_labels_ellipsize="end"
+                fab:menu_labels_singleLine="true"
+                fab:fab_size="mini"
+                fab:menu_colorNormal="@color/btn_cyan"
+                fab:menu_colorPressed="#9fd4ef"
+                fab:menu_colorRipple="#b7cfda"
+                fab:fab_shadowColor="#000"
+                android:visibility="gone"
+                />
+
+    </RelativeLayout>
+
+    <!--<RelativeLayout-->
+    <!--android:id="@+id/rl_ad"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom"-->
+    <!--android:background="@color/bg_white"-->
+    <!--android:visibility="visible"-->
+    <!--&gt;-->
+
+    <!--<com.google.android.gms.ads.AdView-->
+    <!--android:id="@+id/adView"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--ads:adSize="SMART_BANNER"-->
+    <!--ads:adUnitId="@string/banner_details_id"-->
+    <!--&gt;-->
+    <!--</com.google.android.gms.ads.AdView>-->
+    <!--</RelativeLayout>-->
+
+
+</android.support.design.widget.CoordinatorLayout>

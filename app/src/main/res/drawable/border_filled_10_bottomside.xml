@@ -1,0 +1,21 @@
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid
+            android:color="@color/bg_dark">
+    </solid>
+
+    <stroke
+        android:width="@dimen/divider"
+        android:color="@color/btn_dark_cyan">
+    </stroke>
+
+    <corners
+        android:radius="1dp"
+        android:bottomLeftRadius="10dp"
+        android:bottomRightRadius="10dp"
+        android:topLeftRadius="0dp"
+        android:topRightRadius="0dp"/>
+
+</shape>

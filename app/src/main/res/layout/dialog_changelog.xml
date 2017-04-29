@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:locale="it"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    <LinearLayout
+            android:id="@+id/ll_changelog"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="vertical"
+            >
+
+        <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="VERSIONE 0.7.0"
+                android:textStyle="bold"
+                fontPath="@string/font_path_bold"
+                android:textSize="@dimen/text_size_default"
+                android:layout_margin="@dimen/margin_default"
+                android:visibility="gone"
+                />
+
+        <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_default"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_marginBottom="@dimen/margin_default"
+                android:fadeScrollbars="false"
+                >
+            <TextView
+                    android:id="@+id/tv_changelog"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_version"
+                    android:text="@string/changelog"
+                />
+
+        </ScrollView>
+    </LinearLayout>
+
+    <RelativeLayout
+            android:id="@+id/rl_contact"
+            android:layout_width="wrap_content"
+            android:layout_height="90dp"
+            android:layout_below="@id/ll_changelog"
+            android:layout_margin="@dimen/margin_default"
+            android:layout_centerHorizontal="true"
+            >
+
+        <TextView
+                android:id="@+id/tv_contact_me"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:textStyle="bold"
+                fontPath="@string/font_path_bold"
+                android:textSize="@dimen/text_size_smaller"
+                android:textColor="@color/txt_grey"
+                android:text="Problemi?\nSuggerimenti?"
+                />
+
+        <Button
+                android:id="@+id/btn_email"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_toEndOf="@id/tv_contact_me"
+                android:layout_marginStart="@dimen/margin_default"
+                android:background="@drawable/border_filled_5"
+                android:backgroundTint="#FF8B8E"
+                android:elevation="@dimen/elevation_default"
+                android:text="EMAIL"
+                android:textColor="@color/txt_white"
+                android:textSize="@dimen/text_size_smaller"
+                />
+
+        <Button
+                android:id="@+id/btn_twitter"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_toEndOf="@id/btn_email"
+                android:layout_marginStart="@dimen/margin_default"
+                android:background="@drawable/border_filled_5"
+                android:backgroundTint="#8DCEFF"
+                android:elevation="@dimen/elevation_default"
+                android:text="TWITTER"
+                android:textColor="@color/txt_white"
+                android:textSize="@dimen/text_size_smaller"
+            />
+
+        <TextView
+                android:id="@+id/tv_news"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/tv_contact_me"
+                android:layout_marginTop="@dimen/margin_default_minus"
+                android:textSize="@dimen/text_size_smaller"
+                android:textStyle="bold"
+                fontPath="@string/font_path_bold"
+                android:textColor="@color/txt_grey"
+                android:text="Per news e \nlive updates"
+                />
+
+        <Button
+                android:id="@+id/btn_telegram"
+                android:layout_width="160dp"
+                android:layout_height="30dp"
+                android:layout_toEndOf="@id/tv_news"
+                android:layout_below="@id/tv_contact_me"
+                android:layout_alignStart="@id/btn_email"
+                android:layout_marginTop="@dimen/margin_default_minus"
+                android:background="@drawable/border_filled_5"
+                android:backgroundTint="#86D0F5"
+                android:elevation="@dimen/elevation_default"
+                android:text="CANALE TELEGRAM"
+                android:textColor="@color/txt_white"
+                android:textSize="@dimen/text_size_smaller"
+                />
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:locale="it"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+    <RelativeLayout
+            android:layout_marginTop="@dimen/margin_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+        <ImageView
+                android:id="@+id/iv_bolt"
+                android:layout_width="40dp"
+                android:layout_height="@dimen/item_height_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:paddingTop="@dimen/vertical_padding"
+                android:paddingBottom="@dimen/vertical_padding"
+                app:srcCompat="@drawable/ic_bolt"
+                />
+
+        <TextView
+                android:id="@+id/tv_title1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/iv_bolt"
+                android:textSize="@dimen/text_size_default"
+                android:text="La soluzione più veloce del west"
+                />
+
+        <me.grantland.widget.AutofitTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/iv_bolt"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_below="@id/tv_title1"
+                android:maxLines="5"
+                android:textColor="@color/txt_grey"
+                android:text="Quando cerchi tramite swipe vedrai apparire il lampo sulla soluzione che ti porterà a casa prima di tutte le altre (ritardi eventuali inclusi)"
+                />
+    </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+            <ImageView
+                    android:id="@+id/iv_warning"
+                    android:layout_width="40dp"
+                    android:layout_height="@dimen/item_height_default"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="@dimen/vertical_padding"
+                    android:paddingBottom="@dimen/vertical_padding"
+                    app:srcCompat="@drawable/ic_warning_journey"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_title5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/iv_warning"
+                    android:textSize="@dimen/text_size_default"
+                    android:text="La soluzione che ha un po' di problemi"
+                    />
+
+            <me.grantland.widget.AutofitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/iv_warning"
+                    android:layout_below="@id/tv_title5"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:maxLines="5"
+                    android:textColor="@color/txt_grey"
+                    android:text="Apparirà sulle soluzioni che potrebbero essere parzialmente soppresse, o in cui c'è qualcosa che non va (o qualcosa è cambiato)"
+                    />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                    android:id="@+id/iv_cancelled"
+                    android:layout_width="40dp"
+                    android:layout_height="@dimen/item_height_default"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="@dimen/vertical_padding"
+                    android:paddingBottom="@dimen/vertical_padding"
+                    app:srcCompat="@drawable/ic_cancelled_journey"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_title2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
+                android:layout_marginStart="@dimen/margin_default"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/iv_cancelled"
+                android:textSize="@dimen/text_size_default"
+                    android:text="La soluzione che non c'è"
+                />
+
+            <me.grantland.widget.AutofitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/iv_cancelled"
+                    android:layout_below="@id/tv_title2"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:maxLines="5"
+                    android:textColor="@color/txt_grey"
+                    android:text="Apparirà sulle soluzioni il cui treno sembra essere soppresso"
+                    />
+    </RelativeLayout>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+                >
+
+            <ImageView
+                    android:id="@+id/iv_connection"
+                    android:layout_width="40dp"
+                    android:layout_height="@dimen/item_height_default"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="@dimen/vertical_padding"
+                    android:paddingBottom="@dimen/vertical_padding"
+                    app:srcCompat="@drawable/ic_connection_to_be_missed"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_title3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/iv_connection"
+                    android:textSize="@dimen/text_size_default"
+                    android:text="Coincidenze sfortunate"
+                    />
+
+            <me.grantland.widget.AutofitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/iv_connection"
+                    android:layout_below="@id/tv_title3"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:maxLines="5"
+                    android:textColor="@color/txt_grey"
+                    android:text="Apparirà sulle soluzioni in cui ci sono una o più coincidenze, e in cui almeno una di queste verrà persa a causa del ritardo di uno dei treni"
+                    />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                    android:id="@+id/iv_pin"
+                    android:layout_width="40dp"
+                    android:layout_height="@dimen/item_height_default"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="@dimen/vertical_padding"
+                    android:paddingBottom="@dimen/vertical_padding"
+                    app:srcCompat="@drawable/ic_pin"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_title4"
+                    android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
+                android:layout_marginStart="@dimen/margin_default"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/iv_pin"
+                android:textSize="@dimen/text_size_default"
+                    android:text="Una soluzione da salvare"
+                />
+
+            <me.grantland.widget.AutofitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/iv_pin"
+                    android:layout_below="@id/tv_title4"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:maxLines="5"
+                    android:textColor="@color/txt_grey"
+                    android:text="Premendo su quest'icona potrai avere un treno/soluzione tra le notifiche, sempre a portata di mano prima o durante il viaggio!"
+                    />
+    </RelativeLayout>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:card_view="http://schemas.android.com/tools"
+        tools:context=".journeyFavourites.FavouriteJourneysActivity"
+        tools:locale="it"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_gradient"
+        android:fitsSystemWindows="true"
+        >
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        <LinearLayout
+                android:id="@+id/ll_add_favourite"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btn_height_big"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_marginStart="@dimen/margin_default"
+                android:background="@drawable/border_filled_5"
+                android:elevation="@dimen/elevation_default"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                >
+
+            <ImageButton
+                    android:id="@+id/btn_add_new_favourite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:paddingBottom="@dimen/margin_small"
+                    android:background="@android:color/transparent"
+                    android:tint="@color/ic_light"
+                    app:srcCompat="@drawable/ic_add_favourite"
+                    android:contentDescription="Aggiungi tratta ai preferiti"
+                    />
+
+            <me.grantland.widget.AutofitTextView
+                    android:id="@+id/lbl_add_new_favourite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:text="@string/btn_favourite_journeys"
+                    android:textColor="@color/txt_white"
+                    android:textSize="@dimen/text_size_default_plus"
+                    android:textStyle="bold"
+                    fontPath="@string/font_path_bold"
+                    />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+                android:id="@+id/rl_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_white"
+                card_view:cardElevation="4dp"
+                android:layout_alignParentTop="true"
+                android:visibility="gone"
+                tools:visibility="visible"
+                card_view:cardCornerRadius="0dp"
+                card_view:contentPadding="@dimen/margin_smaller"
+                >
+
+            <TextView
+                    android:id="@+id/tv_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:layout_marginBottom="@dimen/margin_default"
+                    android:textStyle="bold"
+                    fontPath="@string/font_path_bold"
+                    tools:text="SERVER IN MANUTENZIONE. \nJUSTINTRAIN TORNERÀ OPERATIVA AL PIÙ PRESTO"
+                    android:textAlignment="center"
+                    android:visibility="visible"
+                    />
+
+        </android.support.v7.widget.CardView>
+
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/rl_ad"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@color/bg_white"-->
+        <!--android:visibility="visible"-->
+        <!--&gt;-->
+
+        <!--<com.google.android.gms.ads.AdView-->
+        <!--android:id="@+id/adView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--ads:adSize="SMART_BANNER"-->
+        <!--ads:adUnitId="@string/banner_favourites_id"-->
+        <!--&gt;-->
+        <!--</com.google.android.gms.ads.AdView>-->
+        <!--</RelativeLayout>-->
+
+
+        <!--android:layout_above="@id/rl_ad"-->
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/rl_message"
+                android:layout_centerHorizontal="true"
+                >
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_favourite_journeys"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="0dp"
+                    android:overScrollMode="never"
+                    android:visibility="visible"
+                    tools:listitem="@layout/item_favourite_journey"
+                    >
+            </android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_search_journey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="16dp"
+            app:fabSize="normal"
+            app:srcCompat="@drawable/ic_search"
+            />
+
+</android.support.design.widget.CoordinatorLayout>

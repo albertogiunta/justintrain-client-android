@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+            android:enabled="true"
+            android:icon="@drawable/ic_search"
+            android:shortcutDisabledMessage="@string/static_shortcut_disabled_message"
+            android:shortcutId="static"
+            android:shortcutLongLabel="@string/static_shortcut_long_label"
+            android:shortcutShortLabel="@string/static_shortcut_short_label"
+            tools:targetApi="n_mr1">
+
+        <intent
+                android:action="android.intent.action.MAIN"
+                android:targetClass="com.jaus.albertogiunta.justintrain_oraritreni.journeyFavourites.FavouriteJourneysActivity"
+                android:targetPackage="com.jaus.albertogiunta.justintrain_oraritreni"/>
+
+        <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="com.jaus.albertogiunta.justintrain_oraritreni.journeySearch.JourneySearchActivity"
+                android:targetPackage="com.jaus.albertogiunta.justintrain_oraritreni"/>
+    </shortcut>
+</shortcuts>

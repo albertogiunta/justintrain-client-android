@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height_default"
+        android:background="?android:attr/selectableItemBackground"
+        tools:background="#7777"
+        >
+
+    <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/margin_default"
+            android:textSize="@dimen/text_size_default"
+            tools:text="Visita il sito web"
+            />
+
+</RelativeLayout>

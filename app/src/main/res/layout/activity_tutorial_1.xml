@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:locale="it"
+        android:gravity="center"
+        android:background="@color/tut_bg_1"
+        android:orientation="vertical"
+        >
+
+    <me.grantland.widget.AutofitTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="@string/tut1_title1"
+            android:textSize="25sp"
+            app:minTextSize="14sp"
+            android:maxLines="2"
+            android:textStyle="bold"
+            fontPath="@string/font_path_bold"
+            android:textAlignment="center"
+            android:lineSpacingExtra="10dp"
+            android:textColor="@color/tut_txt_1"
+            />
+
+
+    <me.grantland.widget.AutofitTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/tut1_title2"
+            android:textSize="25sp"
+            app:minTextSize="14sp"
+            android:maxLines="2"
+            android:textStyle="bold"
+            fontPath="@string/font_path_bold"
+            android:textAlignment="center"
+            android:lineSpacingExtra="10dp"
+            android:textColor="@color/tut_txt_1"
+            />
+
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="60dp"
+            app:srcCompat="@drawable/tut1"
+            />
+
+</LinearLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:locale="it"
+        android:orientation="vertical"
+        >
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/tv_station_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_autocomplete_height"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:padding="@dimen/margin_default"
+            tools:text="Anversa-Villalago-Scanno"
+            android:textColor="@color/txt_dark"
+            android:textSize="@dimen/text_size_default"
+            android:textAllCaps="true"
+            />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider"
+            android:background="@color/bg_grey_lighter"
+            />
+</LinearLayout>

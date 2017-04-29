@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>server_config</key>
+        <value>https://www.justintrain.it</value>
+    </entry>
+    <entry>
+        <key>latest_version</key>
+        <value>8</value>
+    </entry>
+    <entry>
+        <key>is_strike_news_set</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>strike_news</key>
+        <value></value>
+    </entry>
+    <entry>
+        <key>is_maintenance_news_set</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>maintenance_news</key>
+        <value></value>
+    </entry>
+</defaultsMap>

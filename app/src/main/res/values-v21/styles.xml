@@ -1,0 +1,35 @@
+
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/bg_dark</item>
+        <item name="colorPrimaryDark">@color/bg_darker</item>
+        <item name="colorAccent">@color/btn_dark_cyan</item>
+        <item name="android:textColor">@color/txt_dark</item>
+        <item name="android:statusBarColor">@color/bg_darker</item>
+        <item name="android:datePickerDialogTheme">@style/MyDatePickerDialogTheme</item>
+    </style>
+
+    <style name="AppThemeNoShadowActionbar" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="colorPrimary">@color/bg_dark</item>
+        <item name="android:statusBarColor">@color/bg_darker</item>
+        <item name="android:colorControlNormal">@color/bg_white</item>
+        <item name="android:datePickerDialogTheme">@style/MyDatePickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/MyDatePickerDialogTheme</item>
+    </style>
+
+    <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">@color/btn_dark_cyan</item>
+    </style>
+
+    <style name="IntroTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/btn_dark_cyan</item>
+        <item name="colorPrimaryDark">@color/btn_dark_cyan</item>
+        <item name="colorAccent">@color/btn_dark_cyan</item>
+        <item name="android:textColor">@color/txt_dark</item>
+        <item name="android:statusBarColor">@color/btn_dark_cyan</item>
+    </style>
+</resources>

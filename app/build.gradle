@@ -1,0 +1,107 @@
+apply plugin: 'com.android.application'
+
+apply from: "$project.rootDir/tools/script-findbugs.gradle"
+
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'realm-android'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        applicationId "com.jaus.albertogiunta.justintrain_oraritreni"
+        minSdkVersion 19
+        targetSdkVersion 25
+        multiDexEnabled true
+        versionCode 21
+        versionName "0.8.8"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    def keystorePropertiesFile = rootProject.file("keystore.properties")
+    def keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+    signingConfigs {
+        config {
+            keyAlias keystoreProperties['release_key_alias']
+            keyPassword keystoreProperties['release_key_password']
+            storeFile file(keystoreProperties['release_store_file'])
+            storePassword keystoreProperties['release_store_password']
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    buildTypes.each {
+        it.buildConfigField 'String', 'AUTH_FIELD_NAME', keystoreProperties['auth_field_name']
+        it.buildConfigField 'String', 'AUTH_TOKEN', keystoreProperties['auth_token']
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/notice.txt' // will not include NOTICE file
+        exclude 'META-INF/license.txt' // will not include LICENSE file
+        exclude 'META-INF/NOTICE' // will not include LICENSE file
+        exclude 'META-INF/LICENSE' // will not include LICENSE file
+        exclude 'META-INF/LICENSE.txt' // will not include LICENSE file
+        exclude 'META-INF/NOTICE.txt' // will not include LICENSE file
+    }
+
+    retrolambda {
+        javaVersion JavaVersion.VERSION_1_7
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'co.trikita:log:1.1.5'
+
+//    compile 'com.facebook.stetho:stetho:1.4.2'
+    compile 'com.google.firebase:firebase-core:10.2.0' // used for analytics
+    compile 'com.google.firebase:firebase-messaging:10.2.0' // used for notifications
+//    compile 'com.google.firebase:firebase-ads:10.0.1'
+    compile 'com.google.firebase:firebase-crash:10.2.0'
+    compile 'com.google.firebase:firebase-config:10.2.0'
+    compile 'io.reactivex:rxjava:1.2.4'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    compile 'net.danlew:android.joda:2.9.5.1'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.github.paolorotolo:appintro:4.1.0'
+    compile 'net.yslibrary.licenseadapter:licenseadapter:1.3.0'
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+    compile 'eu.davidea:flexible-adapter:5.0.0-rc1'
+    compile 'me.grantland:autofittextview:0.2.1'
+    compile 'com.google.android:flexbox:0.2.5'
+    compile 'com.github.clans:fab:1.6.4'
+    compile 'com.android.support:design:25.3.0'
+    compile 'com.android.support:cardview-v7:25.3.0'
+    compile 'com.android.support:recyclerview-v7:25.3.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+    compile 'com.annimon:stream:1.1.4'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    apt 'com.google.auto.value:auto-value:1.2-rc1'
+    provided 'com.google.auto.value:auto-value:1.2-rc1'
+}

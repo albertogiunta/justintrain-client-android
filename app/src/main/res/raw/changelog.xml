@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog bulletedList="true">
+
+    <changelogversion
+            versionName="0.7.2_5"
+            changeDate="9 Gen 2017">
+        <changelogbug>Bug fix</changelogbug>
+    </changelogversion>
+
+    <changelogversion
+            versionName="0.7.0_4"
+            changeDate="7 Gen 2017">
+        <changelogimprovement>Nuove schermate di Impostazioni e About raggiungibili dalla Home
+        </changelogimprovement>
+        <changelogimprovement>Nuova impostazione per autoscroll intelligente</changelogimprovement>
+        <changelogbug>UI fix generali e per dispositivi Android 4.4 KitKat</changelogbug>
+        <changelogbug>Bug fix</changelogbug>
+    </changelogversion>
+
+    <changelogversion
+            versionName="0.6.4_3"
+            changeDate="23 Dic 2016">
+        <changelogimprovement>Autoscroll sul primo risultato nella ricerca delle soluzioni
+        </changelogimprovement>
+        <changelogbug>UI fix</changelogbug>
+        <changelogbug>Le icone dei bottoni nella notifica non venivano correttamente visualizzate su
+            dispositivi Android 4.4
+        </changelogbug>
+    </changelogversion>
+
+    <changelogversion
+            versionName="0.6.2_2"
+            changeDate="22 Dic 2016">
+        <changelogimprovement>Aggiunta visualizzazione dei cambiamenti tramite la finestra di
+            Changelog (quella che vedi ora)
+        </changelogimprovement>
+        <changelogimprovement>Se hai Android 7.1 o successive, prova a tenere premuto sull'icona
+            dell'app. Avrai una piacevole sorpresa!
+        </changelogimprovement>
+        <changelogimprovement>Quando vedi un [b]fulmine[/b] in una soluzione, quello è il treno che
+            in linea teorica è più conveniente prendere
+        </changelogimprovement>
+        <changelogimprovement>Nella notifica ora appare anche il [b]binario[/b] in cui devi andare a
+            prendere il treno
+        </changelogimprovement>
+        <changelogbug>Cercando soluzioni precedenti alle attuali non venivano date soluzioni se
+            c'era un intervallo più largo di 4 ore
+        </changelogbug>
+    </changelogversion>
+
+    <changelogversion
+            versionName="0.6.0_1"
+            changeDate="19 Dic 2016">
+        <changelogtext>Rilascio versione Beta ufficiale di JustInTrain - Orari Trenitalia.
+        </changelogtext>
+    </changelogversion>
+</changelog>
+
+        <!--  [b][/b] -->
+
+
+        <!--
+        <changelogtext></changelogtext>
+        <changelogimprovement></changelogimprovement>
+        <changelogbug></changelogbug>
+
+        -->
+
+        <!--
+
+        <changelogversion
+                    versionName="0.6.4"
+                    changeDate="23 Dic 2016">
+                <changelogtext></changelogtext>
+                <changelogimprovement></changelogimprovement>
+                <changelogbug></changelogbug>
+            </changelogversion>
+
+
+        -->

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="late1">#EF5350</color>
+    <color name="ontime">#80D8FF</color>
+    <color name="early1">#9ccc65</color>
+
+    <!-- BACKGROUNDS -->
+    <color name="bg_darker">#37474F</color>
+    <color name="bg_dark">#455A64</color>
+    <color name="bg_grey">#B0BEC5</color>
+    <color name="bg_grey_lighter">#ECECEC</color>
+    <color name="bg_white_darker">#F5F5F5</color>
+    <color name="bg_white">#ffffff</color>
+    <color name="bg_yellow">#FFFF8D</color>
+    <color name="bg_red">#ff8a80</color>
+
+    <!-- TEXT -->
+    <color name="txt_white">#FFFFFF</color>
+    <color name="txt_red">#EF5350</color>
+    <color name="txt_orange">#FFCA28</color>
+    <color name="txt_yellow">#fbff28</color>
+    <color name="txt_green">#9CCC65</color>
+    <color name="txt_dark">#37474F</color>
+    <color name="txt_grey">#9E9E9E</color>
+    <color name="txt_grey_lighter">#BDBDBD</color>
+
+    <!-- BUTTONS-->
+    <color name="btn_yellow">#FFFF8D</color>
+    <color name="btn_yello2">#FFED68</color>
+    <color name="btn_cyan">#80D8FF</color>
+    <color name="btn_grey">#BDBDBD</color>
+    <color name="ic_dark">#607D8B</color>
+    <color name="ic_red">#EF5350</color>
+    <color name="ic_orange">#FFCA28</color>
+    <color name="ic_light">#ECECEC</color>
+    <color name="btn_light_cyan">#E3F2FD</color>
+    <color name="btn_dark_cyan">#01579B</color>
+    <color name="btn_red">#de294d</color>
+
+    <color name="tut_bg_1">#EB8469</color>
+    <color name="tut_bg_2">#77ECE2</color>
+    <color name="tut_bg_3">#E57063</color>
+    <color name="tut_txt_1">#161A2B</color>
+    <color name="tut_txt_2">#29282D</color>
+    <color name="tut_txt_3">#2A282F</color>
+
+    <color name="about_facebook_color">#3b5998</color>
+    <color name="about_twitter_color">#55acee</color>
+    <color name="about_instagram_color">#3f729b</color>
+    <color name="about_play_store_color">#45BBC2</color>
+    <color name="about_youtube_color">#cd201f</color>
+    <color name="about_github_color">#333333</color>
+    <color name="about_item_icon_color">#313131</color>
+    <color name="about_description_color">#595959</color>
+    <color name="about_separator_color">#e1e1e1</color>
+    <color name="about_item_text_color">#7c7c7c</color>
+    <color name="about_text_color">#595959</color>
+</resources>

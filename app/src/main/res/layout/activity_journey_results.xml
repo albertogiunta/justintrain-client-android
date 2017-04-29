@@ -1,0 +1,259 @@
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".journeySearch.JourneySearchActivity"
+        tools:locale="it"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_gradient"
+            />
+
+    <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp"
+            >
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:theme="@style/AppThemeNoShadowActionbar"
+                app:title="Soluzioni"
+                app:titleTextColor="@color/txt_white"
+                />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:layout_marginBottom="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            >
+
+        <!-- Your scrolling content -->
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+            <RelativeLayout
+                    android:id="@+id/rl_header_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/item_height_big"
+                    android:background="@color/bg_dark"
+                    android:clickable="true"
+                    android:elevation="@dimen/elevation_default"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    >
+
+                <ImageView
+                        android:id="@+id/iv_dots"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginBottom="@dimen/margin_big"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:tint="@color/ic_dark"
+                        app:srcCompat="@drawable/ic_searched_journey"
+                        />
+
+                <ImageButton
+                        android:id="@+id/btn_header_swap_station_names"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/margin_big"
+                        android:layout_toStartOf="@+id/btn_toggle_favourite"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:backgroundTint="@android:color/transparent"
+                        android:clickable="true"
+                        app:srcCompat="@drawable/ic_swap_vert"
+                        />
+
+                <ImageButton
+                        android:id="@+id/btn_toggle_favourite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/margin_default"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:backgroundTint="@android:color/transparent"
+                        android:clickable="true"
+                        app:srcCompat="@drawable/ic_star_border"
+                        />
+
+                <HorizontalScrollView
+                        android:id="@+id/hsv_departure_station_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="@dimen/margin_smaller"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_smaller"
+                        android:layout_toEndOf="@id/iv_dots"
+                        android:layout_toStartOf="@id/btn_header_swap_station_names"
+                        android:background="@color/bg_darker"
+                        android:padding="4dp"
+                        android:scrollbars="none"
+                        android:visibility="visible"
+                        >
+
+                    <TextView
+                            android:id="@+id/tv_departure_station_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:maxLines="1"
+                            android:scrollHorizontally="true"
+                            tools:text="Pesaro"
+                            android:textColor="@color/txt_white"
+                            android:textSize="@dimen/text_size_default_minus"
+                            android:textAllCaps="true"
+                            />
+                </HorizontalScrollView>
+
+                <HorizontalScrollView
+                        android:id="@+id/hsv_arrival_station_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_smaller"
+                        android:layout_marginTop="@dimen/margin_bigger"
+                        android:layout_toEndOf="@id/iv_dots"
+                        android:layout_toStartOf="@id/btn_header_swap_station_names"
+                        android:background="@color/bg_darker"
+                        android:padding="@dimen/margin_smaller"
+                        android:scrollbars="none"
+                        android:visibility="visible"
+                        >
+
+                    <TextView
+                            android:id="@+id/tv_arrival_station_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:maxLines="1"
+                            android:scrollHorizontally="true"
+                            tools:text="Cesena"
+                            android:textColor="@color/txt_white"
+                            android:textSize="@dimen/text_size_default_minus"
+                            android:textAllCaps="true"
+                            />
+                </HorizontalScrollView>
+
+
+            </RelativeLayout>
+
+            <ProgressBar
+                    android:id="@+id/loading_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:indeterminateTint="@color/btn_dark_cyan"
+                    android:indeterminateTintMode="src_atop"
+                    android:visibility="visible"
+                    />
+
+            <RelativeLayout
+                    android:id="@+id/rl_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    >
+
+                <TextView
+                        android:id="@+id/tv_error_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:padding="@dimen/margin_default_plus"
+                        tools:text="Messaggio"
+                        android:textSize="@dimen/text_size_default_plus"
+                        android:textStyle="italic"
+                        />
+
+                <Button
+                        android:id="@+id/btn_error_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_error_message"
+                        android:layout_centerHorizontal="true"
+                        android:backgroundTint="@color/btn_dark_cyan"
+                        tools:text="Testo"
+                        android:textColor="@color/txt_white"
+                        />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_journey_solutions"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/rl_header_2"
+                    android:background="@drawable/bg_gradient"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    tools:listitem="@layout/item_journey"
+                    />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ImageButton
+            android:id="@+id/btn_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/btn_height_default"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/margin_default"
+            android:background="@drawable/border_filled_5"
+            android:clickable="true"
+            android:elevation="@dimen/elevation_default"
+            app:srcCompat="@drawable/ic_refresh"
+            android:contentDescription="Aggiorna soluzioni"
+            />
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/rl_ad"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:background="@color/bg_white"-->
+        <!--android:visibility="visible"-->
+        <!--&gt;-->
+
+        <!--<com.google.android.gms.ads.AdView-->
+        <!--android:id="@+id/adView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--ads:adSize="SMART_BANNER"-->
+        <!--ads:adUnitId="@string/banner_results_id"-->
+        <!--&gt;-->
+        <!--</com.google.android.gms.ads.AdView>-->
+        <!--</RelativeLayout>-->

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:locale="it"
+        android:id="@+id/cv_fav_journey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-8dp"
+        android:layout_marginBottom="@dimen/margin_default"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        >
+
+    <LinearLayout
+            android:id="@+id/ll_left_fav_trains"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            >
+
+        <include
+                android:id="@+id/left_fav_train_0"
+                layout="@layout/item_favourite_train_journey_left_buttony"
+                android:visibility="visible"
+                />
+        <include
+                android:id="@+id/left_fav_train_1"
+                layout="@layout/item_favourite_train_journey_left_buttony"
+                android:visibility="visible"
+                />
+        <include
+                android:id="@+id/left_fav_train_2"
+                layout="@layout/item_favourite_train_journey_left_buttony"
+                android:visibility="visible"
+                />
+    </LinearLayout>
+
+    <!--<View-->
+    <!--android:layout_width="2dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="#000"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--/>-->
+
+    <LinearLayout
+            android:id="@+id/ll_right_fav_trains"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            >
+
+        <include
+                android:id="@+id/right_fav_train_0"
+                layout="@layout/item_favourite_train_journey_right_buttony"
+                android:visibility="visible"
+                />
+        <include
+                android:id="@+id/right_fav_train_1"
+                layout="@layout/item_favourite_train_journey_right_buttony"
+                android:visibility="visible"
+                />
+        <include
+                android:id="@+id/right_fav_train_2"
+                layout="@layout/item_favourite_train_journey_right_buttony"
+                android:visibility="visible"
+                />
+    </LinearLayout>
+
+</RelativeLayout>

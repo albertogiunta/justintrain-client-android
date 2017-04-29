@@ -1,0 +1,18 @@
+<shape
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="rectangle">
+
+    <solid
+            android:color="@color/btn_cyan">
+    </solid>
+
+    <!--<stroke-->
+    <!--android:width="0dp"-->
+    <!--android:color="@color/btn_cyan">-->
+    <!--</stroke>-->
+
+    <corners
+            android:radius="1dp">
+    </corners>
+
+</shape>
