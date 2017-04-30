@@ -73,7 +73,7 @@
     <string name="about_github">GitHub</string>
     <string name="about_website">Sito Web</string>
     <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '    -->
-    <string name="changelog">• <b>WOW!</b> Ora puoi aggiungere fino a 3 treni preferiti per ciascuna direzione di una tratta! Usali per i treni che prendi più spesso, in questo modo avrai un\'esperienza ancora più rapida!\n\n• <b>Bug fix</b> Quando c\'erano dei cambi risultava impossibile condividere il treno. Ora non più!\n\n
+    <string name="changelog">• <b>WOW!</b> Nuove animazioni in tutta l\'app, per renderne sempre più gradevole l\'utilizzo\n\n•Nuova grafica per i treni preferiti in Home\n\n• <b>Bug e UI fix</b>\n\n
     </string>
     <string name="play_store_native_url">market://details?id=</string>
     <string name="play_store_web_url">https://play.google.com/store/apps/details?id=</string>
@@ -84,5 +84,9 @@
     <string name="font_path_numbers_bold">fonts/proximanovasoft-bold.ttf</string>
 </resources>
         <!--•
-        <b></b>\n\n
+        <b></b>•\n\n
         -->
+
+        <!--• <b>WOW!</b>\n\n-->
+
+        <!--• <b>Bug fix</b>\n\n-->
