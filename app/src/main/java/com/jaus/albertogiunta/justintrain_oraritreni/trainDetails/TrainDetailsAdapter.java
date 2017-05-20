@@ -56,6 +56,8 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
         if (solution == null) {
             FirebaseCrash.report(new Exception("SOLUTION WAS NULL in Traindetilasadapter"));
         }
+        solution = null;
+        if (solution == null) return;
         if (solution.hasChanges()) {
             for (Journey.Solution.Change c : solution.getChangesList()) {
                 Log.d(c.getDepartureStationName(), c.getArrivalStationName());

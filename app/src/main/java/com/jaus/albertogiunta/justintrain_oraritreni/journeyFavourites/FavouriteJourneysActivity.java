@@ -445,6 +445,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
                 analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_REMOVE_FROM_POPUP);
                 presenter.removeFavourite(preferredJourney.getStation1(), preferredJourney.getStation2());
                 updateFavouritesList();
+                btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(0);
                 dialog.dismiss();
             });
 
