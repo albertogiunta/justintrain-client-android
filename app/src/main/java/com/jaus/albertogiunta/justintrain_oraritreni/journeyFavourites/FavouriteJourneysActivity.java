@@ -7,8 +7,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +18,7 @@ import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +46,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.journeyResults.JourneyResul
 import com.jaus.albertogiunta.justintrain_oraritreni.journeySearch.JourneySearchActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.DateTimeAdapter;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.PostProcessingEnabler;
+import com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService;
 import com.jaus.albertogiunta.justintrain_oraritreni.tutorial.IntroActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
@@ -91,6 +95,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_FROM_SWIPE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_STATIONS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_FIRST_START;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS.NONE;
 
 public class FavouriteJourneysActivity extends AppCompatActivity implements FavouritesContract.View,
         FlexibleAdapter.OnItemSwipeListener,
@@ -98,6 +103,8 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
     FavouritesContract.Presenter presenter;
     AnalyticsHelper              analyticsHelper;
+    BroadcastReceiver            messageReceiver;
+
 
     @BindView(R.id.rv_favourite_journeys)
     RecyclerView rvFavouriteJourneys;
@@ -162,6 +169,12 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             }
         });
 
+        messageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                showSnackbar(intent.getExtras().getString(NotificationService.NOTIFICATION_ERROR_MESSAGE), NONE, Snackbar.LENGTH_SHORT);
+            }
+        };
     }
 
     @Override
@@ -204,6 +217,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     public void onResume() {
         super.onResume();
 //        adView.resume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter(NotificationService.NOTIFICATION_ERROR_EVENT));
         btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(0);
         presenter.setState(getIntent().getExtras());
     }

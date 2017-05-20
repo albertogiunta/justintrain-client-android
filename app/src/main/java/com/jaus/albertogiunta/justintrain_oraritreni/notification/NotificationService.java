@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Journey;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
@@ -36,10 +37,14 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
  * a service on a separate handler thread
  */
 public class NotificationService extends IntentService {
-    public static final String ACTION_START_NOTIFICATION  = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.action.START_NOTIFICATION";
-    public static final String ACTION_STOP_NOTIFICATION   = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.action.STOP_NOTIFICATION";
-    public static final String ACTION_UPDATE_NOTIFICATION = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.action.UPDATE_NOTIFICATION";
-    public static final String EXTRA_NOTIFICATION_DATA    = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.extra.NOTIFICATION_DATA";
+    public static final String ACTION_START_NOTIFICATION                    = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.action.START_NOTIFICATION";
+    public static final String ACTION_STOP_NOTIFICATION                     = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.action.STOP_NOTIFICATION";
+    public static final String ACTION_UPDATE_NOTIFICATION                   = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.action.UPDATE_NOTIFICATION";
+    public static final String EXTRA_NOTIFICATION_DATA                      = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.extra.NOTIFICATION_DATA";
+    public static final String NOTIFICATION_ERROR_EVENT                     = "EVENT_NOTIFICATION_ERROR";
+    public static final String NOTIFICATION_ERROR_MESSAGE                   = "NOTIFICATION_ERROR_MESSAGE";
+    public static final String NOTIFICATION_ERROR_MESSAGE_TRAIN_NOT_FOUND   = "Impossibile settare la notifica. \nIl treno potrebbe aver cambiato numero od orario.";
+    public static final String NOTIFICATION_ERROR_MESSAGE_STATION_NOT_FOUND = "Impossibile settare la notifica a causa di un problema con le stazioni di partenza o arrivo.";
 
     AnalyticsHelper analyticsHelper;
 
@@ -92,6 +97,9 @@ public class NotificationService extends IntentService {
 
             } catch (Exception e) {
                 FirebaseCrash.report(new Exception("Requested notification and Station was not found. SOLUTION IS " + sol.toString() + " AND REQUESTED STATIONSs ARE " + sol.getChangesList().get(indexOfJourneyToBeNotified).getDepartureStationName() + " " + sol.getChangesList().get(indexOfJourneyToBeNotified).getArrivalStationName()));
+                Intent notificationErrorIntent = new Intent(NOTIFICATION_ERROR_EVENT);
+                notificationErrorIntent.putExtra(NOTIFICATION_ERROR_MESSAGE, NOTIFICATION_ERROR_MESSAGE_STATION_NOT_FOUND);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(notificationErrorIntent);
             }
         } else {
             trainId = sol.getTrainId();
@@ -104,7 +112,8 @@ public class NotificationService extends IntentService {
 
     private static void getData(String journeyDepartureStationId, String journeyArrivalStationId, String trainId, Context context, boolean justUpdate) {
         Log.d("getData:", journeyDepartureStationId, journeyArrivalStationId, trainId);
-        TrainHeader mainTrainHeader;
+        Intent notificationErrorIntent = new Intent(NOTIFICATION_ERROR_EVENT);
+
         APINetworkingFactory.createRetrofitService(JourneyService.class)
                 .getDelay(journeyDepartureStationId, journeyArrivalStationId, trainId)
                 .subscribeOn(Schedulers.io())
@@ -118,6 +127,8 @@ public class NotificationService extends IntentService {
                     public void onError(Throwable e) {
                         Log.d(e.getMessage());
                         FirebaseCrash.report(new Exception("NOTIFICATION ERROR for departure " + journeyDepartureStationId + " arrival " + journeyArrivalStationId + " train " + trainId));
+                        notificationErrorIntent.putExtra(NOTIFICATION_ERROR_MESSAGE, NOTIFICATION_ERROR_MESSAGE_TRAIN_NOT_FOUND);
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(notificationErrorIntent);
                     }
 
                     @Override
@@ -143,6 +154,8 @@ public class NotificationService extends IntentService {
                                                 getData(journeyDepartureStationId, journeyArrivalStationId, l.get(i + 1).getTrainId(), context, false);
                                             } catch (Exception e) {
                                                 FirebaseCrash.report(new Exception("Requested new train in notification and Station was not found. SOLUTION IS " + s.toString() + " AND REQUESTED STATIONSs ARE " + l.get(i + 1).getDepartureStationName() + " " + l.get(i + 1).getArrivalStationName()));
+                                                notificationErrorIntent.putExtra(NOTIFICATION_ERROR_MESSAGE, NOTIFICATION_ERROR_MESSAGE_STATION_NOT_FOUND);
+                                                LocalBroadcastManager.getInstance(context).sendBroadcast(notificationErrorIntent);
                                             }
                                             return;
                                         } else {

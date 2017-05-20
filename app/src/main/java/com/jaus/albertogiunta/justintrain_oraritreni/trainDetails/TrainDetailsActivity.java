@@ -2,14 +2,17 @@ package com.jaus.albertogiunta.justintrain_oraritreni.trainDetails;
 
 import com.google.firebase.crash.FirebaseCrash;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatDrawableManager;
@@ -31,6 +34,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.News;
 import com.jaus.albertogiunta.justintrain_oraritreni.journeyFavourites.FavouriteJourneysActivity;
+import com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.WrapContentLinearLayoutManager;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
@@ -59,11 +63,13 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_NOT_FOUND_SOLUTION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_SERVER;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_SOLUTION_DETAILS;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS.NONE;
 
 public class TrainDetailsActivity extends AppCompatActivity implements TrainDetailsContract.View {
 
     TrainDetailsContract.Presenter presenter;
     AnalyticsHelper                analyticsHelper;
+    BroadcastReceiver              messageReceiver;
 
     MenuItem menuItem;
 
@@ -132,6 +138,13 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
             refreshBtnLastClickTime = SystemClock.elapsedRealtime();
         });
 
+        messageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                showSnackbar(intent.getExtras().getString(NotificationService.NOTIFICATION_ERROR_MESSAGE), NONE, Snackbar.LENGTH_SHORT);
+            }
+        };
+
         presenter.updateRequested();
     }
 
@@ -176,6 +189,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
     protected void onResume() {
         super.onResume();
 //        adView.resume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter(NotificationService.NOTIFICATION_ERROR_EVENT));
         presenter.setState(getIntent().getExtras());
     }
 
@@ -332,7 +346,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
                             " > " + presenter.getSolution().getArrivalStationId() +
                             " @ " + presenter.getSolution().getDepartureTimeReadable() +
                             " currTime " + DateTime.now().toString("HH:mm")));
-                    showSnackbar("Messaggio ricevuto! Grazie per l'aiuto!", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);
+                    showSnackbar("Messaggio ricevuto! Grazie per l'aiuto!", NONE, Snackbar.LENGTH_LONG);
                     Log.d("intent a report");
                     break;
                 case NO_SOLUTIONS:

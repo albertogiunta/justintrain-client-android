@@ -4,13 +4,16 @@ import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +32,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.journeySearch.JourneySearchActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.DateTimeAdapter;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.PostProcessingEnabler;
+import com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_ERROR_BTN_STATUS;
@@ -56,6 +60,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_FROM_RESULTS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_STATIONS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_TIME;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS.NONE;
 
 public class JourneyResultsActivity extends AppCompatActivity implements JourneyResultsContract.View {
 
@@ -66,6 +71,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
 
     JourneyResultsContract.Presenter presenter;
     AnalyticsHelper                  analyticsHelper;
+    BroadcastReceiver                messageReceiver;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -149,6 +155,13 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
         });
         presenter.setState(getIntent().getExtras());
         presenter.searchFromSearch(true);
+
+        messageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                showSnackbar(intent.getExtras().getString(NotificationService.NOTIFICATION_ERROR_MESSAGE), NONE, Snackbar.LENGTH_SHORT);
+            }
+        };
     }
 
     @Override
@@ -192,6 +205,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
     @Override
     protected void onResume() {
         super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter(NotificationService.NOTIFICATION_ERROR_EVENT));
 //        presenter.setState(getIntent().getExtras());
     }
 
@@ -261,7 +275,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
                             "" + presenter.getPreferredJourney().getStation1().getStationLongId() +
                             " > " + presenter.getPreferredJourney().getStation2().getStationLongId() +
                             " @ " + presenter.getTimeOfSearch().toString("HH:mm")));
-                    showSnackbar("Messaggio ricevuto! Grazie per l'aiuto!", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);
+                    showSnackbar("Messaggio ricevuto! Grazie per l'aiuto!", NONE, Snackbar.LENGTH_LONG);
                     Log.d("intent a report");
                     break;
                 case NO_SOLUTIONS:
