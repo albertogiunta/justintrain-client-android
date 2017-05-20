@@ -31,6 +31,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.News;
 import com.jaus.albertogiunta.justintrain_oraritreni.journeyFavourites.FavouriteJourneysActivity;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.WrapContentLinearLayoutManager;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_ERROR_BTN_STATUS;
@@ -108,7 +109,8 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
         adapter = new TrainDetailsAdapter(getApplicationContext(), presenter);
         rvTrainDetails.setAdapter(adapter);
         rvTrainDetails.setHasFixedSize(true);
-        rvTrainDetails.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+//        rvTrainDetails.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        rvTrainDetails.setLayoutManager(new WrapContentLinearLayoutManager(getViewContext(), LinearLayoutManager.VERTICAL, false));
         rvTrainDetails.addOnScrollListener(new HideShowScrollListener() {
             @Override
             public void onHide() {
