@@ -237,7 +237,12 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
                         this.tvTrainStatus.setTextColor(getTimeDifferenceColor(context, COLORS.BLACK));
                     }
                     this.tvStatusException.setText(parseTrainStatus(train.getTrainStatusCode(), tvStatusException));
-                    this.tvLastSeenStationTime.setText(train.getLastSeenStationName() + " (" + train.getLastSeenTimeReadable() + ")");
+                    if (train.getLastSeenStationName().equals("") || train.getLastSeenTimeReadable().equals("")) {
+                        apply(this.llLastSeen, GONE);
+                    } else {
+                        apply(this.llLastSeen, VISIBLE);
+                        this.tvLastSeenStationTime.setText(train.getLastSeenStationName() + " (" + train.getLastSeenTimeReadable() + ")");
+                    }
                     this.tvTimeDifference.setText(train.getTimeDifference() + "'");
                     this.tvTimeDifference.setTextColor(getTimeDifferenceColor(context, train.getTimeDifference()));
                     this.tvProgress.setText(parseProgress(train.getProgress()));

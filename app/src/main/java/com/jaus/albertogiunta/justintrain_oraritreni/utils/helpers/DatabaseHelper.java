@@ -22,13 +22,13 @@ public class DatabaseHelper {
 
     public static List<String> getElementByNameLong(String stationName) {
         return Stream
-                .of(stationList.where().beginsWith("nameLong", stationName, Case.INSENSITIVE).findAll())
+                .of(stationList.where().beginsWith("nameLong", stationName, Case.INSENSITIVE).or().contains("nameLong", " " + stationName, Case.INSENSITIVE).findAll())
                 .map(Station4Database::getNameLong).collect(Collectors.toList());
     }
 
     public static List<String> getElementByNameShort(String stationName) {
         return Stream
-                .of(stationList.where().beginsWith("nameShort", stationName, Case.INSENSITIVE).findAll())
+                .of(stationList.where().beginsWith("nameShort", stationName, Case.INSENSITIVE).or().contains("nameShort", " " + stationName, Case.INSENSITIVE).findAll())
                 .map(Station4Database::getNameLong).collect(Collectors.toList());
     }
 

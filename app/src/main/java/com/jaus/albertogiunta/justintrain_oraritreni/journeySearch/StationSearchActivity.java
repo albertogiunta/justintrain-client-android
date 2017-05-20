@@ -25,7 +25,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import trikita.log.Log;
 
 public class StationSearchActivity extends AppCompatActivity implements SearchedStationsAdapter.OnClickListener {
 
@@ -70,7 +69,6 @@ public class StationSearchActivity extends AppCompatActivity implements Searched
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.d("ONCHANGE", newText);
                 stationNames.clear();
                 stationNames.addAll(DatabaseHelper.getElementByNameLong(newText));
                 if (stationNames.size() == 0) {
