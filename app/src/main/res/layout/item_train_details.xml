@@ -224,6 +224,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_toStartOf="@id/ll_time_difference"
                 android:layout_marginTop="@dimen/margin_default"
+                android:visibility="gone"
                 >
 
             <TextView
@@ -253,6 +254,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ll_last_seen"
                 android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/ll_time_difference"
                 android:layout_marginTop="@dimen/margin_default_minus"
                 android:maxLines="3"
                 tools:text="asdfòlk asdflòk asdflk jsadlasdlòkf asdflk jasdflòk asdflkò asdflòk asdflk asdòlk asdflk asdflòk sdalk asdflk asdlf"
