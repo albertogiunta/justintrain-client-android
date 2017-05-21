@@ -24,17 +24,17 @@
 
         <include
                 android:id="@+id/left_fav_train_0"
-                layout="@layout/item_favourite_train_journey_left_buttony"
+                layout="@layout/item_favourite_train_journey_left"
                 android:visibility="visible"
                 />
         <include
                 android:id="@+id/left_fav_train_1"
-                layout="@layout/item_favourite_train_journey_left_buttony"
+                layout="@layout/item_favourite_train_journey_left"
                 android:visibility="visible"
                 />
         <include
                 android:id="@+id/left_fav_train_2"
-                layout="@layout/item_favourite_train_journey_left_buttony"
+                layout="@layout/item_favourite_train_journey_left"
                 android:visibility="visible"
                 />
     </LinearLayout>
@@ -58,17 +58,17 @@
 
         <include
                 android:id="@+id/right_fav_train_0"
-                layout="@layout/item_favourite_train_journey_right_buttony"
+                layout="@layout/item_favourite_train_journey_right"
                 android:visibility="visible"
                 />
         <include
                 android:id="@+id/right_fav_train_1"
-                layout="@layout/item_favourite_train_journey_right_buttony"
+                layout="@layout/item_favourite_train_journey_right"
                 android:visibility="visible"
                 />
         <include
                 android:id="@+id/right_fav_train_2"
-                layout="@layout/item_favourite_train_journey_right_buttony"
+                layout="@layout/item_favourite_train_journey_right"
                 android:visibility="visible"
                 />
     </LinearLayout>
