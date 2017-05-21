@@ -31,7 +31,6 @@ import eu.davidea.viewholders.FlexibleViewHolder;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -114,15 +113,7 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                     .create();
 
             List<Journey.Solution> solutions = new ArrayList<>(preferredSolutions.values());
-            Collections.sort(solutions, (o1, o2) -> {
-                if (o1.getDepartureTime().isBefore(o2.getDepartureTime())) {
-                    return -1;
-                } else if (o1.getDepartureTime().isAfter(o2.getDepartureTime())) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
+            solutions.sort((o1, o2) -> o1.getDepartureTime().toLocalTime().compareTo(o2.getDepartureTime().toLocalTime()));
 
             for (Journey.Solution solution : solutions) {
                 if (i < list.size()) {
