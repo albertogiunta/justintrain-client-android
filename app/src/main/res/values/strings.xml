@@ -73,7 +73,7 @@
     <string name="about_github">GitHub</string>
     <string name="about_website">Sito Web</string>
     <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '    -->
-    <string name="changelog">• <b>WOW!</b> Nuove animazioni in tutta l\'app, per renderne sempre più gradevole l\'utilizzo\n\n•Nuova grafica per i treni preferiti in Home\n\n• <b>Bug e UI fix</b>\n\n
+    <string name="changelog">• Migliorata la ricerca delle stazioni: ora si può cercare per qualsiasi parola nel nome della stazione\n\n• <b>Risolto Bug</b> Ora i treni preferiti appaiono tutti e sempre in ordine di orario crescente\n\n• <b>Risolto Bug</b> Eliminato il problema dei treni fantasma in tarda notte (giuro, roba che neanche Ghostbusters)\n\n• Bug e UI fix generali\n\n
     </string>
     <string name="play_store_native_url">market://details?id=</string>
     <string name="play_store_web_url">https://play.google.com/store/apps/details?id=</string>

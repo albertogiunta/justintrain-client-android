@@ -399,13 +399,9 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
                     break;
                 case 1:
                     // visitata
-                    for (View v : textViewsToBeColored) {
-                        ((TextView) v).setTextColor(getTimeDifferenceColor(context, COLORS.GREY_LIGHTER));
-                    }
+                    setAsVisited();
 
-                    tvPlannedDepartureTime.setPaintFlags(tvPlannedDepartureTime.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
                     if (isInStation) {
-                        Log.d("bind: in station");
                         apply(tvActualOrPlannedWithTimeDifference, GONE);
                         apply(tvMarkAsInStation, VISIBLE);
                     } else if (stop.getActualDepartureTime() != null) {
@@ -430,6 +426,7 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
                     tvStationException.setTextColor(getTimeDifferenceColor(context, COLORS.ORANGE));
                     break;
                 case 3:
+                    setAsVisited();
                     apply(tvStationException, VISIBLE);
                     tvStationException.setText("Soppressa");
                     tvStationException.setTextColor(getTimeDifferenceColor(context, COLORS.RED));
@@ -451,6 +448,14 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
                 apply(tvPlatform, VISIBLE);
                 tvPlatform.setText(stop.getDeparturePlatform());
             }
+        }
+
+        private void setAsVisited() {
+            for (View v : textViewsToBeColored) {
+                ((TextView) v).setTextColor(getTimeDifferenceColor(context, COLORS.GREY_LIGHTER));
+            }
+
+            tvPlannedDepartureTime.setPaintFlags(tvPlannedDepartureTime.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         }
 
         private void parseMarkingsAsChangeDepartureOrArrival(String id) {
