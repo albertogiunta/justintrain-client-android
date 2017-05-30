@@ -12,7 +12,7 @@ import android.util.Pair;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Journey;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredJourney;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
-import com.jaus.albertogiunta.justintrain_oraritreni.data.Station4Database;
+import com.jaus.albertogiunta.justintrain_oraritreni.data.Station;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.TrainHeader;
 import com.jaus.albertogiunta.justintrain_oraritreni.journeyResults.JourneyResultsContract.View.JourneySearchStrategy.OnJourneySearchFinishedListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.APINetworkingFactory;
@@ -37,13 +37,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
-import retrofit2.adapter.rxjava.HttpException;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import retrofit2.HttpException;
 import trikita.log.Log;
 
 import static com.jaus.albertogiunta.justintrain_oraritreni.journeyResults.JourneyResultsAdapter.INTERVAL;
@@ -92,13 +88,11 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
                 PreferredJourney journey = gson.fromJson(bundle.getString(I_STATIONS), PreferredJourney.class);
                 this.departureStation = journey.getStation1();
                 this.arrivalStation = journey.getStation2();
-                Log.d("Current bundled stations are: ", this.departureStation.toString(), this.arrivalStation.toString());
                 view.setStationNames(departureStation.getNameLong(), arrivalStation.getNameLong());
                 setFavouriteButtonStatus();
             }
             this.dateTime = new DateTime(bundle.getLong(I_TIME, DateTime.now().getMillis()));
             this.isSearchComingFromSwipe = bundle.getBoolean(I_FROM_SWIPE, false);
-            Log.d("Current bundled DateTime is: ", dateTime);
         } else {
             Log.d("no bundle found");
         }
@@ -227,15 +221,14 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
     @Override
     public void onJourneyRefreshRequested(int recyclerViewIndex) {
         int                               elementIndex = extractIndex(recyclerViewIndex);
-        RealmResults<Station4Database>    stationList  = Realm.getDefaultInstance().where(Station4Database.class).findAll();
         Map<Pair<String, String>, String> m            = new HashMap<>();
         if (journeySolutions.get(elementIndex).hasChanges()) {
             for (int changeIndex = 0; changeIndex < journeySolutions.get(elementIndex).getChangesList().size(); changeIndex++) {
                 try {
-                    String           departureStationName = journeySolutions.get(elementIndex).getChangesList().get(changeIndex).getDepartureStationName();
-                    String           arrivalStationName   = journeySolutions.get(elementIndex).getChangesList().get(changeIndex).getArrivalStationName();
-                    Station4Database tempDepartureStation = DatabaseHelper.getStation4DatabaseObject(departureStationName, stationList);
-                    Station4Database tempArrivalStation   = DatabaseHelper.getStation4DatabaseObject(arrivalStationName, stationList);
+                    String  departureStationName = journeySolutions.get(elementIndex).getChangesList().get(changeIndex).getDepartureStationName();
+                    String  arrivalStationName   = journeySolutions.get(elementIndex).getChangesList().get(changeIndex).getArrivalStationName();
+                    Station tempDepartureStation = DatabaseHelper.getStation4DatabaseObject(departureStationName);
+                    Station tempArrivalStation   = DatabaseHelper.getStation4DatabaseObject(arrivalStationName);
 
                     m.put(new Pair<>(tempDepartureStation.getStationShortId(), tempArrivalStation.getStationShortId()), journeySolutions.get(elementIndex).getChangesList().get(changeIndex).getTrainId());
                 } catch (Exception e) {
@@ -246,58 +239,49 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
         } else {
             m.put(new Pair<>(departureStation.getStationShortId(), arrivalStation.getStationShortId()), journeySolutions.get(elementIndex).getTrainId());
         }
-        Observable.concatDelayError(refreshChange(m)).subscribe(new Subscriber<TrainHeader>() {
-            @Override
-            public void onCompleted() {
-                journeySolutions.get(elementIndex).refreshData();
-                view.updateSolution(recyclerViewIndex);
-                Log.d("onCompleted: ", getSolutionList().get(elementIndex).toString());
-            }
 
-            @Override
-            public void onError(Throwable e) {
-                if (e.getMessage().equals("HTTP 404 ")) {
-                    AnalyticsHelper.getInstance(view.getViewContext()).logScreenEvent(SCREEN_JOURNEY_RESULTS, ERROR_NOT_FOUND_SOLUTION);
-                    view.showSnackbar("Il treno potrebbe essere soppresso o avere cambiato codice", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);
+        Observable.concatDelayError(refreshChange(m)).subscribe(trainHeader -> {
+            Integer          changeIndex = null;
+            Journey.Solution sol         = journeySolutions.get(elementIndex);
+
+            if (sol.hasChanges()) {
+                List<Journey.Solution.Change> changes = sol.getChangesList();
+                for (Journey.Solution.Change c : changes) {
+                    if (trainHeader.getTrainId().equalsIgnoreCase(c.getTrainId()))
+                        changeIndex = changes.indexOf(c);
                 }
-            }
-
-            @Override
-            public void onNext(TrainHeader trainHeader) {
-                Integer          changeIndex = null;
-                Journey.Solution sol         = journeySolutions.get(elementIndex);
-
-                if (sol.hasChanges()) {
-                    List<Journey.Solution.Change> changes = sol.getChangesList();
-                    for (Journey.Solution.Change c : changes) {
-                        if (trainHeader.getTrainId().equalsIgnoreCase(c.getTrainId()))
-                            changeIndex = changes.indexOf(c);
-                    }
-                    if (changeIndex != null) {
-                        changes.get(changeIndex).setDeparturePlatform(trainHeader.getDeparturePlatform());
-                        if (trainHeader.isDeparted()) {
-                            changes.get(changeIndex).setTimeDifference(trainHeader.getTimeDifference());
-                            changes.get(changeIndex).setProgress(trainHeader.getProgress());
-                            changes.get(changeIndex).postProcess();
-                        } else if (sol.getTimeDifference() == null) {
-                            view.showSnackbar("Il treno "
-                                    + trainHeader.getTrainCategory()
-                                    + " "
-                                    + trainHeader.getTrainId()
-                                    + " non è ancora partito", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_SHORT);
-                        }
-                    }
-                } else {
-                    sol.setDeparturePlatform(trainHeader.getDeparturePlatform());
+                if (changeIndex != null) {
+                    changes.get(changeIndex).setDeparturePlatform(trainHeader.getDeparturePlatform());
                     if (trainHeader.isDeparted()) {
-                        sol.setTimeDifference(trainHeader.getTimeDifference());
-                        sol.setProgress(trainHeader.getProgress());
-                    } else {
-                        view.showSnackbar("Il treno non è ancora partito", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_SHORT);
+                        changes.get(changeIndex).setTimeDifference(trainHeader.getTimeDifference());
+                        changes.get(changeIndex).setProgress(trainHeader.getProgress());
+                        changes.get(changeIndex).postProcess();
+                    } else if (sol.getTimeDifference() == null) {
+                        view.showSnackbar("Il treno "
+                                + trainHeader.getTrainCategory()
+                                + " "
+                                + trainHeader.getTrainId()
+                                + " non è ancora partito", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_SHORT);
                     }
                 }
-
+            } else {
+                sol.setDeparturePlatform(trainHeader.getDeparturePlatform());
+                if (trainHeader.isDeparted()) {
+                    sol.setTimeDifference(trainHeader.getTimeDifference());
+                    sol.setProgress(trainHeader.getProgress());
+                } else {
+                    view.showSnackbar("Il treno non è ancora partito", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_SHORT);
+                }
             }
+        }, throwable -> {
+            if (throwable.getMessage().equals("HTTP 404 ")) {
+                AnalyticsHelper.getInstance(view.getViewContext()).logScreenEvent(SCREEN_JOURNEY_RESULTS, ERROR_NOT_FOUND_SOLUTION);
+                view.showSnackbar("Il treno potrebbe essere soppresso o avere cambiato codice", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);
+            }
+        }, () -> {
+            journeySolutions.get(elementIndex).refreshData();
+            view.updateSolution(recyclerViewIndex);
+            Log.d("onCompleted: ", getSolutionList().get(elementIndex).toString());
         });
     }
 
@@ -401,7 +385,6 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
                     .getDelay(p.first,
                             p.second,
                             info.get(p))
-                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread()));
         }
         return o;
@@ -423,30 +406,21 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
         @Override
         public void searchJourney(boolean isNewSearch, String departureStationId, String arrivalStationId, DateTime timestamp, boolean isPreemptive, boolean withDelays, boolean includeTrainToBeTaken, OnJourneySearchFinishedListener listener) {
             Log.d(departureStationId, arrivalStationId, timestamp, isPreemptive, withDelays);
-            APINetworkingFactory.createRetrofitService(JourneyService.class).getJourneyInstant(departureStationId, arrivalStationId, isPreemptive, SettingsPreferences.isIncludeChangesEnabled(listener.getViewContext()), SettingsPreferences.getEnabledCategoriesAsStringArray(listener.getViewContext()))
-                    .subscribeOn(Schedulers.io())
+            APINetworkingFactory
+                    .createRetrofitService(JourneyService.class)
+                    .getJourneyInstant(departureStationId, arrivalStationId, isPreemptive, SettingsPreferences.isIncludeChangesEnabled(listener.getViewContext()), SettingsPreferences.getEnabledCategoriesAsStringArray(listener.getViewContext()))
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Journey>() {
-                        @Override
-                        public void onCompleted() {
+                    .subscribe(journey -> {
+                        journeySolutions.clear();
+                        journeySolutions.addAll(journey.getSolutions());
+                        if (journeySolutions.size() > 0) {
+                            listener.onSuccess();
+                            listener.onScrollToFirstRequested(-1);
+                        } else {
+                            listener.onJourneyNotFound();
                         }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            listener.onServerError(e);
-                        }
-
-                        @Override
-                        public void onNext(Journey solutionList) {
-                            journeySolutions.clear();
-                            journeySolutions.addAll(solutionList.getSolutions());
-                            if (journeySolutions.size() > 0) {
-                                listener.onSuccess();
-                                listener.onScrollToFirstRequested(-1);
-                            } else {
-                                listener.onJourneyNotFound();
-                            }
-                        }
+                    }, throwable -> {
+                        listener.onServerError(throwable);
                     });
         }
     }
@@ -456,66 +430,39 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
         public void searchJourney(boolean isNewSearch, String departureStationId, String arrivalStationId, DateTime timestamp, boolean isPreemptive, boolean withDelays, boolean includeTrainToBeTaken, OnJourneySearchFinishedListener listener) {
             APINetworkingFactory.createRetrofitService(JourneyService.class)
                     .getJourneyAfterTime(departureStationId, arrivalStationId, timestamp.toString("yyyy-MM-dd'T'HH:mmZ"), withDelays, isPreemptive, includeTrainToBeTaken, SettingsPreferences.isIncludeChangesEnabled(listener.getViewContext()), SettingsPreferences.getEnabledCategoriesAsStringArray(listener.getViewContext()))
-                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Journey>() {
-                        @Override
-                        public void onCompleted() {
+                    .subscribe(journey -> {
+                        Log.d(journey.getSolutions().size(), "new solutions found");
+                        if (isNewSearch) {
+                            journeySolutions.clear();
                         }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            listener.onServerError(e);
+                        journeySolutions.addAll(journey.getSolutions());
+                        if (journeySolutions.size() > 0) {
+                            listener.onSuccess();
+                            if (isNewSearch) listener.onScrollToFirstRequested(1);
+                        } else {
+                            listener.onJourneyAfterNotFound();
                         }
-
-                        @Override
-                        public void onNext(Journey solutionList) {
-                            Log.d(solutionList.getSolutions().size(), "new solutions found");
-                            if (isNewSearch) {
-                                journeySolutions.clear();
-                            }
-                            journeySolutions.addAll(solutionList.getSolutions());
-                            if (journeySolutions.size() > 0) {
-                                listener.onSuccess();
-                                if (isNewSearch) listener.onScrollToFirstRequested(1);
-                            } else {
-                                listener.onJourneyAfterNotFound();
-                            }
-                        }
+                    }, throwable -> {
+                        listener.onServerError(throwable);
                     });
         }
-
-
     }
 
     private static class SearchBeforeTimeStrategy implements JourneyResultsContract.View.JourneySearchStrategy {
         @Override
         public void searchJourney(boolean isNewSearch, String departureStationId, String arrivalStationId, DateTime timestamp, boolean isPreemptive, boolean withDelays, boolean includeTrainToBeTaken, OnJourneySearchFinishedListener listener) {
-            Log.d(timestamp);
             APINetworkingFactory.createRetrofitService(JourneyService.class).getJourneyBeforeTime(departureStationId, arrivalStationId, timestamp.toString("yyyy-MM-dd'T'HH:mmZ"), withDelays, isPreemptive, SettingsPreferences.isIncludeChangesEnabled(listener.getViewContext()), SettingsPreferences.getEnabledCategoriesAsStringArray(listener.getViewContext()))
-                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Journey>() {
-                        @Override
-                        public void onCompleted() {
+                    .subscribe(journey -> {
+                        if (journey.getSolutions().size() > 0) {
+                            journeySolutions.addAll(0, journey.getSolutions());
+                            listener.onSuccess();
+                        } else {
+                            listener.onJourneyBeforeNotFound();
                         }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            listener.onServerError(e);
-                            Log.d(e.getMessage());
-                        }
-
-                        @Override
-                        public void onNext(Journey solutionList) {
-                            Log.d(solutionList.getSolutions().size(), "new solutions found");
-                            if (solutionList.getSolutions().size() > 0) {
-                                journeySolutions.addAll(0, solutionList.getSolutions());
-                                listener.onSuccess();
-                            } else {
-                                listener.onJourneyBeforeNotFound();
-                            }
-                        }
+                    }, throwable -> {
+                        listener.onServerError(throwable);
                     });
         }
     }

@@ -17,7 +17,7 @@ public class PreferredStation {
         preferredSolutions = new HashMap<>();
     }
 
-    public PreferredStation(Station4Database station) {
+    public PreferredStation(Station station) {
         this.stationShortId = station.getStationShortId();
         this.stationLongId = station.getStationLongId();
         this.nameShort = station.getNameShort();

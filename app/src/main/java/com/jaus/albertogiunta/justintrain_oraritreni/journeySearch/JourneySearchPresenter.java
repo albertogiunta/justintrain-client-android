@@ -8,7 +8,6 @@ import android.support.design.widget.Snackbar;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredJourney;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
-import com.jaus.albertogiunta.justintrain_oraritreni.data.Station4Database;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.DateTimeAdapter;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.PostProcessingEnabler;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
@@ -20,8 +19,6 @@ import org.joda.time.format.DateTimeFormat;
 
 import java.util.Locale;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
 import trikita.log.Log;
 
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_STATIONS;
@@ -33,10 +30,9 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.Databa
 class JourneySearchPresenter implements JourneySearchContract.Presenter {
 
     private JourneySearchActivity view;
-    private RealmResults<Station4Database> stationList;
-    private PreferredStation departureStation;
-    private PreferredStation arrivalStation;
-    private DateTime dateTime;
+    private PreferredStation      departureStation;
+    private PreferredStation      arrivalStation;
+    private DateTime              dateTime;
 
     Gson gson = new GsonBuilder()
             .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
@@ -45,7 +41,6 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
 
     JourneySearchPresenter(JourneySearchActivity view) {
         this.view = view;
-        this.stationList = Realm.getDefaultInstance().where(Station4Database.class).findAll();
         dateTime = DateTime.now().minusMinutes(10);
     }
 
@@ -141,7 +136,7 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
 //    public List<String> searchStationName(String stationName) {
 //        return Stream
 //                .of(stationList.where().beginsWith("name", stationName, Case.INSENSITIVE).findAll())
-//                .map(Station4Database::getNameLong).collect(Collectors.toList());
+//                .map(Station::getNameLong).collect(Collectors.toList());
 //    }
 
     @Override
@@ -209,16 +204,16 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
     }
 
     private boolean isDataValid() {
-        if (departureStation != null && isStationNameValid(departureStation.getNameShort(), stationList)) {
-            departureStation = new PreferredStation(getStation4DatabaseObject(departureStation.getNameShort(), stationList));
+        if (departureStation != null && isStationNameValid(departureStation.getNameShort())) {
+            departureStation = new PreferredStation(getStation4DatabaseObject(departureStation.getNameShort()));
         } else {
             view.showSnackbar("Stazione di partenza mancante!", ENUM_SNACKBAR_ACTIONS.SELECT_DEPARTURE, Snackbar.LENGTH_LONG);
             if (departureStation != null) Log.d(departureStation.getNameShort() + " not found!");
             return false;
         }
 
-        if (arrivalStation != null && isStationNameValid(arrivalStation.getNameShort(), stationList)) {
-            arrivalStation = new PreferredStation(getStation4DatabaseObject(arrivalStation.getNameShort(), stationList));
+        if (arrivalStation != null && isStationNameValid(arrivalStation.getNameShort())) {
+            arrivalStation = new PreferredStation(getStation4DatabaseObject(arrivalStation.getNameShort()));
         } else {
             view.showSnackbar("Stazione di arrivo mancante!", ENUM_SNACKBAR_ACTIONS.SELECT_ARRIVAL, Snackbar.LENGTH_LONG);
             if (arrivalStation != null) Log.d(arrivalStation.getNameShort() + " not found!");

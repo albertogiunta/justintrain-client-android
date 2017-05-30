@@ -1,19 +1,30 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.data;
 
-import io.realm.RealmObject;
-import io.realm.annotations.Required;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
-public class Station4Database extends RealmObject {
+@Entity(tableName = "station")
+public class Station {
 
-    @Required
-    private String stationShortId;
-    @Required
-    private String stationLongId;
-    @Required
-    private String nameLong;
-    @Required
-    private String nameShort;
+    @PrimaryKey
+    private Integer sid;
+    @ColumnInfo(name = "name_short")
+    private String  nameShort;
+    @ColumnInfo(name = "name_long")
+    private String  nameLong;
+    @ColumnInfo(name = "id_short")
+    private String  stationShortId;
+    @ColumnInfo(name = "id_long")
+    private String  stationLongId;
 
+    public Integer getSid() {
+        return sid;
+    }
+
+    public void setSid(Integer sid) {
+        this.sid = sid;
+    }
 
     public String getStationShortId() {
         return stationShortId;
@@ -49,7 +60,7 @@ public class Station4Database extends RealmObject {
 
     @Override
     public String toString() {
-        return "Station4Database{" +
+        return "Station{" +
                 "stationShortId='" + stationShortId + '\'' +
                 ", stationLongId='" + stationLongId + '\'' +
                 ", nameLong='" + nameLong + '\'' +

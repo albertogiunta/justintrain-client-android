@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Journey;
-import com.jaus.albertogiunta.justintrain_oraritreni.data.News;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredJourney;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Train;
@@ -33,11 +32,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import retrofit2.adapter.rxjava.HttpException;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import retrofit2.HttpException;
 import trikita.log.Log;
 
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_SOLUTION;
@@ -118,58 +115,55 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
             trainIdList = getTrainIdList();
         }
 
-        Observable.concatDelayError(Observable.from(searchTrainDetails(trainIdList))).subscribe(new Subscriber<Train>() {
-            @Override
-            public void onCompleted() {
-                if (view == null) {
-                    return;
-                }
-                getFlatTrainList();
-                view.hideProgress();
-                view.updateTrainDetails();
-            }
-
-            @Override
-            public void onError(Throwable exception) {
-                if (exception == null) {
+        Observable.concatDelayError(Observable.fromIterable(searchTrainDetails(trainIdList))).subscribe(
+                train -> {
+                    trainList.add(train);
+                }, throwable -> {
+                    if (throwable == null) {
                     view.showErrorMessage("Si è verificato un errore", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
                     return;
                 }
-                Log.d(exception.getMessage());
+                    Log.d(throwable.getMessage());
                 if (view != null) {
-                    if (exception.getMessage().equals("HTTP 404 ")) {
+                    if (throwable.getMessage().equals("HTTP 404 ")) {
                         if (solution.hasChanges()) {
                             FirebaseCrash.report(new Exception("TRAIN DETAIL ERROR solution is " + solution.toString()));
                             view.showSnackbar("Uno o più treni non sono ancora disponibili", NONE, Snackbar.LENGTH_LONG);
-                            onCompleted();
+                            onComplete();
                         } else {
                             view.showErrorMessage("Le informazioni su questo treno purtroppo non sono ancora disponibili", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
                         }
                     } else {
-                        Log.e("onServerError: ", exception.toString());
-                        if (exception instanceof HttpException) {
-                            Log.d(((HttpException) exception).response().errorBody(), ((HttpException) exception).response().code());
-                            if (((HttpException) exception).response().code() == 500) {
+                        Log.e("onServerError: ", throwable.toString());
+                        if (throwable instanceof HttpException) {
+                            Log.d(((HttpException) throwable).response().errorBody(), ((HttpException) throwable).response().code());
+                            if (((HttpException) throwable).response().code() == 500) {
                                 view.showErrorMessage("Il server sta avendo dei problemi", "Segnala il problema", ENUM_ERROR_BTN_STATUS.SEND_REPORT);
                             }
-                        } else if (exception instanceof ConnectException) {
+                        } else if (throwable instanceof ConnectException) {
                             if (NetworkingHelper.isNetworkAvailable(view.getViewContext())) {
                                 view.showErrorMessage("Il server sta avendo dei problemi", "Segnala il problema", ENUM_ERROR_BTN_STATUS.SEND_REPORT);
                             } else {
                                 view.showErrorMessage("Assicurati di essere connesso a Internet", "Attiva connessione", ENUM_ERROR_BTN_STATUS.CONN_SETTINGS);
                             }
-                        } else if (exception instanceof SocketTimeoutException) {
+                        } else if (throwable instanceof SocketTimeoutException) {
                             view.showErrorMessage("Assicurati di essere connesso a Internet", "Attiva connessione", ENUM_ERROR_BTN_STATUS.CONN_SETTINGS);
                         }
                     }
                 }
+                }, () -> {
+                    onComplete();
             }
+        );
+    }
 
-            @Override
-            public void onNext(Train train) {
-                trainList.add(train);
-            }
-        });
+    private void onComplete() {
+        if (view == null) {
+            return;
+        }
+        getFlatTrainList();
+        view.hideProgress();
+        view.updateTrainDetails();
     }
 
     @Override
@@ -221,7 +215,6 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
         List<Observable<Train>> o = new LinkedList<>();
         for (String s : trainIdList) {
             o.add(APINetworkingFactory.createRetrofitService(TrainService.class).getTrainDetails(s)
-                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread()));
         }
         return o;
@@ -328,24 +321,11 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
     @Override
     public void onNewsUpdateRequested(String trainId) {
         APINetworkingFactory.createRetrofitService(TrainService.class).getTrainNews(trainId)
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<News>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        FirebaseCrash.report(new Exception("ERROR ON NEWS UPDATE for train" + trainId));
-                    }
-
-                    @Override
-                    public void onNext(News news) {
-                        Log.d("onNext: ", news.toString());
-                        view.showNewsDialog(news);
-                    }
+                .subscribe(news -> {
+                    view.showNewsDialog(news);
+                }, throwable -> {
+                    FirebaseCrash.report(new Exception("ERROR ON NEWS UPDATE for train" + trainId));
                 });
     }
 

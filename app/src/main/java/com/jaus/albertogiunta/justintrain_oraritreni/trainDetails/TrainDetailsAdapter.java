@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Journey;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
-import com.jaus.albertogiunta.justintrain_oraritreni.data.Station4Database;
+import com.jaus.albertogiunta.justintrain_oraritreni.data.Station;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Train;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.COLORS;
@@ -60,8 +60,8 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
             for (Journey.Solution.Change c : solution.getChangesList()) {
                 Log.d(c.getDepartureStationName(), c.getArrivalStationName());
                 try {
-                    Station4Database station1 = DatabaseHelper.getStation4DatabaseObject(c.getDepartureStationName());
-                    Station4Database station2 = DatabaseHelper.getStation4DatabaseObject(c.getArrivalStationName());
+                    Station station1 = DatabaseHelper.getStation4DatabaseObject(c.getDepartureStationName());
+                    Station station2 = DatabaseHelper.getStation4DatabaseObject(c.getArrivalStationName());
                     if (station1 != null && station2 != null) {
                         c.setDepartureStationId(new PreferredStation(station1).getStationLongId());
                         c.setArrivalStationId(new PreferredStation(station2).getStationLongId());
@@ -474,6 +474,8 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
 
         private void check(String idCurrent, String idDeparture, String idArrival) {
             if (idDeparture == null || idArrival == null) {
+                apply(tvMarkAsChangeDeparture, GONE);
+                apply(tvMarkAsChangeArrival, GONE);
                 return;
             }
             if (idCurrent.equals(idDeparture)) {
