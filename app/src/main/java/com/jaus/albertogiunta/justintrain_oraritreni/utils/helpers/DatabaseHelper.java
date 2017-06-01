@@ -6,7 +6,7 @@ import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.jaus.albertogiunta.justintrain_oraritreni.MyApplication;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
-import com.jaus.albertogiunta.justintrain_oraritreni.data.Station;
+import com.jaus.albertogiunta.justintrain_oraritreni.db.Station;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.PreferredStationsPreferences;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class DatabaseHelper {
 
     public static List<String> getElementByNameLong(String stationName) {
         return Stream
-                .of(MyApplication.database.stationDao().getAllByNameLong(stationName))
+                .of(MyApplication.database.stationDao().getAllByNameLong(stationName + "%", "% " + stationName + "%"))
                 .map(Station::getNameLong).collect(Collectors.toList());
     }
 

@@ -3,7 +3,8 @@ package com.jaus.albertogiunta.justintrain_oraritreni;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
-import com.jaus.albertogiunta.justintrain_oraritreni.data.AppDatabase;
+import com.jaus.albertogiunta.justintrain_oraritreni.db.AppDatabase;
+import com.jaus.albertogiunta.justintrain_oraritreni.db.AssetSQLiteOpenHelperFactory;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -29,6 +30,7 @@ public class MyApplication extends Application {
 
         if (database == null) {
             database = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "justintrain.db")
+                    .openHelperFactory(new AssetSQLiteOpenHelperFactory())
                     .allowMainThreadQueries()
                     .build();
         }

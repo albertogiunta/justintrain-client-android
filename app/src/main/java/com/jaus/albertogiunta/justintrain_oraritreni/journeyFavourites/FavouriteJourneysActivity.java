@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -37,11 +38,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.BuildConfig;
+import com.jaus.albertogiunta.justintrain_oraritreni.MyApplication;
 import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.AboutActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.AboutPageUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.SettingsActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredJourney;
+import com.jaus.albertogiunta.justintrain_oraritreni.db.Station;
 import com.jaus.albertogiunta.justintrain_oraritreni.journeyResults.JourneyResultsActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.journeySearch.JourneySearchActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.DateTimeAdapter;
@@ -175,7 +178,40 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
                 showSnackbar(intent.getExtras().getString(NotificationService.NOTIFICATION_ERROR_MESSAGE), NONE, Snackbar.LENGTH_SHORT);
             }
         };
+
+        AsyncTask task = new LoadCursorTask(this).execute();
     }
+
+
+    abstract private class BaseTask<T> extends AsyncTask<T, Void, List<Station>> {
+        Context app;
+
+        BaseTask(Context ctxt) {
+            app = ctxt.getApplicationContext();
+        }
+
+        @Override
+        public void onPostExecute(List<Station> result) {
+            Log.d("onPostExecute: " + result.toString());
+        }
+
+        List<Station> doQuery() {
+            return (MyApplication.database.stationDao().getAllByNameLong());
+        }
+    }
+
+    private class LoadCursorTask extends BaseTask<Void> {
+        private LoadCursorTask(Context ctxt) {
+            super(ctxt);
+        }
+
+        @Override
+        protected List<Station> doInBackground(Void... params) {
+            return (doQuery());
+        }
+    }
+
+
 
     @Override
     protected void attachBaseContext(Context newBase) {

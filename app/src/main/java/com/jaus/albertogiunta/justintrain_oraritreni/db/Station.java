@@ -1,4 +1,4 @@
-package com.jaus.albertogiunta.justintrain_oraritreni.data;
+package com.jaus.albertogiunta.justintrain_oraritreni.db;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -7,14 +7,24 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "station")
 public class Station {
 
+
+    //    @DatabaseField(generatedId = true)
     @PrimaryKey
     private Integer sid;
+
+    //    @DatabaseField(columnName = "name_short")
     @ColumnInfo(name = "name_short")
     private String  nameShort;
+
+    //    @DatabaseField(columnName = "name_long")
     @ColumnInfo(name = "name_long")
     private String  nameLong;
+
+    //    @DatabaseField(columnName = "id_short")
     @ColumnInfo(name = "id_short")
     private String  stationShortId;
+
+    //    @DatabaseField(columnName = "id_long")
     @ColumnInfo(name = "id_long")
     private String  stationLongId;
 

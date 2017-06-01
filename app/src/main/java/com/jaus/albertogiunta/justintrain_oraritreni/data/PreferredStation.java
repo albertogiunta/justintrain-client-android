@@ -1,5 +1,7 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.data;
 
+import com.jaus.albertogiunta.justintrain_oraritreni.db.Station;
+
 import java.util.HashMap;
 import java.util.Map;
 

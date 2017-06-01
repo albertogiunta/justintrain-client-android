@@ -110,7 +110,7 @@ dependencies {
     compile 'android.arch.persistence.room:runtime:1.0.0-alpha1'
     compile 'android.arch.persistence.room:rxjava2:1.0.0-alpha1'
     compile 'com.annimon:stream:1.1.4'
-    compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    compile group: 'com.j256.ormlite', name: 'ormlite-android', version: '5.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     apt 'com.google.auto.value:auto-value:1.2-rc1'
     apt 'android.arch.persistence.room:compiler:1.0.0-alpha1'
