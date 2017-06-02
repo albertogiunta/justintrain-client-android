@@ -85,7 +85,7 @@ public class TrainNotification {
                 .setContentTitle(title)
                 .setContentText(text)
                 // Use a default priority (recognized on devices running Android 4.1 or later)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 // Set ticker text (preview) information for this notification.
                 .setTicker(buildTicker(trainHeader))
                 // Show expanded text content on devices running Android 4.1 or later.
