@@ -16,7 +16,9 @@ import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Journey;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredJourney;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
+import com.jaus.albertogiunta.justintrain_oraritreni.networking.APINetworkingFactory;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.DateTimeAdapter;
+import com.jaus.albertogiunta.justintrain_oraritreni.networking.JourneyService;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.PostProcessingEnabler;
 import com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService;
 import com.jaus.albertogiunta.justintrain_oraritreni.trainDetails.TrainDetailsActivity;
@@ -38,10 +40,13 @@ import java.util.Map;
 
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static butterknife.ButterKnife.apply;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.COLORS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.GONE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.VISIBLE;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.getTimeDifferenceColor;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_CLICK_ON_FAV_SOLUTION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_CLICK_ON_FAV_SOLUTION_NOTIF;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_FAVOURITE_JOURNEYS;
@@ -103,10 +108,11 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
             bindPreferredSolutionsButtons(analyticsHelper, context, preferredJourney.getStation2().getPreferredSolutions(), right, preferredJourney, preferredJourney.getStation2(), preferredJourney.getStation1());
         }
 
-        private void bindPreferredSolutionsButtons(AnalyticsHelper analyticsHelper, Context context, Map<String, Journey.Solution> preferredSolutions, List<RelativeLayout> list, PreferredJourney preferredJourney, PreferredStation departureStation, PreferredStation arrivalStation) {
+        private void bindPreferredSolutionsButtons(AnalyticsHelper analyticsHelper, Context context, Map<String, Journey.Solution> preferredSolutions, List<RelativeLayout> solutionsViewsList, PreferredJourney preferredJourney, PreferredStation departureStation, PreferredStation arrivalStation) {
 
-            Button    btn;
-            ImageView ntf;
+            Button    trainDetailsBtn;
+            ImageView notifcationIV;
+//            Button    delayView;
             int       i = 0;
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
@@ -115,26 +121,24 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
 
             List<Journey.Solution> solutions = new ArrayList<>(preferredSolutions.values());
             Collections.sort(solutions, (o1, o2) -> o1.getDepartureTime().toLocalTime().compareTo(o2.getDepartureTime().toLocalTime()));
-//            solutions.sort((o1, o2) -> o1.getDepartureTime().toLocalTime().compareTo(o2.getDepartureTime().toLocalTime()));
 
             for (Journey.Solution solution : solutions) {
-                if (i < list.size()) {
-                    apply(list.get(i), VISIBLE);
+                if (i < solutionsViewsList.size()) {
+                    apply(solutionsViewsList.get(i), VISIBLE);
                 }
 
-                btn = (Button) list.get(i).findViewById(R.id.btn_solution_time);
-                ntf = (ImageView) list.get(i).findViewById(R.id.btn_pin);
-                btn.setText(solution.getDepartureTimeReadable() + " " + SEPARATOR + " " + solution.getArrivalTimeReadable());
-                btn.setOnClickListener(v -> {
+                trainDetailsBtn = (Button) solutionsViewsList.get(i).findViewById(R.id.btn_solution_time);
+                notifcationIV = (ImageView) solutionsViewsList.get(i).findViewById(R.id.btn_pin);
+                trainDetailsBtn.setText(solution.getDepartureTimeReadable() + " " + SEPARATOR + " " + solution.getArrivalTimeReadable());
+                trainDetailsBtn.setOnClickListener(v -> {
                     analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_CLICK_ON_FAV_SOLUTION);
                     Intent intent = new Intent(context, TrainDetailsActivity.class);
                     intent.putExtra(I_SOLUTION, gson.toJson(solution));
                     intent.putExtra(I_STATIONS, gson.toJson(preferredJourney));
                     context.startActivity(intent);
                 });
-                i++;
 
-                ntf.setOnClickListener(v -> {
+                notifcationIV.setOnClickListener(v -> {
                     analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_CLICK_ON_FAV_SOLUTION_NOTIF);
                     NotificationPreferences.setNotificationData(context, preferredJourney, solution);
                     NotificationService.startActionStartNotification(context,
@@ -145,11 +149,37 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                     AnimationUtils.animOnPress(v, AnimationUtils.ANIM_TYPE.MEDIUM);
                 });
 
-                AnimationUtils.onCompare(ntf);
+                AnimationUtils.onCompare(notifcationIV);
+
+                if (!solution.hasChanges()) {
+                    if (DateTime.now().isAfter(solution.getDepartureTime().minusMinutes(30)) &&
+                            DateTime.now().isBefore(solution.getArrivalTime())) {
+                        final int j = i;
+                        APINetworkingFactory
+                                .createRetrofitService(JourneyService.class)
+                                .getDelayMinimal(departureStation.getStationShortId(), arrivalStation.getStationShortId(), solution.getTrainId())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(trainHeader -> {
+                                    Button delayView = (Button) solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
+                                    if (trainHeader.isDeparted()) {
+                                        apply(delayView, VISIBLE);
+                                        delayView.setText(trainHeader.getTimeDifference() + "'");
+                                        if (trainHeader.getTimeDifference() > 0) {
+                                            delayView.setTextColor(getTimeDifferenceColor(context, COLORS.RED));
+                                        } else {
+                                            delayView.setTextColor(getTimeDifferenceColor(context, COLORS.BLUE));
+                                        }
+                                    } else {
+                                        apply(delayView, GONE);
+                                    }
+                                });
+                    }
+                }
+                i++;
             }
 
-            for (int j = preferredSolutions.size(); j < list.size(); j++) {
-                apply(list.get(j), GONE);
+            for (int j = preferredSolutions.size(); j < solutionsViewsList.size(); j++) {
+                apply(solutionsViewsList.get(j), GONE);
             }
         }
     }

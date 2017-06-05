@@ -54,4 +54,9 @@ public interface JourneyService {
                                      @Path("arrivalStationId") String arrivalStationId,
                                      @Path("trainId") String trainId);
 
+    @GET(version + "/departure/{departureStationId}/arrival/{arrivalStationId}/train/{trainId}/minimal")
+    Observable<TrainHeader> getDelayMinimal(@Path("departureStationId") String departureStationId,
+                                            @Path("arrivalStationId") String arrivalStationId,
+                                            @Path("trainId") String trainId);
+
 }

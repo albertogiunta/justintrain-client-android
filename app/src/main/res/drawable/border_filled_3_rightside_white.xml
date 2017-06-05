@@ -6,10 +6,11 @@
             android:color="@color/bg_white">
     </solid>
 
-    <!--<stroke-->
-    <!--android:width="0dp"-->
-    <!--android:color="@color/btn_cyan">-->
-    <!--</stroke>-->
+
+    <stroke
+            android:width="0dp"
+            android:color="@color/btn_cyan">
+    </stroke>
 
     <corners
             android:radius="1dp"
