@@ -120,40 +120,40 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
                     trainList.add(train);
                 }, throwable -> {
                     if (throwable == null) {
-                    view.showErrorMessage("Si è verificato un errore", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
-                    return;
-                }
+                        view.showErrorMessage("Si è verificato un errore", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
+                        return;
+                    }
                     Log.d(throwable.getMessage());
-                if (view != null) {
-                    if (throwable.getMessage().equals("HTTP 404 ")) {
-                        if (solution.hasChanges()) {
-                            FirebaseCrash.report(new Exception("TRAIN DETAIL ERROR solution is " + solution.toString()));
-                            view.showSnackbar("Uno o più treni non sono ancora disponibili", NONE, Snackbar.LENGTH_LONG);
-                            onComplete();
-                        } else {
-                            view.showErrorMessage("Le informazioni su questo treno purtroppo non sono ancora disponibili", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
-                        }
-                    } else {
-                        Log.e("onServerError: ", throwable.toString());
-                        if (throwable instanceof HttpException) {
-                            Log.d(((HttpException) throwable).response().errorBody(), ((HttpException) throwable).response().code());
-                            if (((HttpException) throwable).response().code() == 500) {
-                                view.showErrorMessage("Il server sta avendo dei problemi", "Segnala il problema", ENUM_ERROR_BTN_STATUS.SEND_REPORT);
-                            }
-                        } else if (throwable instanceof ConnectException) {
-                            if (NetworkingHelper.isNetworkAvailable(view.getViewContext())) {
-                                view.showErrorMessage("Il server sta avendo dei problemi", "Segnala il problema", ENUM_ERROR_BTN_STATUS.SEND_REPORT);
+                    if (view != null) {
+                        if (throwable.getMessage().equals("HTTP 404 ")) {
+                            if (solution.hasChanges()) {
+                                FirebaseCrash.report(new Exception("TRAIN DETAIL ERROR solution is " + solution.toString()));
+                                view.showSnackbar("Uno o più treni non sono ancora disponibili", NONE, Snackbar.LENGTH_LONG);
+                                onComplete();
                             } else {
+                                view.showErrorMessage("Le informazioni su questo treno purtroppo non sono ancora disponibili", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
+                            }
+                        } else {
+                            Log.e("onServerError: ", throwable.toString());
+                            if (throwable instanceof HttpException) {
+                                Log.d(((HttpException) throwable).response().errorBody(), ((HttpException) throwable).response().code());
+                                if (((HttpException) throwable).response().code() == 500) {
+                                    view.showErrorMessage("Il server sta avendo dei problemi", "Segnala il problema", ENUM_ERROR_BTN_STATUS.SEND_REPORT);
+                                }
+                            } else if (throwable instanceof ConnectException) {
+                                if (NetworkingHelper.isNetworkAvailable(view.getViewContext())) {
+                                    view.showErrorMessage("Il server sta avendo dei problemi", "Segnala il problema", ENUM_ERROR_BTN_STATUS.SEND_REPORT);
+                                } else {
+                                    view.showErrorMessage("Assicurati di essere connesso a Internet", "Attiva connessione", ENUM_ERROR_BTN_STATUS.CONN_SETTINGS);
+                                }
+                            } else if (throwable instanceof SocketTimeoutException) {
                                 view.showErrorMessage("Assicurati di essere connesso a Internet", "Attiva connessione", ENUM_ERROR_BTN_STATUS.CONN_SETTINGS);
                             }
-                        } else if (throwable instanceof SocketTimeoutException) {
-                            view.showErrorMessage("Assicurati di essere connesso a Internet", "Attiva connessione", ENUM_ERROR_BTN_STATUS.CONN_SETTINGS);
                         }
                     }
-                }
                 }, () -> {
                     onComplete();
-            }
+                }
         );
     }
 
@@ -214,7 +214,8 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
         Log.d("searchTrainDetails: searching train with id:", trainIdList);
         List<Observable<Train>> o = new LinkedList<>();
         for (String s : trainIdList) {
-            o.add(APINetworkingFactory.createRetrofitService(TrainService.class).getTrainDetails(s)
+            o.add(APINetworkingFactory.createRetrofitService(TrainService.class)
+                    .getTrainDetails(s)
                     .observeOn(AndroidSchedulers.mainThread()));
         }
         return o;

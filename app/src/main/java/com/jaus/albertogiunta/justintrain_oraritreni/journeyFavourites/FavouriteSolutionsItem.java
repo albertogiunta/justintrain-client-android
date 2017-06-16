@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -16,6 +17,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Journey;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredJourney;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
+import com.jaus.albertogiunta.justintrain_oraritreni.data.TrainHeader;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.APINetworkingFactory;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.DateTimeAdapter;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.JourneyService;
@@ -23,6 +25,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.networking.PostProcessingEn
 import com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService;
 import com.jaus.albertogiunta.justintrain_oraritreni.trainDetails.TrainDetailsActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.NotificationPreferences;
 
@@ -40,10 +43,11 @@ import java.util.Map;
 
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import trikita.log.Log;
 
 import static butterknife.ButterKnife.apply;
-import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.COLORS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.GONE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.VISIBLE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.getTimeDifferenceColor;
@@ -113,7 +117,7 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
             Button    trainDetailsBtn;
             ImageView notifcationIV;
 //            Button    delayView;
-            int       i = 0;
+            int i = 0;
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
                     .registerTypeAdapterFactory(new PostProcessingEnabler())
@@ -150,27 +154,60 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                 });
 
                 AnimationUtils.onCompare(notifcationIV);
-
-                if (!solution.hasChanges()) {
-                    if (DateTime.now().isAfter(solution.getDepartureTime().minusMinutes(30)) &&
-                            DateTime.now().isBefore(solution.getArrivalTime())) {
-                        final int j = i;
+                if (DateTime.now().toLocalTime().isAfter(solution.getDepartureTime().minusMinutes(60).toLocalTime()) &&
+                        DateTime.now().toLocalTime().isBefore(solution.getArrivalTime().toLocalTime())) {
+                    final int   j           = i;
+                    Button      delayView   = (Button) solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
+                    ImageButton warningView = (ImageButton) solutionsViewsList.get(j).findViewById(R.id.iv_warning);
+                    apply(warningView, GONE);
+                    apply(delayView, GONE);
+                    if (!solution.hasChanges()) {
                         APINetworkingFactory
                                 .createRetrofitService(JourneyService.class)
-                                .getDelayMinimal(departureStation.getStationShortId(), arrivalStation.getStationShortId(), solution.getTrainId())
+                                .getDelayMinimal("xxx", "xxx", solution.getTrainId())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(trainHeader -> {
-                                    Button delayView = (Button) solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
-                                    if (trainHeader.isDeparted()) {
-                                        apply(delayView, VISIBLE);
-                                        delayView.setText(trainHeader.getTimeDifference() + "'");
-                                        if (trainHeader.getTimeDifference() > 0) {
-                                            delayView.setTextColor(getTimeDifferenceColor(context, COLORS.RED));
-                                        } else {
-                                            delayView.setTextColor(getTimeDifferenceColor(context, COLORS.BLUE));
-                                        }
+                                    if (trainHeader.getTrainStatusCode() > 1) {
+                                        apply(warningView, VISIBLE);
                                     } else {
-                                        apply(delayView, GONE);
+                                        if (trainHeader.isDeparted()) {
+                                            showTimeDifference(delayView, trainHeader.getTimeDifference(), context);
+                                        } else {
+                                            apply(delayView, GONE);
+                                        }
+                                    }
+                                });
+                    } else {
+                        List<TrainHeader>             headerList = new LinkedList<>();
+                        List<Observable<TrainHeader>> obsList    = new LinkedList<>();
+
+                        for (Journey.Solution.Change c : solution.getChangesList()) {
+                            obsList.add(APINetworkingFactory.createRetrofitService(JourneyService.class)
+                                    .getDelayMinimal("xxx", "xxx", c.getTrainId())
+                                    .observeOn(AndroidSchedulers.mainThread()));
+                        }
+
+                        Observable.concatDelayError(Observable.fromIterable(obsList)).subscribe(
+                                trainHeader -> {
+                                    headerList.add(trainHeader);
+                                }, throwable -> {
+                                    Log.d("bindPreferredSolutionsButtons: ERORREEE");
+                                }, () -> {
+                                    boolean foundWarning   = false;
+                                    Integer timeDifference = 0;
+                                    for (TrainHeader trainHeader : headerList) {
+                                        if (trainHeader.getTrainStatusCode() > 1) {
+                                            foundWarning = true;
+                                            break;
+                                        } else {
+                                            timeDifference += trainHeader.getTimeDifference();
+                                        }
+                                    }
+
+                                    if (foundWarning) {
+                                        apply(warningView, VISIBLE);
+                                    } else {
+                                        showTimeDifference(delayView, timeDifference, context);
                                     }
                                 });
                     }
@@ -181,6 +218,16 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
             for (int j = preferredSolutions.size(); j < solutionsViewsList.size(); j++) {
                 apply(solutionsViewsList.get(j), GONE);
             }
+        }
+    }
+
+    private static void showTimeDifference(Button delayView, Integer timeDifference, Context context) {
+        apply(delayView, VISIBLE);
+        delayView.setText(timeDifference + "'");
+        if (timeDifference > 0) {
+            delayView.setTextColor(getTimeDifferenceColor(context, ViewsUtils.COLORS.RED));
+        } else {
+            delayView.setTextColor(getTimeDifferenceColor(context, ViewsUtils.COLORS.GREEN));
         }
     }
 
