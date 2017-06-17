@@ -34,7 +34,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
-import trikita.log.Log;
 
 import static butterknife.ButterKnife.apply;
 import static butterknife.ButterKnife.bind;
@@ -53,7 +52,6 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 
 class JourneyResultsAdapter extends RecyclerView.Adapter {
 
-    static int INTERVAL = 0;
     private Context                          context;
     private List<Journey.Solution>           solutionList;
     private JourneyResultsContract.Presenter presenter;
@@ -74,8 +72,6 @@ class JourneyResultsAdapter extends RecyclerView.Adapter {
                 return new LoadMoreBeforeHolder(layoutInflater.inflate(R.layout.item_journey_load_before, parent, false));
             case VIEW_TYPES.Footer:
                 return new LoadMoreAfterHolder(layoutInflater.inflate(R.layout.item_journey_load_after, parent, false));
-            case VIEW_TYPES.NativeAd:
-//                return new AdViewHolder(layoutInflater.inflate(R.layout.item_journey_native_ad, parent, false));
             default:
                 throw new RuntimeException("there is no type that matches the type " + viewType);
         }
@@ -84,28 +80,12 @@ class JourneyResultsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (solutionList.isEmpty()) return;
-        if (INTERVAL != 0) {
-            Log.d("onBindViewHolder: ", position, (int) Math.floor(position / INTERVAL));
-        }
         if (holder instanceof JourneyHolder) {
-            if (INTERVAL != 0) {
-                ((JourneyHolder) holder).bind(solutionList.get(position - 1 - (int) Math.floor(position / INTERVAL)));
-            } else {
-                ((JourneyHolder) holder).bind(solutionList.get(position - 1));
-            }
+            ((JourneyHolder) holder).bind(solutionList.get(position - 1));
         } else if (holder instanceof LoadMoreAfterHolder) {
             ((LoadMoreAfterHolder) holder).readyButton();
         } else if (holder instanceof LoadMoreBeforeHolder) {
             ((LoadMoreBeforeHolder) holder).readyButton();
-//        } else if (holder instanceof AdViewHolder) {
-//            if (((AdViewHolder) holder).adView.getAdSize() == null) {
-//                ((AdViewHolder) holder).adView.setAdSize(new AdSize(width, 80));
-//            }
-//            Log.d("AdViewHolder: ", ((AdViewHolder) holder).adView.getAdSize());
-//            ((AdViewHolder) holder).adView.loadAd(new AdRequest.Builder()
-//                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
-//                    .addTestDevice("EF67DDDDDDD0896B1B02876D927AC309")  // An example device ID
-//                    .build());
         }
     }
 
@@ -114,11 +94,7 @@ class JourneyResultsAdapter extends RecyclerView.Adapter {
         if (solutionList.isEmpty()) {
             return 0;
         } else {
-            if (INTERVAL != 0) {
-                return solutionList.size() + 2 + (solutionList.size() / INTERVAL);
-            } else {
-                return solutionList.size() + 2;
-            }
+            return solutionList.size() + 2;
         }
     }
 
@@ -126,16 +102,10 @@ class JourneyResultsAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         if (position == 0) {
             return VIEW_TYPES.Header;
-        } else if (INTERVAL != 0 && position == solutionList.size() + 1 + (int) Math.floor(solutionList.size() / INTERVAL)) {
-            return VIEW_TYPES.Footer;
-        } else if (INTERVAL == 0 && position == solutionList.size() + 1) {
+        } else if (position == solutionList.size() + 1) {
             return VIEW_TYPES.Footer;
         } else {
-            if (INTERVAL != 0 && position % INTERVAL == 0) {
-                return VIEW_TYPES.NativeAd;
-            } else {
-                return VIEW_TYPES.Normal;
-            }
+            return VIEW_TYPES.Normal;
         }
     }
 
@@ -143,7 +113,6 @@ class JourneyResultsAdapter extends RecyclerView.Adapter {
         static final int Header   = 1;
         static final int Normal   = 2;
         static final int Footer   = 3;
-        static final int NativeAd = 4;
     }
 
     class JourneyHolder extends RecyclerView.ViewHolder {
@@ -451,15 +420,4 @@ class JourneyResultsAdapter extends RecyclerView.Adapter {
             apply(btn, VISIBLE);
         }
     }
-
-
-//    class AdViewHolder extends RecyclerView.ViewHolder {
-//        @BindView(R.id.nativeAdView)
-//        NativeExpressAdView adView;
-
-//        public AdViewHolder(View v) {
-//            super(v);
-//            bind(this, itemView);
-//        }
-//    }
 }

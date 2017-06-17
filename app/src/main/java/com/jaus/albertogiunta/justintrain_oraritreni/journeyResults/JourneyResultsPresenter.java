@@ -42,7 +42,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import retrofit2.HttpException;
 import trikita.log.Log;
 
-import static com.jaus.albertogiunta.justintrain_oraritreni.journeyResults.JourneyResultsAdapter.INTERVAL;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_NOT_FOUND_JOURNEY_AFTER;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_NOT_FOUND_JOURNEY_BEFORE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_NOT_FOUND_SOLUTION;
@@ -396,9 +395,6 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
 //    }
 
     private int extractIndex(int i) {
-        if (INTERVAL != 0) {
-            return i - 1 - (int) Math.floor(i / INTERVAL);
-        }
         return i - 1;
     }
 

@@ -66,9 +66,6 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
 
     public static final String ACTION = "com.jaus.albertogiunta.justintrain_oraritreni.OPEN_DYNAMIC_SHORTCUT";
 
-    // The Native Express ad unit ID.
-//    private static final String AD_UNIT_ID = "ca-app-pub-8963908741443055/6579349527";
-
     JourneyResultsContract.Presenter presenter;
     AnalyticsHelper                  analyticsHelper;
     BroadcastReceiver                messageReceiver;
