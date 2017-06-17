@@ -15,15 +15,18 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.Set
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_CHANGES;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_INSTANT_DELAY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_LIGHTNING;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_PREEMPTIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_VIBRATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_CHANGES;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_INSTANT_DELAY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_LIGHTNING;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_PREEMPTIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_VIBRATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_GET_PREEMPTIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INCLUDE_CHANGES;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INSTANT_DELAY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_LIGHTNING;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_VIBRATION;
 
@@ -44,6 +47,10 @@ public class SettingsActivity extends AppCompatActivity {
         linearLayout = (LinearLayout) view1.findViewById(R.id.ll_container);
 
         View aboutPage = new AboutPageBuilder(this)
+                .addItem(new ItemBuilder(this, linearLayout).addItemGroupHeader("Preferiti").build())
+                // FAV TRAIN VIBRATION
+                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Ritardo istantaneo", "Quando accedi alla schermata iniziale", SettingsPreferences.isInstantDelayEnabled(this), true, SP_SETT_INSTANT_DELAY, SETTINGS_ENABLE_INSTANT_DELAY, SETTINGS_DISABLE_INSTANT_DELAY)
+                        .build())
                 .addItem(new ItemBuilder(this, linearLayout).addItemGroupHeader("Notifica").build())
                 // NOTIFICATION VIBRATION
                 .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Vibrazione nella notifica", "Quando la attivi o la aggiorni", SettingsPreferences.isVibrationEnabled(this), true, SP_SETT_NOTIF_VIBRATION, SETTINGS_ENABLE_VIBRATION, SETTINGS_DISABLE_VIBRATION)

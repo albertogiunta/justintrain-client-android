@@ -31,14 +31,14 @@ public class CONST_ANALYTICS {
     public static final String ACTION_SEARCH_JOURNEY_FROM_FAVOURITES = "Search journey from favourites";
     public static final String ACTION_SWIPE_LEFT_TO_RIGHT            = "Swipe left to right";
     public static final String ACTION_SWIPE_RIGHT_TO_LEFT            = "Swipe right to left";
-    public static final String ACTION_AR_FROM_POPUP               = "Search AR from popup";
-    public static final String ACTION_RA_FROM_POPUP               = "Search RA from popup";
-    public static final String ACTION_REMOVE_FROM_POPUP           = "Remove journey from popup";
-    public static final String ACTION_NO_SWIPE_BUT_CLICK          = "No swipe but click";
-    public static final String ACTION_NO_SWIPE_BUT_LONG_CLICK     = "No swipe but long click";
-    public static final String ACTION_ON_UPDATE_CLICK             = "Action on update click";
-    public static final String ACTION_CLICK_ON_FAV_SOLUTION       = "Action on favourite solution click";
-    public static final String ACTION_CLICK_ON_FAV_SOLUTION_NOTIF = "Action on favourite solution notification click";
+    public static final String ACTION_AR_FROM_POPUP                  = "Search AR from popup";
+    public static final String ACTION_RA_FROM_POPUP                  = "Search RA from popup";
+    public static final String ACTION_REMOVE_FROM_POPUP              = "Remove journey from popup";
+    public static final String ACTION_NO_SWIPE_BUT_CLICK             = "No swipe but click";
+    public static final String ACTION_NO_SWIPE_BUT_LONG_CLICK        = "No swipe but long click";
+    public static final String ACTION_ON_UPDATE_CLICK                = "Action on update click";
+    public static final String ACTION_CLICK_ON_FAV_SOLUTION          = "Action on favourite solution click";
+    public static final String ACTION_CLICK_ON_FAV_SOLUTION_NOTIF    = "Action on favourite solution notification click";
 
     // SEARCH
     public static final String ACTION_SELECT_DEPARTURE             = "Select departure";
@@ -84,13 +84,15 @@ public class CONST_ANALYTICS {
 
 
     // SETTINGS
-    public static final String SETTINGS_ENABLE_VIBRATION   = "Settings enable vibration";
-    public static final String SETTINGS_DISABLE_VIBRATION  = "Settings disable vibration";
-    public static final String SETTINGS_ENABLE_PREEMPTIVE  = "Settings enable preemptive";
-    public static final String SETTINGS_DISABLE_PREEMPTIVE = "Settings disable preemptive";
-    public static final String SETTINGS_ENABLE_LIGHTNING   = "Settings enable lightning";
-    public static final String SETTINGS_DISABLE_LIGHTNING  = "Settings disable lightning";
-    public static final String SETTINGS_ENABLE_CHANGES     = "Settings enable changes";
-    public static final String SETTINGS_DISABLE_CHANGES    = "Settings disable changes";
+    public static final String SETTINGS_ENABLE_INSTANT_DELAY  = "Settings enable instant delay";
+    public static final String SETTINGS_DISABLE_INSTANT_DELAY = "Settings disable instant delay";
+    public static final String SETTINGS_ENABLE_VIBRATION      = "Settings enable vibration";
+    public static final String SETTINGS_DISABLE_VIBRATION     = "Settings disable vibration";
+    public static final String SETTINGS_ENABLE_PREEMPTIVE     = "Settings enable preemptive";
+    public static final String SETTINGS_DISABLE_PREEMPTIVE    = "Settings disable preemptive";
+    public static final String SETTINGS_ENABLE_LIGHTNING      = "Settings enable lightning";
+    public static final String SETTINGS_DISABLE_LIGHTNING     = "Settings disable lightning";
+    public static final String SETTINGS_ENABLE_CHANGES        = "Settings enable changes";
+    public static final String SETTINGS_DISABLE_CHANGES       = "Settings disable changes";
 
 }

@@ -28,6 +28,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationU
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.NotificationPreferences;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.SettingsPreferences;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
@@ -154,7 +155,8 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                 });
 
                 AnimationUtils.onCompare(notifcationIV);
-                if (DateTime.now().toLocalTime().isAfter(solution.getDepartureTime().minusMinutes(60).toLocalTime()) &&
+                if (SettingsPreferences.isInstantDelayEnabled(context) &&
+                        DateTime.now().toLocalTime().isAfter(solution.getDepartureTime().minusMinutes(60).toLocalTime()) &&
                         DateTime.now().toLocalTime().isBefore(solution.getArrivalTime().toLocalTime())) {
                     final int   j           = i;
                     Button      delayView   = (Button) solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
@@ -211,6 +213,12 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                                     }
                                 });
                     }
+                } else {
+                    final int   j           = i;
+                    Button      delayView   = (Button) solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
+                    ImageButton warningView = (ImageButton) solutionsViewsList.get(j).findViewById(R.id.iv_warning);
+                    apply(warningView, GONE);
+                    apply(delayView, GONE);
                 }
                 i++;
             }

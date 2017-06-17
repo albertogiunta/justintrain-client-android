@@ -11,6 +11,7 @@ import java.util.List;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.PREFIX_CATEGORIES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_GET_PREEMPTIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INCLUDE_CHANGES;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INSTANT_DELAY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_LIGHTNING;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_VIBRATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_FIRST_START;
@@ -19,6 +20,19 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_VERSION;
 
 public class SettingsPreferences {
+
+    // instant delay
+    public static boolean isInstantDelayEnabled(Context context) {
+        return SharedPreferencesHelper.getSharedPreferenceBoolean(context, SP_SETT_INSTANT_DELAY, true);
+    }
+
+    public static void enableInstantDelay(Context context) {
+        enableGenericSetting(context, SP_SETT_INSTANT_DELAY);
+    }
+
+    public static void disableInstantDelay(Context context) {
+        disableGenericSetting(context, SP_SETT_INSTANT_DELAY);
+    }
 
     // vibration
     public static boolean isVibrationEnabled(Context context) {
@@ -184,6 +198,11 @@ public class SettingsPreferences {
         enableAllCategories(context);
     }
 
+    public static void setNewSettingsNotPreviouslyIncludedBefore23(Context context) {
+        // 23 - 0.9.4
+        enableInstantDelay(context);
+    }
+
     public static void setDefaultSharedPreferencesOnFirstStart(Context context) {
         // preferences
         SharedPreferencesHelper.setSharedPreferenceBoolean(context, SP_SP_FIRST_START, false);
@@ -194,6 +213,7 @@ public class SettingsPreferences {
         setNewSettingsNotPreviouslyIncludedBefore6(context);
         setNewSettingsNotPreviouslyIncludedBefore12(context);
         setNewSettingsNotPreviouslyIncludedBefore13(context);
+        setNewSettingsNotPreviouslyIncludedBefore23(context);
     }
 
     public static boolean areAllCategoriesEnabled(Context context) {
