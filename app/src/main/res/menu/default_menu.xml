@@ -3,17 +3,54 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-            android:id="@+id/action_settings"
-            android:title="Impostazioni"
-            app:showAsAction="never"/>
+            android:id="@+id/action_more"
+            android:orderInCategory="100"
+            android:icon="@drawable/ic_more"
+            android:title="More"
+            app:showAsAction="always">
+        <menu>
+            <item
+                    android:id="@+id/action_join"
+                    android:title="Entra nel Fun Club"
+                    android:icon="@drawable/ic_heart_outline"
+                    app:showAsAction="always"
+                    />
 
-    <item
-            android:id="@+id/action_legend"
-            android:title="Legenda simboli"
-            app:showAsAction="never"/>
+            <item
+                    android:id="@+id/action_settings"
+                    android:title="Impostazioni"
+                    android:icon="@drawable/ic_settings"
+                    app:showAsAction="always"
+                    />
 
-    <item
-            android:id="@+id/action_about"
-            android:title="Info e feedback"
-            app:showAsAction="never"/>
+            <item
+                    android:id="@+id/action_review"
+                    android:title="Valuta sul Play Store"
+                    android:icon="@drawable/ic_stars"
+                    app:showAsAction="always"
+                    />
+
+            <item
+                    android:id="@+id/action_share"
+                    android:title="Condividi l'app"
+                    android:icon="@drawable/ic_share_menu"
+                    app:showAsAction="always"
+                    />
+
+
+            <item
+                    android:id="@+id/action_legend"
+                    android:title="Legenda simboli"
+                    android:icon="@drawable/ic_assistant"
+                    app:showAsAction="always"
+                    />
+
+            <item
+                    android:id="@+id/action_about"
+                    android:title="Info e feedback"
+                    android:icon="@drawable/ic_info"
+                    app:showAsAction="always"
+                    />
+        </menu>
+    </item>
 </menu>

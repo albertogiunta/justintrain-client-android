@@ -58,10 +58,8 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
             this.arrivalStation = journey.getStation2();
             view.setStationNames(departureStation.getNameLong(), arrivalStation.getNameLong());
             setFavouriteButtonStatus();
-            Log.d("onResuming: resuming bundle", journey.toString());
             this.dateTime = new DateTime(bundle.getLong(I_TIME, DateTime.now().minusMinutes(10).getMillis()));
             setDateTime();
-            Log.d("Current bundled DateTime is: ", dateTime);
         } else {
             if (this.departureStation != null) {
                 view.setDepartureStationNames(departureStation.getNameLong());

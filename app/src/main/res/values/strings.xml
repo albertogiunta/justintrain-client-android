@@ -39,14 +39,8 @@
     <string name="search">Cerca</string>
 
     <string name="app_id">ca-app-pub-8963908741443055~4285788324</string>
-    <string name="banner_favourites_id">ca-app-pub-8963908741443055/5762521525</string>
-    <string name="banner_test_favourites_id">ca-app-pub-3940256099942544/6300978111</string>
-
-    <string name="banner_results_id">ca-app-pub-8963908741443055/2455801525</string>
-    <string name="banner_test_results_id">ca-app-pub-3940256099942544/6300978111</string>
-
-    <string name="banner_details_id">ca-app-pub-8963908741443055/3932534720</string>
-    <string name="banner_test_details_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="journey_id_real">ca-app-pub-8963908741443055/2399261121</string>
+    <string name="journey_id_test">ca-app-pub-3940256099942544/2793859312</string>
 
     <string name="static_shortcut_disabled_message">Non ancora disponibile</string>
     <string name="static_shortcut_long_label">Cerca</string>

@@ -8,9 +8,10 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="com.android.vending.BILLING"/>
 
     <application
-            android:name="com.jaus.albertogiunta.justintrain_oraritreni.MyApplication"
+            android:name=".MyApplication"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
@@ -18,16 +19,14 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan|adjustResize">
         <activity
-                android:name="com.jaus.albertogiunta.justintrain_oraritreni.tutorial.IntroActivity"
+                android:name=".tutorial.IntroActivity"
                 android:label="Intro Just In Train"
-                android:theme="@style/AppThemeNoShadowActionbar"
                 android:screenOrientation="portrait"
-                />
+                android:theme="@style/AppThemeNoShadowActionbar"/>
         <activity
-                android:name="com.jaus.albertogiunta.justintrain_oraritreni.journeyFavourites.FavouriteJourneysActivity"
+                android:name=".journeyFavourites.FavouriteJourneysActivity"
                 android:label="JustInTrain Orari Trenitalia"
-                android:screenOrientation="portrait"
-                >
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -40,56 +39,53 @@
                     android:resource="@xml/shortcuts"/>
         </activity>
         <activity
-                android:name="com.jaus.albertogiunta.justintrain_oraritreni.journeySearch.JourneySearchActivity"
+                android:name=".journeySearch.JourneySearchActivity"
                 android:label="Cerca tratta"
-                android:theme="@style/AppThemeNoShadowActionbar"
                 android:screenOrientation="portrait"
-                >
+                android:theme="@style/AppThemeNoShadowActionbar">
         </activity>
         <activity
-                android:name="com.jaus.albertogiunta.justintrain_oraritreni.journeySearch.StationSearchActivity"
-                android:launchMode="singleTop"
+                android:name=".journeySearch.StationSearchActivity"
                 android:label="Cerca stazione"
-                android:screenOrientation="portrait"
-                >
+                android:launchMode="singleTop"
+                android:screenOrientation="portrait">
             <meta-data
                     android:name="android.app.searchable"
                     android:resource="@xml/searchable"/>
         </activity>
         <activity
-                android:name="com.jaus.albertogiunta.justintrain_oraritreni.journeyResults.JourneyResultsActivity"
+                android:name=".journeyResults.JourneyResultsActivity"
                 android:label="Soluzioni"
-                android:theme="@style/AppThemeNoShadowActionbar"
                 android:screenOrientation="portrait"
-                >
+                android:theme="@style/AppThemeNoShadowActionbar">
             <intent-filter>
                 <action android:name="com.jaus.albertogiunta.justintrain_oraritreni.OPEN_DYNAMIC_SHORTCUT"/>
             </intent-filter>
         </activity>
         <activity
-                android:name="com.jaus.albertogiunta.justintrain_oraritreni.trainDetails.TrainDetailsActivity"
+                android:name=".trainDetails.TrainDetailsActivity"
                 android:label="Dettagli Soluzione"
-                android:screenOrientation="portrait"
                 android:launchMode="singleTop"
-                />
-
+                android:screenOrientation="portrait"/>
         <activity
-                android:name="com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.SettingsActivity"
+                android:name=".aboutAndSettings.SettingsActivity"
                 android:label="Impostazioni"
-                android:screenOrientation="portrait"
-                />
+                android:screenOrientation="portrait"/>
         <activity
-                android:name="com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.AboutActivity"
+                android:name=".aboutAndSettings.AboutActivity"
                 android:label="Info e Feedback"
-                android:screenOrientation="portrait"
-                />
+                android:screenOrientation="portrait"/>
         <activity
-                android:name="com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.LicencesActivity"
+                android:name=".aboutAndSettings.LicencesActivity"
                 android:label="Licenze"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".aboutAndSettings.LicenseUpgradeActivity"
+                android:label="Entra nel Fan Club!"
                 android:screenOrientation="portrait"
-                />
+                android:theme="@style/AppThemeActionbarPremiumActivity"/>
 
-        <!--//////////////////////////////////////////////////////-->
+        <!-- ////////////////////////////////////////////////////// -->
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"
                 android:resource="@drawable/ic_notification2"/>
@@ -98,7 +94,7 @@
                 android:resource="@color/btn_dark_cyan"/>
 
         <service
-                android:name="com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService"
+                android:name=".notification.NotificationService"
                 android:exported="false">
         </service>
         <service

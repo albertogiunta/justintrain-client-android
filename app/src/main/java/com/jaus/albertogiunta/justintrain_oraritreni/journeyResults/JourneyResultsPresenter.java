@@ -93,7 +93,6 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
             this.dateTime = new DateTime(bundle.getLong(I_TIME, DateTime.now().getMillis()));
             this.isSearchComingFromSwipe = bundle.getBoolean(I_FROM_SWIPE, false);
         } else {
-            Log.d("no bundle found");
         }
     }
 
@@ -214,7 +213,6 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
                 arrivalStation,
                 journeySolutions.get(elementIndex),
                 null);
-        Log.d("onNotificationRequested: ", getSolutionList().get(elementIndex).toString());
     }
 
     @Override
@@ -280,7 +278,6 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
         }, () -> {
             journeySolutions.get(elementIndex).refreshData();
             view.updateSolution(recyclerViewIndex);
-            Log.d("onCompleted: ", getSolutionList().get(elementIndex).toString());
         });
     }
 
@@ -401,7 +398,6 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
     private static class SearchInstantlyStrategy implements JourneyResultsContract.View.JourneySearchStrategy {
         @Override
         public void searchJourney(boolean isNewSearch, String departureStationId, String arrivalStationId, DateTime timestamp, boolean isPreemptive, boolean withDelays, boolean includeTrainToBeTaken, OnJourneySearchFinishedListener listener) {
-            Log.d(departureStationId, arrivalStationId, timestamp, isPreemptive, withDelays);
             APINetworkingFactory
                     .createRetrofitService(JourneyService.class)
                     .getJourneyInstant(departureStationId, arrivalStationId, isPreemptive, SettingsPreferences.isIncludeChangesEnabled(listener.getViewContext()), SettingsPreferences.getEnabledCategoriesAsStringArray(listener.getViewContext()))
@@ -428,7 +424,6 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
                     .getJourneyAfterTime(departureStationId, arrivalStationId, timestamp.toString("yyyy-MM-dd'T'HH:mmZ"), withDelays, isPreemptive, includeTrainToBeTaken, SettingsPreferences.isIncludeChangesEnabled(listener.getViewContext()), SettingsPreferences.getEnabledCategoriesAsStringArray(listener.getViewContext()))
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(journey -> {
-                        Log.d(journey.getSolutions().size(), "new solutions found");
                         if (isNewSearch) {
                             journeySolutions.clear();
                         }

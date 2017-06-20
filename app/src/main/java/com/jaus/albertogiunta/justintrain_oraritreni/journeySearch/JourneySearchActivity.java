@@ -239,16 +239,13 @@ public class JourneySearchActivity extends AppCompatActivity implements JourneyS
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null) {
             String stationName = data.getStringExtra("stationName");
-            Log.d("onActivityResult: ", stationName);
             if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(I_FROM_RESULTS, false)) {
                 getIntent().putExtra(I_IS_TEMP, true);
             }
             if (requestCode == I_CODE_DEPARTURE) {
-                Log.d("onActivityResult: ", requestCode);
                 presenter.onDepartureStationNameChanged(stationName);
 //                this.tvDeparture.setText(stationName);
             } else if (requestCode == I_CODE_ARRIVAL) {
-                Log.d("onActivityResult: ", requestCode);
                 presenter.onArrivalStationNameChanged(stationName);
 //                this.tvArrival.setText(stationName);
             }

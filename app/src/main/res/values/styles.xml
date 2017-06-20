@@ -19,6 +19,14 @@
         <item name="colorControlNormal">@color/bg_white</item>
     </style>
 
+    <style name="AppThemeActionbarPremiumActivity" parent="Theme.AppCompat.Light">
+        <item name="actionBarTheme">@style/Theme.MyApp.ActionBarPremium</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
+        <item name="colorPrimary">#212121</item>
+    </style>
+
     <style name="IntroTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/btn_dark_cyan</item>
         <item name="colorPrimaryDark">@color/btn_dark_cyan</item>
@@ -28,6 +36,11 @@
 
     <style name="Theme.MyApp.ActionBar" parent="style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="elevation">0dp</item>
+    </style>
+
+    <style name="Theme.MyApp.ActionBarPremium" parent="style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:textColorPrimary">#212121</item>
+        <item name="android:textColor">#FFFFFF</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>

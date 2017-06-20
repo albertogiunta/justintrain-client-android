@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import trikita.log.Log;
-
 public class SharedPreferencesHelper {
 
     private final static String PREF_FILE = "PREF";
@@ -125,7 +123,6 @@ public class SharedPreferencesHelper {
         SharedPreferences.Editor editor   = settings.edit();
         editor.remove(key);
         editor.apply();
-        Log.d("removeSharedPreferenceObject: removed key ", key);
     }
 
     /**

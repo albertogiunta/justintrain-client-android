@@ -21,6 +21,8 @@ public class MyApplication extends Application {
         super.onCreate();
         JodaTimeAndroid.init(this);
 
+//        MobileAds.initialize(getApplicationContext(), "ca-app-pub-8963908741443055~4285788324");
+
         String fontPath = "fonts/rooneysans-medium.ttf";
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath(fontPath)

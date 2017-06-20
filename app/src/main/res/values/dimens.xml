@@ -65,6 +65,8 @@
     <dimen name="item_favourite_journey">@dimen/item_height_big</dimen>
     <dimen name="item_journey_details">@dimen/item_height_smaller</dimen>
 
+    <dimen name="item_banner">80dp</dimen>
+
     <!--MARGINS-->
     <dimen name="margin_very_big">40dp</dimen>
     <dimen name="margin_bigger">36dp</dimen>
