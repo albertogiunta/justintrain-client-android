@@ -33,15 +33,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.BuildConfig;
 import com.jaus.albertogiunta.justintrain_oraritreni.MyApplication;
 import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.AboutActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.AboutPageUtils;
+import com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.LicenseUpgradeActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.SettingsActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredJourney;
 import com.jaus.albertogiunta.justintrain_oraritreni.db.Station;
@@ -78,6 +83,7 @@ import butterknife.OnClick;
 import trikita.log.Log;
 
 import static butterknife.ButterKnife.apply;
+import static com.android.billingclient.api.BillingClient.BillingResponse;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.GONE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.VISIBLE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_AR_FROM_POPUP;
@@ -102,12 +108,15 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM
 
 public class FavouriteJourneysActivity extends AppCompatActivity implements FavouritesContract.View,
         FlexibleAdapter.OnItemSwipeListener,
-        FlexibleAdapter.OnItemClickListener {
+        FlexibleAdapter.OnItemClickListener,
+        PurchasesUpdatedListener {
 
     FavouritesContract.Presenter presenter;
     AnalyticsHelper              analyticsHelper;
     BroadcastReceiver            messageReceiver;
 
+    @BindView(R.id.btn_iap)
+    Button btnIAP;
 
     @BindView(R.id.rv_favourite_journeys)
     RecyclerView rvFavouriteJourneys;
@@ -126,6 +135,9 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
             .registerTypeAdapterFactory(new PostProcessingEnabler())
             .create();
+
+    BillingClient mBillingClient;
+
 //    @BindView(R.id.adView)
 //    AdView         adView;
 
@@ -179,7 +191,62 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             }
         };
 
+        mBillingClient = new BillingClient.Builder(getViewContext())
+                .setListener(this)
+                .build();
+
+        btnIAP.setOnClickListener(v -> {
+            Intent i = new Intent(FavouriteJourneysActivity.this, LicenseUpgradeActivity.class);
+            FavouriteJourneysActivity.this.startActivity(i);
+//            mBillingClient.startConnection(new BillingClientStateListener() {
+//                @Override
+//                public void onBillingSetupFinished(@BillingResponse int billingResponse) {
+//                    if (billingResponse == BillingResponse.OK) {
+//                        // The billing client is ready. You can query purchases here.
+//                        List<String> skuList = new ArrayList<>();
+//                        skuList.add("premium_upgrade_mp");
+//                        mBillingClient.querySkuDetailsAsync(BillingClient.SkuType.INAPP, skuList,
+//                                result -> {
+//                                    if (result.getResponseCode() == BillingResponse.OK
+//                                            && result.getSkuDetailsList() != null) {
+//                                        // only 1 item so far
+//                                        String                    skuId        = result.getSkuDetailsList().get(0).getSku();
+//                                        BillingFlowParams.Builder builder      = new BillingFlowParams.Builder().setSku(skuId).setType(BillingClient.SkuType.INAPP);
+//                                        int                       responseCode = mBillingClient.launchBillingFlow(FavouriteJourneysActivity.this, builder.build());
+//
+//                                    }
+//
+//                                });
+//
+//                    }
+//                }
+//
+//                @Override
+//                public void onBillingServiceDisconnected() {
+//                    // Try to restart the connection on the next request to the
+//                    // In-app Billing service by calling the startConnection() method.
+//                }
+//            });
+
+
+        });
+
         AsyncTask task = new LoadCursorTask(this).execute();
+    }
+
+    @Override
+    public void onPurchasesUpdated(@BillingResponse int responseCode, List<Purchase> purchases) {
+        if (responseCode == BillingResponse.OK
+                && purchases != null) {
+            for (Purchase purchase : purchases) {
+                Log.d("onPurchasesUpdated: ", purchase.toString());
+                mBillingClient.consumeAsync(purchase.getPurchaseToken(), (purchaseToken, resultCode) -> Log.d("onConsumeResponse: ", resultCode));
+            }
+        } else if (responseCode == BillingResponse.USER_CANCELED) {
+            // Handle an error caused by a user cancelling the purchase flow.
+        } else {
+            // Handle any other error codes.
+        }
     }
 
 
@@ -192,7 +259,6 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
         @Override
         public void onPostExecute(List<Station> result) {
-            Log.d("onPostExecute: " + result.toString());
         }
 
         List<Station> doQuery() {
@@ -212,7 +278,6 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     }
 
 
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -228,8 +293,26 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_join:
+                FavouriteJourneysActivity.this.startActivity(new Intent(FavouriteJourneysActivity.this, LicenseUpgradeActivity.class));
+                return true;
             case R.id.action_settings:
                 FavouriteJourneysActivity.this.startActivity(new Intent(FavouriteJourneysActivity.this, SettingsActivity.class));
+                return true;
+            case R.id.action_share:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT,
+                        "Dai un'occhiata a quest'app pensata appositamente per i pendolari Trenitalia!\nhttps://play.google.com/store/apps/details?id=com.jaus.albertogiunta.justintrain_oraritreni");
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(sendIntent, "Consiglia l'app via..."));
+                return true;
+            case R.id.action_review:
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
+                }
                 return true;
             case R.id.action_legend:
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(FavouriteJourneysActivity.this);
@@ -420,16 +503,10 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
     @Override
     public void onItemSwipe(int position, int direction) {
-        Log.d("onItemSwipe position=" + position +
-                " direction=" + (direction == ItemTouchHelper.LEFT ? "LEFT" : "RIGHT"));
-//        FavouriteJourneysActivity.this.startActivity(setISearchIntent(true, presenter.getPreferredJourneys().get(position).swapStations()));
-
         List<Integer> positions = new ArrayList<>(1);
         positions.add(position);
         // Build the message
-        IFlexible     abstractItem = adapter.getItem(position);
-        StringBuilder message      = new StringBuilder();
-        message.append("ciao").append(" ");
+        IFlexible abstractItem = adapter.getItem(position);
         // Experimenting NEW feature
         if (abstractItem.isSelectable()) {
             adapter.setRestoreSelectionOnUndo(false);
@@ -446,8 +523,6 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
     @Override
     public void onActionStateChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-        Log.d("onItemSwipe position=" +
-                " direction=" + actionState);
     }
 
     @Override
