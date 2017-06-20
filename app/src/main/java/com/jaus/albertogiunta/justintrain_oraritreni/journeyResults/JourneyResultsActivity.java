@@ -1,5 +1,6 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.journeyResults;
 
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,6 +34,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.journeySearch.JourneySearch
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.DateTimeAdapter;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.PostProcessingEnabler;
 import com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_ERROR_BTN_STATUS;
@@ -85,6 +87,11 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
     @BindView(R.id.btn_toggle_favourite)
     ImageButton btnHeaderToggleFavorite;
 
+    @BindView(R.id.rl_banner_placeholder)
+    RelativeLayout      rlBannerPlaceholder;
+    @BindView(R.id.adView)
+    NativeExpressAdView adView;
+
     @BindView(R.id.loading_spinner)
     ProgressBar progressBar;
 
@@ -116,6 +123,8 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView);
 
         btnHeaderSwapStationNames.setOnClickListener(v -> {
             AnimationUtils.animOnPress(v, AnimationUtils.ANIM_TYPE.MEDIUM);
@@ -261,7 +270,6 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
             Intent i;
             switch (intent) {
                 case CONN_SETTINGS:
-                    Log.d("intent a settings");
                     analyticsHelper.logScreenEvent(SCREEN_JOURNEY_RESULTS, ERROR_CONNECTIVITY);
                     i = new Intent(Settings.ACTION_SETTINGS);
                     startActivity(i);
@@ -273,16 +281,13 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
                             " > " + presenter.getPreferredJourney().getStation2().getStationLongId() +
                             " @ " + presenter.getTimeOfSearch().toString("HH:mm")));
                     showSnackbar("Messaggio ricevuto! Grazie per l'aiuto!", NONE, Snackbar.LENGTH_LONG);
-                    Log.d("intent a report");
                     break;
                 case NO_SOLUTIONS:
                     analyticsHelper.logScreenEvent(SCREEN_JOURNEY_RESULTS, ERROR_NOT_FOUND_JOURNEY);
-                    Log.d("intent a ricerca");
                     finish();
                     break;
                 case SERVICE_UNAVAILABLE:
                     analyticsHelper.logScreenEvent(SCREEN_JOURNEY_RESULTS, ERROR_SERVICE_UNAVAILABLE);
-                    Log.d("service unavailable");
                     analyticsHelper.logScreenEvent(SCREEN_JOURNEY_RESULTS, ACTION_REFRESH_JOURNEY);
                     presenter.searchFromSearch(true);
                     break;
@@ -292,7 +297,6 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
 
     @Override
     public void scrollToFirstFeasibleSolution(int position) {
-        Log.d("scrolling to ", position);
         ((LinearLayoutManager) rvJourneySolutions.getLayoutManager()).scrollToPositionWithOffset(position, 14);
     }
 
@@ -308,7 +312,6 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
 
     @Override
     public void updateSolution(int elementIndex) {
-        Log.d("updateSolution: ", elementIndex);
         journeyResultsAdapter.notifyItemChanged(elementIndex);
     }
 
