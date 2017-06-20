@@ -46,7 +46,6 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import trikita.log.Log;
 
 import static butterknife.ButterKnife.apply;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.GONE;
@@ -161,8 +160,8 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                     final int   j           = i;
                     Button      delayView   = (Button) solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
                     ImageButton warningView = (ImageButton) solutionsViewsList.get(j).findViewById(R.id.iv_warning);
-                    apply(warningView, GONE);
-                    apply(delayView, GONE);
+//                    apply(warningView, GONE);
+//                    apply(delayView, GONE);
                     if (!solution.hasChanges()) {
                         APINetworkingFactory
                                 .createRetrofitService(JourneyService.class)
@@ -193,7 +192,6 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                                 trainHeader -> {
                                     headerList.add(trainHeader);
                                 }, throwable -> {
-                                    Log.d("bindPreferredSolutionsButtons: ERORREEE");
                                 }, () -> {
                                     boolean foundWarning   = false;
                                     Integer timeDifference = 0;
@@ -214,11 +212,11 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                                 });
                     }
                 } else {
-                    final int   j           = i;
-                    Button      delayView   = (Button) solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
-                    ImageButton warningView = (ImageButton) solutionsViewsList.get(j).findViewById(R.id.iv_warning);
-                    apply(warningView, GONE);
-                    apply(delayView, GONE);
+//                    final int   j           = i;
+//                    Button      delayView   = (Button) solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
+//                    ImageButton warningView = (ImageButton) solutionsViewsList.get(j).findViewById(R.id.iv_warning);
+//                    apply(warningView, GONE);
+//                    apply(delayView, GONE);
                 }
                 i++;
             }
