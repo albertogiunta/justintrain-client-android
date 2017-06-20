@@ -66,7 +66,7 @@ public class AboutActivity extends AppCompatActivity {
                         }).build())
                 .addSeparator() //-----------------------------------------//
                 .addItem(new ItemBuilder(this, linearLayout)
-                        .addItemWithTitleSubtitle("Consiglia l'app ad un amico!", "GO #TeamJustInTrainers")
+                        .addItemWithTitleSubtitle("Condividi l'app con un amico!", "GO #TeamJustInTrainers")
                         .addOnClickListener(view -> {
                             Intent sendIntent = new Intent();
                             sendIntent.setAction(Intent.ACTION_SEND);
