@@ -3,11 +3,13 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:fab="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
         tools:context=".trainDetails.TrainDetailsActivity"
         tools:locale="it"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
+
 
     <View
             android:layout_width="match_parent"
@@ -35,6 +37,49 @@
                     android:indeterminateTintMode="src_atop"
                     android:visibility="visible"
                     />
+
+            <android.support.v7.widget.CardView
+                    android:id="@+id/cv_banner_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/bg_dark"
+                    >
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/item_banner"
+                        android:layout_marginTop="@dimen/margin_small"
+                        >
+
+                    <ProgressBar
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="24dp"
+                            android:layout_centerVertical="true"
+                            android:indeterminateTint="@color/bg_grey_lighter"
+                            />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Carico Banner..."
+                            android:textSize="@dimen/text_size_default"
+                            android:layout_centerInParent="true"
+                            android:textColor="@color/txt_grey"
+                            />
+
+                </RelativeLayout>
+
+                <com.google.android.gms.ads.NativeExpressAdView
+                        android:id="@+id/adView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        ads:adUnitId="@string/journey_id_test"
+                        ads:adSize=" FULL_WIDTHx80"
+                        android:visibility="gone"
+                        />
+            </android.support.v7.widget.CardView>
 
             <RelativeLayout
                     android:id="@+id/rl_error"
@@ -71,7 +116,7 @@
                     android:id="@+id/rv_train_details"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/rl_header_2"
+                    android:layout_below="@id/cv_banner_placeholder"
                     android:background="@drawable/bg_gradient"
                     android:clickable="true"
                     android:visibility="gone"
@@ -134,26 +179,5 @@
                 />
 
     </RelativeLayout>
-
-    <!--<RelativeLayout-->
-    <!--android:id="@+id/rl_ad"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="bottom"-->
-    <!--android:background="@color/bg_white"-->
-    <!--android:visibility="visible"-->
-    <!--&gt;-->
-
-    <!--<com.google.android.gms.ads.AdView-->
-    <!--android:id="@+id/adView"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--ads:adSize="SMART_BANNER"-->
-    <!--ads:adUnitId="@string/banner_details_id"-->
-    <!--&gt;-->
-    <!--</com.google.android.gms.ads.AdView>-->
-    <!--</RelativeLayout>-->
-
 
 </android.support.design.widget.CoordinatorLayout>

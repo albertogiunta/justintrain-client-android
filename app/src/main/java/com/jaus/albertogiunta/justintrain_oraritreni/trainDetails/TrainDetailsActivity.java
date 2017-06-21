@@ -1,5 +1,6 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.trainDetails;
 
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.firebase.crash.FirebaseCrash;
 
 import android.content.BroadcastReceiver;
@@ -35,6 +36,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.News;
 import com.jaus.albertogiunta.justintrain_oraritreni.journeyFavourites.FavouriteJourneysActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.WrapContentLinearLayoutManager;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
@@ -91,8 +93,8 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
     @BindView(R.id.btn_error_button)
     Button         btnErrorMessage;
 
-//    @BindView(R.id.adView)
-//    AdView adView;
+    @BindView(R.id.adView)
+    NativeExpressAdView adView;
 
     TrainDetailsAdapter adapter;
     private long refreshBtnLastClickTime = SystemClock.elapsedRealtime();
@@ -104,7 +106,8 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
         setContentView(R.layout.activity_train_details);
         ButterKnife.bind(this);
         analyticsHelper = AnalyticsHelper.getInstance(getViewContext());
-//        Ads.initializeAds(getViewContext(), adView);
+        Ads.initializeAds(getViewContext(), adView);
+
         presenter = new TrainDetailsPresenter(this);
         presenter.setState(getIntent().getExtras());
 

@@ -22,7 +22,7 @@ public class Ads {
     }
 
 
-    public static void initializeAds(Context context, View bannerPlaceholder, NativeExpressAdView adView) {
+    public static void initializeAds(Context context, NativeExpressAdView adView) {
         MobileAds.initialize(context, "ca-app-pub-8963908741443055~4285788324");
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
@@ -30,7 +30,10 @@ public class Ads {
                 .build();
         Log.d("initializeAds: ", adView.getAdUnitId());
         adView.loadAd(adRequest);
+    }
 
+    public static void initializeAds(Context context, View bannerPlaceholder, NativeExpressAdView adView) {
+        initializeAds(context, adView);
 
         adView.setAdListener(new AdListener() {
             @Override
