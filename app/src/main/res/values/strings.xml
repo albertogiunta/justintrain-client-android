@@ -73,7 +73,7 @@
     <string name="about_github">GitHub</string>
     <string name="about_website">Sito Web</string>
     <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '   -->
-    <string name="changelog">• Migliorata la ricerca delle stazioni: ora si può cercare per qualsiasi parola nel nome della stazione\n\n• <b>Risolto Bug</b> Ora i treni preferiti appaiono tutti e sempre in ordine di orario crescente\n\n• <b>Risolto Bug</b> Eliminato il problema dei treni fantasma in tarda notte (giuro, roba che neanche Ghostbusters)\n\n• Bug e UI fix generali\n\n
+    <string name="changelog">• Fix al bug che non rendeva utilizzabile la schermata di Ricerca su alcuni dispositivi\n\n• Fix al ritardo che scompariva nella schermata dei Dettagli nelle soluzioni con più treni\n\n• NB gli aggiornamenti sono un po\' meno frequenti ora perché sto preparando una Major Release! Presto ci saranno delle belle novità :)
     </string>
     <string name="play_store_native_url">market://details?id=</string>
     <string name="play_store_web_url">https://play.google.com/store/apps/details?id=</string>

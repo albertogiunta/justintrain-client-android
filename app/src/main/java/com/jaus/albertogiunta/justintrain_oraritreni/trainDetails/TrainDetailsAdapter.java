@@ -221,6 +221,7 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
                     apply(llLastSeen, VISIBLE);
                     apply(btnPin, VISIBLE);
                     apply(llTimeDifference, VISIBLE);
+                    apply(tvTimeDifference, VISIBLE);
 
                     if (train.getTimeDifference() > 30) {
                         apply(tvWhyDelay, VISIBLE);

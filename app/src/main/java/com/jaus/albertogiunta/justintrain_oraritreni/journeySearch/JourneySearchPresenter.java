@@ -59,14 +59,12 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
         if (bundle != null) {
             // Restore value of members from saved state
             PreferredJourney journey = gson.fromJson(bundle.getString(I_STATIONS), PreferredJourney.class);
-            this.departureStation = journey.getStation1();
-            this.arrivalStation = journey.getStation2();
-            view.setStationNames(departureStation.getNameLong(), arrivalStation.getNameLong());
+            this.departureStation = this.departureStation != null ? this.departureStation : journey != null ? journey.getStation1() : null;
+            this.arrivalStation = this.arrivalStation != null ? this.arrivalStation : journey != null ? journey.getStation2() : null;
+            view.setStationNames(departureStation, arrivalStation);
             setFavouriteButtonStatus();
-            Log.d("onResuming: resuming bundle", journey.toString());
             this.dateTime = new DateTime(bundle.getLong(I_TIME, DateTime.now().minusMinutes(10).getMillis()));
             setDateTime();
-            Log.d("Current bundled DateTime is: ", dateTime);
         } else {
             if (this.departureStation != null) {
                 view.setDepartureStationNames(departureStation.getNameLong());
@@ -77,7 +75,6 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
             if (this.departureStation != null && this.arrivalStation != null) {
                 setFavouriteButtonStatus();
             }
-            Log.d("no bundle found");
         }
     }
 
