@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.R;
+import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
 import com.jaus.albertogiunta.justintrain_oraritreni.journeyResults.JourneyResultsActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
@@ -94,6 +95,8 @@ public class JourneySearchActivity extends AppCompatActivity implements JourneyS
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (savedInstanceState != null) getIntent().putExtras(savedInstanceState);
 
         this.tvDeparture.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         this.tvArrival.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
@@ -187,15 +190,7 @@ public class JourneySearchActivity extends AppCompatActivity implements JourneyS
     @Override
     protected void onResume() {
         super.onResume();
-        if (getIntent().getExtras() != null) {
-            if (!getIntent().getExtras().getBoolean(I_IS_TEMP, false)) {
-                presenter.setState(getIntent().getExtras());
-            } else {
-                presenter.setState(null);
-            }
-        } else {
-            presenter.setState(null);
-        }
+        presenter.setState(getIntent().getExtras());
     }
 
     @Override
@@ -236,9 +231,10 @@ public class JourneySearchActivity extends AppCompatActivity implements JourneyS
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null) {
             String stationName = data.getStringExtra("stationName");
+            Log.d("onActivityResult: ", stationName);
             if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(I_FROM_RESULTS, false)) {
                 getIntent().putExtra(I_IS_TEMP, true);
             }
@@ -250,6 +246,13 @@ public class JourneySearchActivity extends AppCompatActivity implements JourneyS
 //                this.tvArrival.setText(stationName);
             }
         }
+    }
+
+    @Override
+    public void setStationNames(PreferredStation departureStationName, PreferredStation arrivalStationName) {
+        if (departureStationName != null)
+            this.tvDeparture.setText(departureStationName.getNameLong());
+        if (arrivalStationName != null) this.tvArrival.setText(arrivalStationName.getNameLong());
     }
 
     @Override
