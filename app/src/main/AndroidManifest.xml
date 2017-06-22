@@ -22,7 +22,7 @@
                 android:name=".tutorial.IntroActivity"
                 android:label="Intro Just In Train"
                 android:screenOrientation="portrait"
-                android:theme="@style/AppThemeNoShadowActionbar"/>
+                android:theme="@style/AppThemeNoActionbar"/>
         <activity
                 android:name=".journeyFavourites.FavouriteJourneysActivity"
                 android:label="JustInTrain Orari Trenitalia"
@@ -42,7 +42,7 @@
                 android:name=".journeySearch.JourneySearchActivity"
                 android:label="Cerca tratta"
                 android:screenOrientation="portrait"
-                android:theme="@style/AppThemeNoShadowActionbar">
+                android:theme="@style/AppThemeNoActionbar">
         </activity>
         <activity
                 android:name=".journeySearch.StationSearchActivity"
@@ -57,7 +57,7 @@
                 android:name=".journeyResults.JourneyResultsActivity"
                 android:label="Soluzioni"
                 android:screenOrientation="portrait"
-                android:theme="@style/AppThemeNoShadowActionbar">
+                android:theme="@style/AppThemeNoActionbar">
             <intent-filter>
                 <action android:name="com.jaus.albertogiunta.justintrain_oraritreni.OPEN_DYNAMIC_SHORTCUT"/>
             </intent-filter>
@@ -66,6 +66,7 @@
                 android:name=".trainDetails.TrainDetailsActivity"
                 android:label="Dettagli Soluzione"
                 android:launchMode="singleTop"
+                android:theme="@style/AppThemeNoActionbar"
                 android:screenOrientation="portrait"/>
         <activity
                 android:name=".aboutAndSettings.SettingsActivity"

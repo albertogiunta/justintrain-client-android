@@ -27,11 +27,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:theme="@style/AppThemeNoShadowActionbar"
+                app:theme="@style/AppThemeNoActionbar"
                 app:title="Soluzioni"
                 app:titleTextColor="@color/txt_white"
                 />
-
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
@@ -207,7 +206,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
                         android:layout_below="@id/rl_header_2_top"
-                        ads:adUnitId="@string/journey_id_test"
+                        ads:adUnitId="@string/journey_id_real"
                         ads:adSize=" FULL_WIDTHx80"
                         android:visibility="gone"
                         />
@@ -283,24 +282,3 @@
             />
 
 </android.support.design.widget.CoordinatorLayout>
-
-
-        <!--<RelativeLayout-->
-        <!--android:id="@+id/rl_ad"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom"-->
-        <!--android:background="@color/bg_white"-->
-        <!--android:visibility="visible"-->
-        <!--&gt;-->
-
-        <!--<com.google.android.gms.ads.AdView-->
-        <!--android:id="@+id/adView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--ads:adSize="SMART_BANNER"-->
-        <!--ads:adUnitId="@string/banner_results_id"-->
-        <!--&gt;-->
-        <!--</com.google.android.gms.ads.AdView>-->
-        <!--</RelativeLayout>-->

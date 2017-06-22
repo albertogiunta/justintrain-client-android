@@ -10,7 +10,7 @@
         <item name="android:datePickerDialogTheme">@style/MyDatePickerDialogTheme</item>
     </style>
 
-    <style name="AppThemeNoShadowActionbar" parent="Theme.AppCompat.Light">
+    <style name="AppThemeNoActionbar" parent="Theme.AppCompat.Light">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>

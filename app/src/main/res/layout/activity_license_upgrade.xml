@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:theme="@style/AppThemeNoShadowActionbar"
+                app:theme="@style/AppThemeNoActionbar"
                 app:title="JustInTrain Fan Club"
                 app:titleTextColor="@color/txt_white"
                 />
@@ -75,7 +75,7 @@
                     android:layout_gravity="center_horizontal"
                     fontPath="@string/font_path_bold"
                     android:text="Upgrade PREMIUM a vita (2,49€)"
-                    android:background="@drawable/bg_button_selector"
+                    android:background="@drawable/bg_button_selector_yellow"
                     />
 
             <TextView
@@ -374,7 +374,7 @@
                     android:layout_gravity="center_horizontal"
                     fontPath="@string/font_path_bold"
                     android:text="Upgrade PREMIUM a vita (2,49€)"
-                    android:background="@drawable/bg_button_selector"
+                    android:background="@drawable/bg_button_selector_yellow"
                     />
 
         </LinearLayout>

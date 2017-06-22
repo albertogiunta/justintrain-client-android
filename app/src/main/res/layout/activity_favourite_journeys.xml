@@ -12,13 +12,6 @@
         android:fitsSystemWindows="true"
         >
 
-    <Button
-            android:id="@+id/btn_iap"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:text="Acquista"
-            />
-
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -118,11 +111,29 @@
 
     </RelativeLayout>
 
+    <Button
+            android:id="@+id/btn_iap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginBottom="18dp"
+            android:layout_centerHorizontal="true"
+            android:textAllCaps="false"
+            android:text="Ottieni le nuove feature esclusive!\nEntra a far parte del Fan Club "
+            android:paddingStart="@dimen/margin_big"
+            android:paddingEnd="@dimen/margin_big"
+            android:paddingTop="@dimen/margin_small"
+            android:paddingBottom="@dimen/margin_small"
+            android:background="@drawable/bg_button_selector_green"
+            />
+
     <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_search_journey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/margin_default"
             android:layout_marginBottom="16dp"
             app:fabSize="normal"
             app:srcCompat="@drawable/ic_search"

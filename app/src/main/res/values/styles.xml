@@ -10,10 +10,17 @@
     </style>
 
     <!--<style name="AppThemeNoShadowActionbar" parent="Theme.AppCompat.Light">-->
-    <style name="AppThemeNoShadowActionbar" parent="Theme.AppCompat.Light">
+    <style name="AppThemeNoActionbar" parent="Theme.AppCompat.Light">
         <item name="actionBarTheme">@style/Theme.MyApp.ActionBar</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
+        <item name="colorPrimary">@color/bg_dark</item>
+        <item name="colorControlNormal">@color/bg_white</item>
+    </style>
+
+    <style name="AppThemeNoShadowActionbar" parent="Theme.AppCompat.Light">
+        <item name="actionBarTheme">@style/Theme.MyApp.ActionBar</item>
         <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
         <item name="colorPrimary">@color/bg_dark</item>
         <item name="colorControlNormal">@color/bg_white</item>

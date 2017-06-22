@@ -5,7 +5,7 @@
             <!-- SHADOW -->
             <item>
                 <shape>
-                    <solid android:color="@color/ic_orange"/>
+                    <solid android:color="#FCCF31"/>
                     <corners android:radius="10dp"/>
                 </shape>
             </item>
@@ -13,7 +13,7 @@
                 <shape>
                     <padding android:bottom="12dp"/>
 
-                    <solid android:color="@color/bg_yellow"/>
+                    <solid android:color="#FDEB71"/>
 
                     <corners android:radius="5dp"/>
 
@@ -32,7 +32,7 @@
             <!-- SHADOW -->
             <item>
                 <shape>
-                    <solid android:color="@color/ic_orange"/>
+                    <solid android:color="#FCCF31"/>
                     <corners android:radius="10dp"/>
                 </shape>
             </item>
@@ -40,7 +40,7 @@
                 <shape>
                     <padding android:bottom="12dp"/>
 
-                    <solid android:color="@color/ic_orange"/>
+                    <solid android:color="#FCCF31"/>
 
                     <corners android:radius="5dp"/>
 

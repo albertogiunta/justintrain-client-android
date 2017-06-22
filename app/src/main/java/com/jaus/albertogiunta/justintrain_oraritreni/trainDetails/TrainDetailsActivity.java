@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -75,6 +76,9 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
 
     MenuItem menuItem;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     @BindView(R.id.loading_spinner)
     ProgressBar          progressBar;
     @BindView(R.id.rv_train_details)
@@ -93,6 +97,8 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
     @BindView(R.id.btn_error_button)
     Button         btnErrorMessage;
 
+    @BindView(R.id.rl_banner_placeholder)
+    RelativeLayout      rlBannerPlaceholder;
     @BindView(R.id.adView)
     NativeExpressAdView adView;
 
@@ -106,10 +112,12 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
         setContentView(R.layout.activity_train_details);
         ButterKnife.bind(this);
         analyticsHelper = AnalyticsHelper.getInstance(getViewContext());
-        Ads.initializeAds(getViewContext(), adView);
+        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView);
 
         presenter = new TrainDetailsPresenter(this);
         presenter.setState(getIntent().getExtras());
+
+        setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -176,11 +176,13 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             @Override
             public void onHide() {
                 btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(200).setDuration(100);
+                btnIAP.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(200).setDuration(100);
             }
 
             @Override
             public void onShow() {
                 btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(100);
+                btnIAP.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(100);
             }
         });
 
@@ -194,6 +196,11 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         mBillingClient = new BillingClient.Builder(getViewContext())
                 .setListener(this)
                 .build();
+
+        btnIAP.setText(btnIAP.getText().toString() + new String(Character.toChars(0x21AA)));
+//        btnIAP.setScaleX(0);
+//        btnIAP.setScaleY(0);
+//        new Handler().postDelayed(() -> AnimationUtils.onCompare(btnIAP), 500);
 
         btnIAP.setOnClickListener(v -> {
             Intent i = new Intent(FavouriteJourneysActivity.this, LicenseUpgradeActivity.class);

@@ -10,17 +10,34 @@
         android:layout_height="match_parent"
         >
 
-
     <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_gradient"
             />
 
+    <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp"
+            >
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:theme="@style/AppThemeNoActionbar"
+                app:title="Dettagli Soluzione"
+                app:titleTextColor="@color/txt_white"
+                />
+    </android.support.design.widget.AppBarLayout>
+
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
 
         <RelativeLayout
@@ -42,10 +59,12 @@
                     android:id="@+id/cv_banner_placeholder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:cardCornerRadius="0dp"
                     android:backgroundTint="@color/bg_dark"
                     >
 
                 <RelativeLayout
+                        android:id="@+id/rl_banner_placeholder"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/item_banner"
                         android:layout_marginTop="@dimen/margin_small"
@@ -75,7 +94,8 @@
                         android:id="@+id/adView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        ads:adUnitId="@string/journey_id_test"
+                        android:layout_marginTop="@dimen/margin_small"
+                        ads:adUnitId="@string/journey_id_real"
                         ads:adSize=" FULL_WIDTHx80"
                         android:visibility="gone"
                         />
