@@ -38,9 +38,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.BuildConfig;
 import com.jaus.albertogiunta.justintrain_oraritreni.MyApplication;
 import com.jaus.albertogiunta.justintrain_oraritreni.R;
@@ -83,7 +80,6 @@ import butterknife.OnClick;
 import trikita.log.Log;
 
 import static butterknife.ButterKnife.apply;
-import static com.android.billingclient.api.BillingClient.BillingResponse;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.GONE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.VISIBLE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_AR_FROM_POPUP;
@@ -108,8 +104,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM
 
 public class FavouriteJourneysActivity extends AppCompatActivity implements FavouritesContract.View,
         FlexibleAdapter.OnItemSwipeListener,
-        FlexibleAdapter.OnItemClickListener,
-        PurchasesUpdatedListener {
+        FlexibleAdapter.OnItemClickListener {
 
     FavouritesContract.Presenter presenter;
     AnalyticsHelper              analyticsHelper;
@@ -136,10 +131,6 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             .registerTypeAdapterFactory(new PostProcessingEnabler())
             .create();
 
-    BillingClient mBillingClient;
-
-//    @BindView(R.id.adView)
-//    AdView         adView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,7 +138,6 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         setContentView(R.layout.activity_favourite_journeys);
         ButterKnife.bind(this);
         analyticsHelper = AnalyticsHelper.getInstance(getViewContext());
-//        Ads.initializeAds(getViewContext(), adView);
         checkIntro();
 //        MigrationHelper.migrateIfDue(getViewContext());
         presenter = new FavouritesPresenter(this);
@@ -193,69 +183,15 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             }
         };
 
-        mBillingClient = new BillingClient.Builder(getViewContext())
-                .setListener(this)
-                .build();
-
         btnIAP.setText(btnIAP.getText().toString() + new String(Character.toChars(0x21AA)));
-//        btnIAP.setScaleX(0);
-//        btnIAP.setScaleY(0);
-//        new Handler().postDelayed(() -> AnimationUtils.onCompare(btnIAP), 500);
 
         btnIAP.setOnClickListener(v -> {
             Intent i = new Intent(FavouriteJourneysActivity.this, LicenseUpgradeActivity.class);
             FavouriteJourneysActivity.this.startActivity(i);
-//            mBillingClient.startConnection(new BillingClientStateListener() {
-//                @Override
-//                public void onBillingSetupFinished(@BillingResponse int billingResponse) {
-//                    if (billingResponse == BillingResponse.OK) {
-//                        // The billing client is ready. You can query purchases here.
-//                        List<String> skuList = new ArrayList<>();
-//                        skuList.add("premium_upgrade_mp");
-//                        mBillingClient.querySkuDetailsAsync(BillingClient.SkuType.INAPP, skuList,
-//                                result -> {
-//                                    if (result.getResponseCode() == BillingResponse.OK
-//                                            && result.getSkuDetailsList() != null) {
-//                                        // only 1 item so far
-//                                        String                    skuId        = result.getSkuDetailsList().get(0).getSku();
-//                                        BillingFlowParams.Builder builder      = new BillingFlowParams.Builder().setSku(skuId).setType(BillingClient.SkuType.INAPP);
-//                                        int                       responseCode = mBillingClient.launchBillingFlow(FavouriteJourneysActivity.this, builder.build());
-//
-//                                    }
-//
-//                                });
-//
-//                    }
-//                }
-//
-//                @Override
-//                public void onBillingServiceDisconnected() {
-//                    // Try to restart the connection on the next request to the
-//                    // In-app Billing service by calling the startConnection() method.
-//                }
-//            });
-
-
         });
 
         AsyncTask task = new LoadCursorTask(this).execute();
     }
-
-    @Override
-    public void onPurchasesUpdated(@BillingResponse int responseCode, List<Purchase> purchases) {
-        if (responseCode == BillingResponse.OK
-                && purchases != null) {
-            for (Purchase purchase : purchases) {
-                Log.d("onPurchasesUpdated: ", purchase.toString());
-                mBillingClient.consumeAsync(purchase.getPurchaseToken(), (purchaseToken, resultCode) -> Log.d("onConsumeResponse: ", resultCode));
-            }
-        } else if (responseCode == BillingResponse.USER_CANCELED) {
-            // Handle an error caused by a user cancelling the purchase flow.
-        } else {
-            // Handle any other error codes.
-        }
-    }
-
 
     abstract private class BaseTask<T> extends AsyncTask<T, Void, List<Station>> {
         Context app;

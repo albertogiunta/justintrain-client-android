@@ -187,7 +187,13 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
 
             apply(tvWhyDelay, GONE);
 
-            if (train.getTrainStatusCode() == 2) {
+            if (train.getTrainStatusCode() == -1) {
+                apply(tvTrainStatus, GONE);
+                apply(tvStatusException, GONE);
+                apply(tvWhyDelay, GONE);
+                apply(llLastSeen, GONE);
+                apply(llTimeDifference, INVISIBLE);
+            } else if (train.getTrainStatusCode() == 2) {
                 // soppresso
                 apply(tvTrainStatus, GONE);
                 apply(tvStatusException, VISIBLE);
@@ -474,7 +480,7 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
         }
 
         private void check(String idCurrent, String idDeparture, String idArrival) {
-            if (idDeparture == null || idArrival == null) {
+            if (idCurrent == null || idDeparture == null || idArrival == null) {
                 apply(tvMarkAsChangeDeparture, GONE);
                 apply(tvMarkAsChangeArrival, GONE);
                 return;

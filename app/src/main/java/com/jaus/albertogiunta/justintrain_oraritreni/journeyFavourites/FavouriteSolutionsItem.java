@@ -177,6 +177,11 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                                             apply(delayView, GONE);
                                         }
                                     }
+                                }, throwable -> {
+                                    if (throwable.getMessage().equals("HTTP 404 ")) {
+                                        apply(delayView, GONE);
+                                        apply(warningView, VISIBLE);
+                                    }
                                 });
                     } else {
                         List<TrainHeader>             headerList = new LinkedList<>();
@@ -192,6 +197,8 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                                 trainHeader -> {
                                     headerList.add(trainHeader);
                                 }, throwable -> {
+                                    apply(delayView, GONE);
+                                    apply(warningView, VISIBLE);
                                 }, () -> {
                                     boolean foundWarning   = false;
                                     Integer timeDifference = 0;

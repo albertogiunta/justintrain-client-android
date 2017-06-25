@@ -206,7 +206,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
                         android:layout_below="@id/rl_header_2_top"
-                        ads:adUnitId="@string/journey_id_real"
+                        ads:adUnitId="@string/journey_id_test"
                         ads:adSize=" FULL_WIDTHx80"
                         android:visibility="gone"
                         />

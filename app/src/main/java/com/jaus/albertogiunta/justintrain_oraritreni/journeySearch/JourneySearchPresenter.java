@@ -78,13 +78,13 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
         if (bundle == null) bundle = new Bundle();
         bundle.putString(I_STATIONS, gson.toJson(new PreferredJourney(departureStation, arrivalStation)));
         if (departureStation != null) {
-            Log.d("Current bundled departure stations is: ", this.departureStation);
+//            Log.d("Current bundled departure stations is: ", this.departureStation);
         }
         if (arrivalStation != null) {
-            Log.d("Current bundled departure stations is: ", this.arrivalStation);
+//            Log.d("Current bundled departure stations is: ", this.arrivalStation);
         }
         bundle.putLong(I_TIME, dateTime.getMillis());
-        Log.d("Current bundled DateTime is: ", dateTime);
+//        Log.d("Current bundled DateTime is: ", dateTime);
         return bundle;
     }
 

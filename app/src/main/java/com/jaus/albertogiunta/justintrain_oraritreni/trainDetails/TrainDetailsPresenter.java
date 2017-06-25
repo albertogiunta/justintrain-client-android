@@ -46,14 +46,16 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
     private TrainDetailsContract.View view;
     private List<Train>               trainList;
     private List<Object>              trainStopList;
-    List<String> trainIdList;
-    private Journey.Solution solution;
-    private PreferredJourney preferredJourney;
+    private List<String>              trainIdList;
+    private List<Integer>             busesIndexList;
+    private Journey.Solution          solution;
+    private PreferredJourney          preferredJourney;
 
     TrainDetailsPresenter(TrainDetailsContract.View view) {
         this.view = view;
         trainList = new ArrayList<>();
         trainStopList = new ArrayList<>();
+        busesIndexList = new ArrayList<>();
         trainIdList = new ArrayList<>();
     }
 
@@ -79,12 +81,10 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
                     shareableTrainList.add(solution.getTrainCategory() + " " + solution.getTrainId());
                 }
                 if (view != null) view.setShareButton(shareableTrainList);
-                Log.d("Current bundled solution is: ", solution.toString());
             }
             if (bundle.getString(I_STATIONS) != null) {
                 preferredJourney = gson.fromJson(bundle.getString(I_STATIONS), PreferredJourney.class);
                 updatePreferredJourneyFromFavouritesIfAvailable();
-                Log.d("Current bundled preferred journey is: ", preferredJourney.toString());
             }
         } else {
             Log.d("no bundle found");
@@ -114,6 +114,12 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
         if (trainIdList.size() == 0) {
             trainIdList = getTrainIdList();
         }
+
+        if (trainIdList.size() == 0) {
+            onComplete();
+            return;
+        }
+
 
         Observable.concatDelayError(Observable.fromIterable(searchTrainDetails(trainIdList))).subscribe(
                 train -> {
@@ -161,6 +167,7 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
         if (view == null) {
             return;
         }
+        insertBuses();
         getFlatTrainList();
         view.hideProgress();
         view.updateTrainDetails();
@@ -330,16 +337,33 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
                 });
     }
 
+    private void insertBuses() {
+        // solution is only 1 train
+        if (busesIndexList.size() == 1 && busesIndexList.get(0) == -1) {
+            trainList.add(new Train(solution));
+        } else {
+            for (Integer busIndex : busesIndexList) {
+                trainList.add(busIndex, new Train(solution.getChangesList().get(busIndex)));
+            }
+        }
+    }
+
     private List<String> getTrainIdList() {
         List<String> trainIdList = new LinkedList<>();
         if (solution.hasChanges()) {
             for (Journey.Solution.Change c : solution.getChangesList()) {
                 if (!c.getTrainCategory().equalsIgnoreCase("BUS")) {
                     trainIdList.add(c.getTrainId());
+                } else {
+                    busesIndexList.add(solution.getChangesList().indexOf(c));
                 }
             }
         } else {
-            trainIdList.add(solution.getTrainId());
+            if (!solution.getTrainCategory().equalsIgnoreCase("BUS")) {
+                trainIdList.add(solution.getTrainId());
+            } else {
+                busesIndexList.add(-1);
+            }
         }
         return trainIdList;
     }

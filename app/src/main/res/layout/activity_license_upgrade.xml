@@ -66,6 +66,7 @@
 
 
             <Button
+                    android:id="@+id/btn_iap_first"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_default_plus"
@@ -282,7 +283,7 @@
                             android:textColor="@color/txt_white"
                             fontPath="@string/font_path_standard"
                             android:textSize="@dimen/text_size_smaller"
-                            android:text="Le funzionalità per il Fan Club saranno sempre esclusive. Non perdertele!"
+                            android:text="Le funzionalità per il Fan Club saranno sempre esclusive ed in costante aggiornamento."
                             />
                 </LinearLayout>
             </LinearLayout>
@@ -365,6 +366,7 @@
                     />
 
             <Button
+                    android:id="@+id/btn_iap_second"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_default_plus"

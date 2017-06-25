@@ -26,10 +26,10 @@ public class APINetworkingFactory {
      */
     public static <T> T createRetrofitService(final Class<T> clazz) {
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
+                .addInterceptor(loggingInterceptor)
                 .addInterceptor(chain -> {
                     Request original = chain.request();
 
