@@ -67,7 +67,7 @@ public class FavouriteJourneysItem extends AbstractFlexibleItem<FavouriteJourney
         @BindView(R.id.tv_favourite_station_right)
         AutofitTextView tvPreferredStation2;
 
-        public boolean swiped = false;
+        boolean swiped = false;
 
         SimpleViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);

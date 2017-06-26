@@ -60,10 +60,9 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 
 public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSolutionsItem.SimpleViewHolder> {
 
-    private Context context;
-    PreferredJourney preferredJourney;
-    public AnalyticsHelper analyticsHelper;
-
+    private Context          context;
+    private PreferredJourney preferredJourney;
+    private AnalyticsHelper  analyticsHelper;
 
     public FavouriteSolutionsItem(Context context, PreferredJourney journey) {
         super();

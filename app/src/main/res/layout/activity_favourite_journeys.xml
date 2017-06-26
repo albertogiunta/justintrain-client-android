@@ -104,6 +104,8 @@
                     android:overScrollMode="never"
                     android:visibility="visible"
                     tools:listitem="@layout/item_favourite_journey"
+                    android:paddingBottom="70dp"
+                    android:clipToPadding="false"
                     >
             </android.support.v7.widget.RecyclerView>
 
