@@ -101,7 +101,6 @@ public class TrainNotification {
                         closeIc,
                         res.getString(R.string.action_end),
                         PendingIntent.getService(context, 1001, iStop, PendingIntent.FLAG_UPDATE_CURRENT))
-                // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setContentIntent(intent);

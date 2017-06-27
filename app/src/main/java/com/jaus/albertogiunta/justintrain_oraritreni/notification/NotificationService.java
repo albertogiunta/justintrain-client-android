@@ -5,8 +5,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Journey;
@@ -45,6 +47,7 @@ public class NotificationService extends IntentService {
     public static final String NOTIFICATION_ERROR_MESSAGE_STATION_NOT_FOUND = "Impossibile settare la notifica a causa di un problema con le stazioni di partenza o arrivo.";
 
     AnalyticsHelper analyticsHelper;
+    static BroadcastReceiver mReceiver;
 
     Gson gson = new GsonBuilder()
             .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
@@ -58,18 +61,22 @@ public class NotificationService extends IntentService {
     public void onCreate() {
         super.onCreate();
         analyticsHelper = AnalyticsHelper.getInstance(getBaseContext());
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     public static void startActionStartNotification(Context context, PreferredStation journeyDepartureStation, PreferredStation journeyArrivalStation, Journey.Solution sol, Integer indexOfJourneyToBeNotified) {
-        Log.d("startActionStartNotification:", "start");
         String  trainId;
         String  journeyDepartureStationId = journeyDepartureStation.getStationShortId();
         String  journeyArrivalStationId   = journeyArrivalStation.getStationShortId();
-        Intent  intent                    = new Intent(context, NotificationService.class);
         boolean justUpdate                = indexOfJourneyToBeNotified != null;
 
-        intent.setAction(ACTION_START_NOTIFICATION);
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        mReceiver = new ScreenOnReceiver();
+        context.registerReceiver(mReceiver, filter);
 
         if (sol.hasChanges()) {
             if (indexOfJourneyToBeNotified == null) {
@@ -169,19 +176,24 @@ public class NotificationService extends IntentService {
             final String action = intent.getAction();
             Log.d(action);
             if (ACTION_START_NOTIFICATION.equals(action)) {
-                Log.d("onHandleIntent:", "start");
             } else if (ACTION_STOP_NOTIFICATION.equals(action)) {
                 analyticsHelper.logScreenEvent(SCREEN_NOTIFICATION, ACTION_REMOVE_NOTIFICATION);
-                Log.d("onHandleIntent:", "stop");
+                unregisterReceiver(mReceiver);
                 NotificationPreferences.removeNotificationData(getBaseContext());
                 TrainNotification.cancel(this);
             } else if (ACTION_UPDATE_NOTIFICATION.equals(action)) {
                 analyticsHelper.logScreenEvent(SCREEN_NOTIFICATION, ACTION_REFRESH_NOTIFICAITON);
-                Log.d("onHandleIntent:", "update");
-                TrainHeader trainHeader = gson.fromJson(intent.getStringExtra(EXTRA_NOTIFICATION_DATA), TrainHeader.class);
-                getData(trainHeader.getJourneyDepartureStationId(),
-                        trainHeader.getJourneyArrivalStationId(),
-                        trainHeader.getTrainId(), getApplicationContext(), false);
+                if (intent.getStringExtra(EXTRA_NOTIFICATION_DATA) != null) {
+                    TrainHeader trainHeader = gson.fromJson(intent.getStringExtra(EXTRA_NOTIFICATION_DATA), TrainHeader.class);
+                    getData(trainHeader.getJourneyDepartureStationId(),
+                            trainHeader.getJourneyArrivalStationId(),
+                            trainHeader.getTrainId(), getApplicationContext(), false);
+                } else {
+                    Journey.Solution s = gson.fromJson(NotificationPreferences.getNotificationSolutionString(getBaseContext()), Journey.Solution.class);
+                    getData(s.getDepartureStationShortId(),
+                            s.getArrivalStationShortId(),
+                            s.getTrainId(), getApplicationContext(), false);
+                }
             }
         }
     }

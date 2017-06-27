@@ -98,6 +98,11 @@
                 android:name=".notification.NotificationService"
                 android:exported="false">
         </service>
+        <receiver android:name=".notification.ScreenOnReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.SCREEN_ON"/>
+            </intent-filter>
+        </receiver>
         <service
                 android:name=".notification.AppFCMService"
                 android:exported="false">

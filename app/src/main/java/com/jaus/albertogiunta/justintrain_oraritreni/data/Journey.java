@@ -108,6 +108,10 @@ public class Journey implements PostProcessingEnabler.PostProcessable {
             return departureStationId;
         }
 
+        public String getDepartureStationShortId() {
+            return departureStationId.replaceAll("(S|N)0+|(S|N)", "");
+        }
+
         public void setDepartureStationId(String departureStationId) {
             this.departureStationId = departureStationId;
         }
@@ -162,6 +166,10 @@ public class Journey implements PostProcessingEnabler.PostProcessable {
 
         public String getArrivalStationId() {
             return arrivalStationId;
+        }
+
+        public String getArrivalStationShortId() {
+            return arrivalStationId.replaceAll("(S|N)0+|(S|N)", "");
         }
 
         public void setArrivalStationId(String arrivalStationId) {
