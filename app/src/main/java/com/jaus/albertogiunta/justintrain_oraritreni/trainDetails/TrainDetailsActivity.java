@@ -226,6 +226,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
         if (isPreferred) {
             analyticsHelper.logScreenEvent(SCREEN_SOLUTION_DETAILS, ACTION_SET_FAVOURITE);
             this.menuItem.setIcon(R.drawable.ic_star_black);
+//            AnimationUtils.animOnPress(this.menuItem, AnimationUtils.ANIM_TYPE.MEDIUM);
         } else {
             analyticsHelper.logScreenEvent(SCREEN_SOLUTION_DETAILS, ACTION_REMOVE_FAVOURITE);
             this.menuItem.setIcon(R.drawable.ic_star_border);

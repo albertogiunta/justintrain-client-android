@@ -47,7 +47,6 @@ public class NotificationService extends IntentService {
     public static final String NOTIFICATION_ERROR_MESSAGE_STATION_NOT_FOUND = "Impossibile settare la notifica a causa di un problema con le stazioni di partenza o arrivo.";
 
     AnalyticsHelper analyticsHelper;
-    static BroadcastReceiver mReceiver;
 
     Gson gson = new GsonBuilder()
             .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
@@ -74,8 +73,8 @@ public class NotificationService extends IntentService {
         String  journeyArrivalStationId   = journeyArrivalStation.getStationShortId();
         boolean justUpdate                = indexOfJourneyToBeNotified != null;
 
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        mReceiver = new ScreenOnReceiver();
+        IntentFilter      filter    = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        BroadcastReceiver mReceiver = new ScreenOnReceiver();
         context.registerReceiver(mReceiver, filter);
 
         if (sol.hasChanges()) {
@@ -178,7 +177,7 @@ public class NotificationService extends IntentService {
             if (ACTION_START_NOTIFICATION.equals(action)) {
             } else if (ACTION_STOP_NOTIFICATION.equals(action)) {
                 analyticsHelper.logScreenEvent(SCREEN_NOTIFICATION, ACTION_REMOVE_NOTIFICATION);
-                unregisterReceiver(mReceiver);
+//                unregisterReceiver(mReceiver);
                 NotificationPreferences.removeNotificationData(getBaseContext());
                 TrainNotification.cancel(this);
             } else if (ACTION_UPDATE_NOTIFICATION.equals(action)) {

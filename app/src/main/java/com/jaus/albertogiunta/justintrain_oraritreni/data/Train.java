@@ -81,7 +81,7 @@ public class Train {
         departure.currentStopTypeCode = 1;
         departure.currentStopStatusCode = 0;
         Stop arrival = new Stop();
-        arrival.stationName = s.getArrivalStationName().toUpperCase();
+        arrival.stationName = s.getArrivalStationName() != null ? s.getArrivalStationName().toUpperCase() : "";
         arrival.plannedDepartureTime = DateTime.now().withTime(LocalTime.parse(s.getArrivalTimeReadable()));
         arrival.isVisited = false;
         arrival.currentStopTypeCode = 3;
