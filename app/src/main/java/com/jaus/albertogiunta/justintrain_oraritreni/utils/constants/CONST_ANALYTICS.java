@@ -6,9 +6,17 @@ public class CONST_ANALYTICS {
     public static final String SCREEN_FAVOURITE_JOURNEYS = "FAV";
     public static final String SCREEN_SEARCH_JOURNEY     = "SEAJ";
     public static final String SCREEN_JOURNEY_RESULTS    = "RESJ";
-    public static final String SCREEN_SOLUTION_DETAILS   = "RESJ";
+    public static final String SCREEN_SOLUTION_DETAILS   = "SOLD";
     public static final String SCREEN_NOTIFICATION       = "NOT";
     public static final String SCREEN_SETTINGS           = "SETT";
+    public static final String SCREEN_UPGRADE_LICENSE    = "UPGR";
+
+    public static final String AD_CLICKED        = "Ad journey results";
+    public static final String AD_FAILED_TO_LOAD = "Ad journey results";
+    public static final String AD_IMPRESSION     = "Ad journey results";
+    public static final String IAP_SEARCH        = "IAP tap search screen";
+    public static final String IAP_TOP           = "IAP tap button top";
+    public static final String IAP_BOTTOM        = "IAP tap button bottom";
 
     // ERRORS
     public static final String ERROR_REFRESH                  = "Error refresh";

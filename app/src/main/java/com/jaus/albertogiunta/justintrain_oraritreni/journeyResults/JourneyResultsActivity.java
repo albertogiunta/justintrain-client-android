@@ -124,7 +124,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView);
+        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView, analyticsHelper, SCREEN_JOURNEY_RESULTS);
 
         btnHeaderSwapStationNames.setOnClickListener(v -> {
             AnimationUtils.animOnPress(v, AnimationUtils.ANIM_TYPE.MEDIUM);

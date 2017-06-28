@@ -90,6 +90,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SEARCH_JOURNEY_FROM_FAVOURITES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SWIPE_LEFT_TO_RIGHT;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SWIPE_RIGHT_TO_LEFT;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.IAP_SEARCH;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_FAVOURITE_JOURNEYS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_IS_MAINTENANCE_SET;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_IS_STRIKE_SET;
@@ -186,6 +187,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         btnIAP.setText(btnIAP.getText().toString() + new String(Character.toChars(0x21AA)));
 
         btnIAP.setOnClickListener(v -> {
+            analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, IAP_SEARCH);
             Intent i = new Intent(FavouriteJourneysActivity.this, LicenseUpgradeActivity.class);
             FavouriteJourneysActivity.this.startActivity(i);
         });

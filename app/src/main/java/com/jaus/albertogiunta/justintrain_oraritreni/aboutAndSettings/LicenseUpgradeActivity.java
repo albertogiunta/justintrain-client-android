@@ -51,6 +51,9 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements Purchas
                 .setListener(this)
                 .build();
 
+//        analyticsHelper.logScreenEvent(SCREEN_UPGRADE_LICENSE, IAP_TOP);
+//        analyticsHelper.logScreenEvent(SCREEN_UPGRADE_LICENSE, IAP_BOTTOM);
+
     }
 
     @Override

@@ -112,7 +112,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
         setContentView(R.layout.activity_train_details);
         ButterKnife.bind(this);
         analyticsHelper = AnalyticsHelper.getInstance(getViewContext());
-        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView);
+        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView, analyticsHelper, SCREEN_SOLUTION_DETAILS);
 
         presenter = new TrainDetailsPresenter(this);
         presenter.setState(getIntent().getExtras());
