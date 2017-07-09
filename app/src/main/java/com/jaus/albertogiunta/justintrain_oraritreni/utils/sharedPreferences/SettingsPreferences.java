@@ -13,6 +13,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INCLUDE_CHANGES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INSTANT_DELAY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_LIGHTNING;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_LIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_VIBRATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_FIRST_START;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_SAVED_VERSION;
@@ -45,6 +46,19 @@ public class SettingsPreferences {
 
     public static void disableVibration(Context context) {
         disableGenericSetting(context, SP_SETT_NOTIF_VIBRATION);
+    }
+
+    // live notification
+    public static boolean isLiveNotificationEnabled(Context context) {
+        return SharedPreferencesHelper.getSharedPreferenceBoolean(context, SP_SETT_NOTIF_VIBRATION, true);
+    }
+
+    public static void enableLiveNotification(Context context) {
+        enableGenericSetting(context, SP_SETT_NOTIF_LIVE);
+    }
+
+    public static void disableLiveNotification(Context context) {
+        disableGenericSetting(context, SP_SETT_NOTIF_LIVE);
     }
 
     // lightning
@@ -171,36 +185,29 @@ public class SettingsPreferences {
         SharedPreferencesHelper.setSharedPreferenceBoolean(context, CONST, false);
     }
 
-    // inclusion of settings
-    public static void setNewSettingsNotPreviouslyIncludedBefore(Context context) {
-        if (getPreviouslySavedVersionCode(context) < 12) {
-            setNewSettingsNotPreviouslyIncludedBefore12(context);
-        }
-        if (getPreviouslySavedVersionCode(context) < 13) {
-            setNewSettingsNotPreviouslyIncludedBefore13(context);
-        }
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void setNewSettingsNotPreviouslyIncludedBefore6(Context context) {
+    private static void setNewSettingsNotPreviouslyIncludedBefore6(Context context) {
         // 6 - 0.7.4
         disableLightning(context);
     }
 
-    public static void setNewSettingsNotPreviouslyIncludedBefore12(Context context) {
+    private static void setNewSettingsNotPreviouslyIncludedBefore12(Context context) {
         // 12 - 0.8.2
         enableVibration(context);
         enablePreemptive(context);
     }
 
-    public static void setNewSettingsNotPreviouslyIncludedBefore13(Context context) {
+    private static void setNewSettingsNotPreviouslyIncludedBefore13(Context context) {
         // 13 - 0.8.4
         enableIncludeChanges(context);
         enableAllCategories(context);
     }
 
-    public static void setNewSettingsNotPreviouslyIncludedBefore23(Context context) {
-        // 23 - 0.9.4
+    private static void setNewSettingsNotPreviouslyIncludedBefore27(Context context) {
+        // 27 - 1.0.0
         enableInstantDelay(context);
+        enableLiveNotification(context);
     }
 
     public static void setDefaultSharedPreferencesOnFirstStart(Context context) {
@@ -213,10 +220,23 @@ public class SettingsPreferences {
         setNewSettingsNotPreviouslyIncludedBefore6(context);
         setNewSettingsNotPreviouslyIncludedBefore12(context);
         setNewSettingsNotPreviouslyIncludedBefore13(context);
-        setNewSettingsNotPreviouslyIncludedBefore23(context);
+        setNewSettingsNotPreviouslyIncludedBefore27(context);
     }
 
-    public static boolean areAllCategoriesEnabled(Context context) {
+    // inclusion of settings - update together with onFirstStart
+    public static void setNewSettingsNotPreviouslyIncludedBefore(Context context) {
+        if (getPreviouslySavedVersionCode(context) < 12) {
+            setNewSettingsNotPreviouslyIncludedBefore12(context);
+        }
+        if (getPreviouslySavedVersionCode(context) < 13) {
+            setNewSettingsNotPreviouslyIncludedBefore13(context);
+        }
+        if (getPreviouslySavedVersionCode(context) < 27) {
+            setNewSettingsNotPreviouslyIncludedBefore27(context);
+        }
+    }
+
+    private static boolean areAllCategoriesEnabled(Context context) {
         return getEnabledCategoriesAsStringArray(context).length == ENUM_CATEGORIES.values().length;
     }
 

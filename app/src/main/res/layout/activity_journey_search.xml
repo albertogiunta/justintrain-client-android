@@ -26,7 +26,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:theme="@style/AppThemeNoActionbar"
+                android:theme="@style/AppThemeNoActionbar"
                 app:title="Cerca Tratta"
                 app:titleTextColor="@color/txt_white"
                 />

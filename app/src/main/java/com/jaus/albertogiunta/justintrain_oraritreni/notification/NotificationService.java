@@ -20,6 +20,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.networking.JourneyService;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.DatabaseHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.NotificationPreferences;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.SettingsPreferences;
 
 import org.joda.time.DateTime;
 
@@ -74,8 +75,11 @@ public class NotificationService extends IntentService {
         boolean justUpdate                = indexOfJourneyToBeNotified != null;
 
         IntentFilter      filter    = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        BroadcastReceiver mReceiver = new ScreenOnReceiver();
-        context.registerReceiver(mReceiver, filter);
+
+        if (SettingsPreferences.isLiveNotificationEnabled(context)) {
+            BroadcastReceiver mReceiver = new ScreenOnReceiver();
+            context.registerReceiver(mReceiver, filter);
+        }
 
         if (sol.hasChanges()) {
             if (indexOfJourneyToBeNotified == null) {

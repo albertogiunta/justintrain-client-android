@@ -27,17 +27,11 @@ import java.util.Locale;
 import trikita.log.Log;
 
 /**
- * BillingManager.java
+ * BillingManagerNO.java
  *
  * A simple, short, and understandable wrapper class around Google Play’s In-App Billing API v3.
  *
  * This is not a library, not in the sense that you can import and use. This is intentional.
- *
- * The authors’ experience with IAB libraries has been that:
- * (1) they do not provide enough value, since the Google API is not that difficult to work with;
- * (2) when something goes wrong, it’s notoriously hard to debug;
- * (3) many of the popular ones do not handle all the different kinds of error conditions properly,
- * and in the process, make it harder for a caller to handle because they silently drop them.
  *
  * To use this class, copy/paste into your own app’s code. There is a lot of logging; use a flag
  * to turn off most of it in production.
@@ -50,21 +44,10 @@ import trikita.log.Log;
  *
  * It supports a limited-time Trial Mode check as well: simply implement a class named {@code Trial}
  * with a static method named {@code isInTrialPeriod(Context)}.
- *
- *
- * Copyright 2016 onwards, Chimbori.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
  */
-public class BillingManager {
-    private static final String TAG = "BillingManager";
+
+public class BillingManagerNO {
+    private static final String TAG = "BillingManagerNO";
 
     private static final int BILLING_API_VERSION = 3;
 
@@ -122,26 +105,26 @@ public class BillingManager {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private static BillingManager instance;
+    private static BillingManagerNO instance;
 
     @FreemiumStatus
     private int freemiumStatus = FREEMIUM_STATUS_UNKNOWN;
 
     /**
-     * Ensure that there is exactly one instance of {@code BillingManager} app-wide, because
+     * Ensure that there is exactly one instance of {@code BillingManagerNO} app-wide, because
      * otherwise
      * there are two @Producers registered with Otto, which is disallowed and causes a
      * RuntimeException.
      */
-    public static synchronized BillingManager with(Context context) {
+    public static synchronized BillingManagerNO with(Context context) {
         if (instance == null) {
             Log.i(TAG, "Created");
-            instance = new BillingManager(context);
+            instance = new BillingManagerNO(context);
         }
         return instance;
     }
 
-    private BillingManager(Context context) {
+    private BillingManagerNO(Context context) {
         this.context = context;
     }
 
@@ -159,7 +142,7 @@ public class BillingManager {
              */
             @Override
             protected Integer doInBackground(Void... voids) {
-                Thread.currentThread().setName("BillingManager.checkPurchaseStatus");
+                Thread.currentThread().setName("BillingManagerNO.checkPurchaseStatus");
                 reconnect(new OnBillingServiceConnectedListener() {
                     @Override
                     public void onConnected(ServiceConnection serviceConnection, IInAppBillingService billingService) {
@@ -328,7 +311,7 @@ public class BillingManager {
      * public class YourActivity extends Activity {
      * // ...
      * @Override protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-     * if (BillingManager.with(context).handleActivityResult(requestCode, resultCode, intent)) {
+     * if (BillingManagerNO.with(context).handleActivityResult(requestCode, resultCode, intent)) {
      * return;
      * }
      * super.onActivityResult(requestCode, resultCode, intent);
@@ -436,15 +419,15 @@ public class BillingManager {
      */
     private static String getFreemiumStatusString(@FreemiumStatus int status) {
         switch (status) {
-            case BillingManager.FREEMIUM_STATUS_UNKNOWN:
+            case BillingManagerNO.FREEMIUM_STATUS_UNKNOWN:
                 return null;  // Null, because there is no value in having these logged.
             case FREEMIUM_STATUS_ERROR:
                 return "Error";  // Covers FREEMIUM_STATUS_ERROR & any unknown errors.
-            case BillingManager.FREEMIUM_STATUS_FREE:
+            case BillingManagerNO.FREEMIUM_STATUS_FREE:
                 return "Free";
-            case BillingManager.FREEMIUM_STATUS_PREMIUM:
+            case BillingManagerNO.FREEMIUM_STATUS_PREMIUM:
                 return "Premium";
-            case BillingManager.FREEMIUM_STATUS_TRIAL:
+            case BillingManagerNO.FREEMIUM_STATUS_TRIAL:
                 return "Trial";
         }
         return null;

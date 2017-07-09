@@ -40,6 +40,10 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowSc
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_ERROR_BTN_STATUS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.CustomIABHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabResult;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.Inventory;
 
 import org.joda.time.DateTime;
 
@@ -64,13 +68,16 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_TIME;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS.NONE;
 
-public class JourneyResultsActivity extends AppCompatActivity implements JourneyResultsContract.View {
+public class JourneyResultsActivity extends AppCompatActivity implements
+        JourneyResultsContract.View,
+        IabHelper.QueryInventoryFinishedListener {
 
     public static final String ACTION = "com.jaus.albertogiunta.justintrain_oraritreni.OPEN_DYNAMIC_SHORTCUT";
 
     JourneyResultsContract.Presenter presenter;
     AnalyticsHelper                  analyticsHelper;
     BroadcastReceiver                messageReceiver;
+    CustomIABHelper                  iabHelper;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -119,6 +126,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
         setContentView(R.layout.activity_journey_results);
         ButterKnife.bind(this);
         analyticsHelper = AnalyticsHelper.getInstance(getViewContext());
+        iabHelper = CustomIABHelper.getInstance(JourneyResultsActivity.this, this);
         presenter = new JourneyResultsPresenter(this);
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
@@ -211,6 +219,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
     @Override
     protected void onResume() {
         super.onResume();
+        iabHelper.userIsPro(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter(NotificationService.NOTIFICATION_ERROR_EVENT));
 //        presenter.setState(getIntent().getExtras());
     }
@@ -349,5 +358,12 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
             JourneyResultsActivity.this.startActivityForResult(intent, 1);
         }
         return false;
+    }
+
+    @Override
+    public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+        if (inv.hasPurchase("premium_upgrade_mp")) {
+            Ads.removeAds(rlBannerPlaceholder, adView);
+        }
     }
 }

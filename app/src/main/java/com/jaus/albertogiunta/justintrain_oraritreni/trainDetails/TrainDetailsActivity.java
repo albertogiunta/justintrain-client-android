@@ -44,6 +44,10 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowSc
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_ERROR_BTN_STATUS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.CustomIABHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabResult;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.Inventory;
 
 import org.joda.time.DateTime;
 
@@ -68,11 +72,14 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_SOLUTION_DETAILS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS.NONE;
 
-public class TrainDetailsActivity extends AppCompatActivity implements TrainDetailsContract.View {
+public class TrainDetailsActivity extends AppCompatActivity implements
+        TrainDetailsContract.View,
+        IabHelper.QueryInventoryFinishedListener {
 
     TrainDetailsContract.Presenter presenter;
     AnalyticsHelper                analyticsHelper;
     BroadcastReceiver              messageReceiver;
+    CustomIABHelper                iabHelper;
 
     MenuItem menuItem;
 
@@ -112,6 +119,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
         setContentView(R.layout.activity_train_details);
         ButterKnife.bind(this);
         analyticsHelper = AnalyticsHelper.getInstance(getViewContext());
+        iabHelper = CustomIABHelper.getInstance(TrainDetailsActivity.this, this);
         Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView, analyticsHelper, SCREEN_SOLUTION_DETAILS);
 
         presenter = new TrainDetailsPresenter(this);
@@ -200,6 +208,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
     protected void onResume() {
         super.onResume();
 //        adView.resume();
+        iabHelper.userIsPro(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter(NotificationService.NOTIFICATION_ERROR_EVENT));
         presenter.setState(getIntent().getExtras());
     }
@@ -368,5 +377,12 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
                     break;
             }
         });
+    }
+
+    @Override
+    public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+        if (inv.hasPurchase("premium_upgrade_mp")) {
+            Ads.removeAds(rlBannerPlaceholder, adView);
+        }
     }
 }

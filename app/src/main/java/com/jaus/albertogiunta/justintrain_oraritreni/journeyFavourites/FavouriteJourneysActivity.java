@@ -58,6 +58,10 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowSc
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.CustomIABHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabResult;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.Inventory;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.ServerConfigsHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.ShortcutHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.MigrationHelper;
@@ -105,11 +109,13 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM
 
 public class FavouriteJourneysActivity extends AppCompatActivity implements FavouritesContract.View,
         FlexibleAdapter.OnItemSwipeListener,
-        FlexibleAdapter.OnItemClickListener {
+        FlexibleAdapter.OnItemClickListener,
+        IabHelper.QueryInventoryFinishedListener {
 
     FavouritesContract.Presenter presenter;
     AnalyticsHelper              analyticsHelper;
     BroadcastReceiver            messageReceiver;
+    CustomIABHelper              iabHelper;
 
     @BindView(R.id.btn_iap)
     Button btnIAP;
@@ -139,9 +145,11 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         setContentView(R.layout.activity_favourite_journeys);
         ButterKnife.bind(this);
         analyticsHelper = AnalyticsHelper.getInstance(getViewContext());
+        iabHelper = CustomIABHelper.getInstance(FavouriteJourneysActivity.this, this);
         checkIntro();
 //        MigrationHelper.migrateIfDue(getViewContext());
         presenter = new FavouritesPresenter(this);
+
 
         new Handler().postDelayed(() -> {
             fetchRemoteConfigs();
@@ -158,6 +166,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         rvFavouriteJourneys.setAdapter(adapter);
         rvFavouriteJourneys.setLayoutManager(new LinearLayoutManager(this));
         adapter.setSwipeEnabled(true);
+
 
         btnSearch.setScaleX(0);
         btnSearch.setScaleY(0);
@@ -193,6 +202,15 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         });
 
         AsyncTask task = new LoadCursorTask(this).execute();
+    }
+
+    @Override
+    public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+        if (inv.hasPurchase("premium_upgrade_mp")) {
+            btnIAP.setText("COMPRATOOO");
+        } else {
+            btnIAP.setText("niente");
+        }
     }
 
     abstract private class BaseTask<T> extends AsyncTask<T, Void, List<Station>> {
@@ -284,6 +302,8 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter(NotificationService.NOTIFICATION_ERROR_EVENT));
         btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(0);
         presenter.setState(getIntent().getExtras());
+
+        iabHelper.userIsPro(this);
     }
 
     @Override

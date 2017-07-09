@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:theme="@style/AppThemeNoActionbar"
+                android:theme="@style/AppThemeNoActionbar"
                 app:title="JustInTrain Fan Club"
                 app:titleTextColor="@color/txt_white"
                 />
@@ -256,7 +256,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/txt_white"
                             fontPath="@string/font_path_bold"
-                            android:text="Notifiche istantanee"
+                            android:text="Notifiche LIVE"
                             />
 
                     <TextView

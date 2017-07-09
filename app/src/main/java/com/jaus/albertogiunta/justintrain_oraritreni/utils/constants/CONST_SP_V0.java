@@ -10,6 +10,7 @@ public class CONST_SP_V0 {
     public static final String SP_SP_FIRST_START            = "settings>isFirstStart";
     public static final String SP_SETT_LIGHTNING            = "settings>isLightningEnabled";
     public static final String SP_SETT_NOTIF_VIBRATION      = "settings>isNotifVibrationEnabled";
+    public static final String SP_SETT_NOTIF_LIVE           = "settings>isNotifLiveEnabled";
     public static final String SP_SETT_INSTANT_DELAY        = "settings>isInstantDelayEnabled";
     public static final String SP_SETT_GET_PREEMPTIVE       = "settings>isPreemptiveSearchEnabled";
     public static final String SP_SETT_INCLUDE_CHANGES      = "settings>includeSolutionWithChanges";

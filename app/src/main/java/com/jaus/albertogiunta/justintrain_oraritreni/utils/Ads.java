@@ -8,6 +8,7 @@ import com.google.android.gms.ads.NativeExpressAdView;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
 
@@ -51,5 +52,22 @@ public class Ads {
                 analyticsHelper.logScreenEvent(screenName, AD_CLICKED);
             }
         });
+    }
+
+    public static void removeAds(View bannerPlaceholder, NativeExpressAdView adView) {
+
+        apply(bannerPlaceholder, GONE);
+        apply(adView, GONE);
+        adView.setEnabled(false);
+
+        ViewGroup parent = (ViewGroup) adView.getParent();
+        parent.removeView(adView);
+        parent.invalidate();
+
+        parent = (ViewGroup) bannerPlaceholder.getParent();
+        parent.removeView(bannerPlaceholder);
+        parent.invalidate();
+
+
     }
 }
