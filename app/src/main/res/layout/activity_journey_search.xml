@@ -9,7 +9,7 @@
         android:baselineAligned="false"
         android:orientation="vertical"
         android:weightSum="4"
-        android:background="@drawable/bg_gradient"
+        android:background="@drawable/bg_gradient_1"
         android:clipChildren="false"
         android:clipToPadding="false"
         >

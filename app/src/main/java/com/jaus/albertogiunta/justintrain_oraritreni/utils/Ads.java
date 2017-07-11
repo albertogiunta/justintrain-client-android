@@ -61,13 +61,13 @@ public class Ads {
         adView.setEnabled(false);
 
         ViewGroup parent = (ViewGroup) adView.getParent();
+        if (parent != null) {
         parent.removeView(adView);
         parent.invalidate();
 
         parent = (ViewGroup) bannerPlaceholder.getParent();
         parent.removeView(bannerPlaceholder);
         parent.invalidate();
-
-
+        }
     }
 }

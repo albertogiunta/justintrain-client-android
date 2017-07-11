@@ -13,7 +13,7 @@
     <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_gradient"
+            android:background="@drawable/bg_gradient_1"
             />
 
     <android.support.design.widget.AppBarLayout
@@ -137,7 +137,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/cv_banner_placeholder"
-                    android:background="@drawable/bg_gradient"
+                    android:background="@drawable/bg_gradient_1"
                     android:clickable="true"
                     android:visibility="gone"
                     tools:listitem="@layout/item_train_details"

@@ -6,7 +6,7 @@
         tools:locale="it"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_gradient"
+        android:background="@drawable/bg_gradient_1"
         >
 
     <android.support.v7.widget.RecyclerView
