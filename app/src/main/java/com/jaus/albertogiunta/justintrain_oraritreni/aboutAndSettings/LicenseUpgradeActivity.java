@@ -1,11 +1,16 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.R;
@@ -88,28 +93,27 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
     @Override
     public void onIabSetupFinished(IabResult result) {
         if (result.isSuccess()) {
-            Log.d("In-app Billing set up" + result);
-            billingHelper.queryInventoryAsync((result2, inv) -> {
-                // TODO DEBUGGGGGG
-                if (CustomIABHelper.isOrderOk(result, inv)) {
-                    billingHelper.consumeAsync(inv.getPurchase("premium_upgrade_mp"), null);
-                    SettingsPreferences.disableLiveNotification(LicenseUpgradeActivity.this);
-                    SettingsPreferences.disableInstantDelay(LicenseUpgradeActivity.this);
-                }
-                // TODO END DEBUGGGGGG
-            });
-            dealWithIabSetupSuccess();
+            dealWithIabSetupSuccess(result);
         } else {
             Log.d("Problem setting up In-app Billing: " + result);
             dealWithIabSetupFailure();
         }
     }
 
-    private void dealWithIabSetupSuccess() {
+    private void dealWithIabSetupSuccess(IabResult result) {
+        billingHelper.queryInventoryAsync((result2, inv) -> {
+            // TODO DEBUGGGGGG
+            boolean debugPurchase = false;
+            if (debugPurchase && CustomIABHelper.isOrderOk(result, inv)) {
+                billingHelper.consumeAsync(inv.getPurchase("premium_upgrade_mp"), null);
+                SettingsPreferences.disableLiveNotification(LicenseUpgradeActivity.this);
+                SettingsPreferences.disableInstantDelay(LicenseUpgradeActivity.this);
+            }
+            // TODO END DEBUGGGGGG
+        });
     }
 
     private void dealWithIabSetupFailure() {
-        Log.d("Sorry buying a passport is not available at this current time");
     }
 
     protected void purchaseItem(String sku) {
@@ -148,17 +152,22 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
 
     protected void dealWithPurchaseFailed(IabResult result) {
         Log.d("Error purchasing: " + result);
+        FirebaseCrash.report(new Exception("Purchase failed. Code: " + result.getResponse() + " " + result.getMessage()));
     }
 
     protected void dealWithPurchaseSuccess(IabResult result, Purchase info) {
         Log.d("Item purchased: " + result);
 
         billingHelper.queryInventoryAsync(false, (result1, inv) -> {
-            Log.d("dealWithPurchaseSuccess: ", result.toString());
-            Log.d("dealWithPurchaseSuccess: ", inv.getPurchase("premium_upgrade_mp"), inv.hasPurchase("premium_upgrade_mp"));
-
             SettingsPreferences.enableLiveNotification(LicenseUpgradeActivity.this);
             SettingsPreferences.enableInstantDelay(LicenseUpgradeActivity.this);
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(LicenseUpgradeActivity.this);
+            View                view        = LayoutInflater.from(LicenseUpgradeActivity.this).inflate(R.layout.dialog_gone_pro, null);
+            alertDialog.setView(view)
+                    .setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
+                    .create()
+                    .show();
         });
     }
 
