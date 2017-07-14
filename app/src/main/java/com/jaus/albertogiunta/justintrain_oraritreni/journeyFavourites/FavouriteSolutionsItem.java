@@ -159,15 +159,19 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                 AnimationUtils.onCompare(notifcationIV);
 
                 if (SettingsPreferences.isInstantDelayEnabled(context) &&
-                        DateTime.now().toLocalTime().isAfter(solution.getDepartureTime().minusMinutes(60).toLocalTime()) &&
-                        DateTime.now().toLocalTime().isBefore(solution.getArrivalTime().toLocalTime())) {
-                    final int   j           = i;
+                        DateTime.now().toLocalTime().isBefore(solution.getDepartureTime().toLocalTime())) {
 
-                    if (j < boldIndex) {
-                        boldIndex = j;
+                    if (i < boldIndex) {
+                        boldIndex = i;
                         trainDetailsBtn.setTypeface(null, Typeface.BOLD);
                     }
 
+                }
+
+                if (SettingsPreferences.isInstantDelayEnabled(context) &&
+                        DateTime.now().toLocalTime().isAfter(solution.getDepartureTime().minusMinutes(60).toLocalTime()) &&
+                        DateTime.now().toLocalTime().isBefore(solution.getArrivalTime().toLocalTime())) {
+                    final int   j           = i;
 
                     Button      delayView   = (Button) solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
                     ImageButton warningView = (ImageButton) solutionsViewsList.get(j).findViewById(R.id.iv_warning);
