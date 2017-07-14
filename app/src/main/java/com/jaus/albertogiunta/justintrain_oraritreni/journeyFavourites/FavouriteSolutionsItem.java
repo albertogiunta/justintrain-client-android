@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,6 +126,8 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
             List<Journey.Solution> solutions = new ArrayList<>(preferredSolutions.values());
             Collections.sort(solutions, (o1, o2) -> o1.getDepartureTime().toLocalTime().compareTo(o2.getDepartureTime().toLocalTime()));
 
+            int boldIndex = Integer.MAX_VALUE;
+
             for (Journey.Solution solution : solutions) {
                 if (i < solutionsViewsList.size()) {
                     apply(solutionsViewsList.get(i), VISIBLE);
@@ -133,6 +136,7 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                 trainDetailsBtn = (Button) solutionsViewsList.get(i).findViewById(R.id.btn_solution_time);
                 notifcationIV = (ImageView) solutionsViewsList.get(i).findViewById(R.id.btn_pin);
                 trainDetailsBtn.setText(solution.getDepartureTimeReadable() + " " + SEPARATOR + " " + solution.getArrivalTimeReadable());
+
                 trainDetailsBtn.setOnClickListener(v -> {
                     analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_CLICK_ON_FAV_SOLUTION);
                     Intent intent = new Intent(context, TrainDetailsActivity.class);
@@ -153,10 +157,18 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                 });
 
                 AnimationUtils.onCompare(notifcationIV);
+
                 if (SettingsPreferences.isInstantDelayEnabled(context) &&
                         DateTime.now().toLocalTime().isAfter(solution.getDepartureTime().minusMinutes(60).toLocalTime()) &&
                         DateTime.now().toLocalTime().isBefore(solution.getArrivalTime().toLocalTime())) {
                     final int   j           = i;
+
+                    if (j < boldIndex) {
+                        boldIndex = j;
+                        trainDetailsBtn.setTypeface(null, Typeface.BOLD);
+                    }
+
+
                     Button      delayView   = (Button) solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
                     ImageButton warningView = (ImageButton) solutionsViewsList.get(j).findViewById(R.id.iv_warning);
 //                    apply(warningView, GONE);

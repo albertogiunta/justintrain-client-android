@@ -2,6 +2,7 @@ package com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers;
 
 import android.content.Context;
 
+import com.android.billingclient.api.Purchase;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabResult;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.Inventory;
@@ -24,7 +25,7 @@ public class CustomIABHelper implements IabHelper.QueryInventoryFinishedListener
             if (!isSetupDone) {
                 billingHelper.startSetup(result -> {
                     isSetupDone = true;
-                    userIsPro(listener);
+                    isUserPro(listener);
                 });
             }
         } catch (IllegalStateException e) {
@@ -37,21 +38,26 @@ public class CustomIABHelper implements IabHelper.QueryInventoryFinishedListener
         if (instance == null) {
             instance = new CustomIABHelper(context, listener);
         } else {
-            instance.userIsPro(listener);
+            instance.isUserPro(listener);
         }
         return CustomIABHelper.instance;
     }
 
-    public void userIsPro(IabHelper.QueryInventoryFinishedListener listener) {
+    public void isUserPro(IabHelper.QueryInventoryFinishedListener listener) {
         if (isSetupDone) {
-            Log.d("isPro: 1", isPro);
             billingHelper.queryInventoryAsync(false, listener);
         }
-        Log.d("isPro: 2", isPro);
     }
 
     @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-        isPro = (inv.hasPurchase("premium_upgrade_mp"));
+        isPro = (inv.hasPurchase("premium_upgrade_mp") &&
+                inv.getPurchase("premium_upgrade_mp").getPurchaseState() == Purchase.PurchaseState.PURCHASED);
+    }
+
+    public static boolean isOrderOk(IabResult result, Inventory inv) {
+        return result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_OK &&
+                inv.hasPurchase("premium_upgrade_mp") &&
+                (inv.getPurchase("premium_upgrade_mp").getPurchaseState() == Purchase.PurchaseState.PURCHASED);
     }
 }

@@ -7,10 +7,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -208,7 +210,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
 //        adView.resume();
-        iabHelper.userIsPro(this);
+        iabHelper.isUserPro(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter(NotificationService.NOTIFICATION_ERROR_EVENT));
         presenter.setState(getIntent().getExtras());
     }
@@ -381,7 +383,10 @@ public class TrainDetailsActivity extends AppCompatActivity implements
 
     @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-        if (inv.hasPurchase("premium_upgrade_mp")) {
+        if (CustomIABHelper.isOrderOk(result, inv)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ((AppBarLayout) toolbar.getParent()).setElevation(10f);
+            }
             Ads.removeAds(rlBannerPlaceholder, adView);
         }
     }

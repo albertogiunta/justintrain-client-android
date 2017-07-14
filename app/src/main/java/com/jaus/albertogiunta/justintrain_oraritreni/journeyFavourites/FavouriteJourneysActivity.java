@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -27,6 +28,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -206,10 +208,16 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
     @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-        if (inv.hasPurchase("premium_upgrade_mp")) {
-            btnIAP.setText("COMPRATOOO");
+        if (CustomIABHelper.isOrderOk(result, inv)) {
+            apply(btnIAP, GONE);
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
+            lp.gravity = Gravity.BOTTOM | Gravity.CENTER;
+            btnSearch.setLayoutParams(lp);
         } else {
-            btnIAP.setText("niente");
+            apply(btnIAP, VISIBLE);
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
+            lp.gravity = Gravity.BOTTOM | Gravity.END;
+            btnSearch.setLayoutParams(lp);
         }
     }
 
@@ -303,7 +311,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(0);
         presenter.setState(getIntent().getExtras());
 
-        iabHelper.userIsPro(this);
+        iabHelper.isUserPro(this);
     }
 
     @Override

@@ -139,6 +139,7 @@
             android:layout_marginBottom="16dp"
             app:fabSize="normal"
             app:srcCompat="@drawable/ic_search"
+            android:visibility="visible"
             />
 
 </android.support.design.widget.CoordinatorLayout>

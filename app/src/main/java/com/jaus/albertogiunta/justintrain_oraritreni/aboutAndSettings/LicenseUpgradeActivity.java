@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.CustomIABHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabResult;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.Purchase;
@@ -90,7 +91,7 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
             Log.d("In-app Billing set up" + result);
             billingHelper.queryInventoryAsync((result2, inv) -> {
                 // TODO DEBUGGGGGG
-                if (inv.hasPurchase("premium_upgrade_mp")) {
+                if (CustomIABHelper.isOrderOk(result, inv)) {
                     billingHelper.consumeAsync(inv.getPurchase("premium_upgrade_mp"), null);
                     SettingsPreferences.disableLiveNotification(LicenseUpgradeActivity.this);
                     SettingsPreferences.disableInstantDelay(LicenseUpgradeActivity.this);

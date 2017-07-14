@@ -219,7 +219,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        iabHelper.userIsPro(this);
+        iabHelper.isUserPro(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter(NotificationService.NOTIFICATION_ERROR_EVENT));
 //        presenter.setState(getIntent().getExtras());
     }
@@ -362,7 +362,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements
 
     @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-        if (inv.hasPurchase("premium_upgrade_mp")) {
+        if (CustomIABHelper.isOrderOk(result, inv)) {
             Ads.removeAds(rlBannerPlaceholder, adView);
         }
     }

@@ -124,7 +124,7 @@ public class SettingsActivity extends AppCompatActivity implements IabHelper.Que
 
     @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-        if (inv.hasPurchase("premium_upgrade_mp")) {
+        if (CustomIABHelper.isOrderOk(result, inv)) {
             isPro = true;
         }
         buildView();
