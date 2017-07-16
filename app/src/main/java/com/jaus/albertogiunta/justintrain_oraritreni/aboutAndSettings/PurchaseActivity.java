@@ -19,7 +19,7 @@ import trikita.log.Log;
  * availability
  *
  * After that you can purchase items using purchaseItem(String sku) and listening for the result
- * by overriding dealWithPurchaseFailed(IabResult result) and dealWithPurchaseSuccess(IabResult
+ * by overriding dealWithPurchaseFailed(IabResult result) and dealWithPurchaseSuccessUpgrade(IabResult
  * result, Purchase info)
  *
  * @author Blundell

@@ -64,6 +64,19 @@
                     android:text="Se sei un pendolare vero, ti meriti di più.\nLascia che di più ti venga dato."
                     />
 
+            <TextView
+                    android:id="@+id/tv_already_pro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    android:textSize="@dimen/text_size_smaller"
+                    android:layout_gravity="center_horizontal"
+                    android:textAlignment="center"
+                    android:layout_marginTop="@dimen/margin_small"
+                    fontPath="@string/font_path_standard"
+                    android:text="* Sei un utente PRO"
+                    android:visibility="gone"
+                    />
 
             <Button
                     android:id="@+id/btn_iap_first"
