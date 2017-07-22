@@ -88,7 +88,7 @@
                     android:paddingEnd="@dimen/margin_very_big"
                     android:layout_gravity="center_horizontal"
                     fontPath="@string/font_path_bold"
-                    android:text="Upgrade PREMIUM a vita (2,49€)"
+                    android:text="Upgrade PREMIUM a vita"
                     android:background="@drawable/bg_button_selector_yellow"
                     />
 
@@ -432,15 +432,18 @@
             </LinearLayout>
 
             <TextView
+                    android:id="@+id/tv_pro_users_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_big"
+                    android:paddingLeft="@dimen/margin_small"
+                    android:paddingRight="@dimen/margin_small"
                     android:textColor="@color/txt_white"
                     android:layout_gravity="center"
                     android:textAlignment="center"
                     android:textSize="@dimen/text_size_default_minus"
                     fontPath="@string/font_path_bold"
-                    android:text="Altre 12 persone sono entrate nel Fan Club\nUnisciti anche tu!"
+                    android:text="@string/upgrade_pro_users_number"
                     />
 
             <Button
@@ -453,7 +456,7 @@
                     android:paddingEnd="@dimen/margin_very_big"
                     android:layout_gravity="center_horizontal"
                     fontPath="@string/font_path_bold"
-                    android:text="Upgrade PREMIUM a vita (2,49€)"
+                    android:text="Upgrade PREMIUM a vita"
                     android:background="@drawable/bg_button_selector_yellow"
                     />
 

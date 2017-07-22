@@ -24,8 +24,9 @@ interface FavouritesContract {
          * @param message to display
          * @param titleColor color f the title
          * @param isUpdateMessage
+         * @param isDiscountMessage
          */
-        void updateDashboard(String message, ViewsUtils.COLORS titleColor, boolean isUpdateMessage);
+        void updateDashboard(String message, ViewsUtils.COLORS titleColor, boolean isUpdateMessage, boolean isDiscountMessage);
 
         /**
          * Should be called after the preferred journey list has been updated

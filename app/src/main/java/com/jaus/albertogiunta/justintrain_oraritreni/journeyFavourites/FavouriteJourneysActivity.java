@@ -1,6 +1,7 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.journeyFavourites;
 
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.gson.Gson;
@@ -53,6 +54,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.journeyResults.JourneyResul
 import com.jaus.albertogiunta.justintrain_oraritreni.journeySearch.JourneySearchActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.DateTimeAdapter;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.PostProcessingEnabler;
+import com.jaus.albertogiunta.justintrain_oraritreni.notification.ClickActionHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService;
 import com.jaus.albertogiunta.justintrain_oraritreni.tutorial.IntroActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
@@ -90,6 +92,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.Vie
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.VISIBLE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_AR_FROM_POPUP;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_NO_SWIPE_BUT_CLICK;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_ON_SALE_CLICK;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_ON_UPDATE_CLICK;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_RA_FROM_POPUP;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_REMOVE_FROM_POPUP;
@@ -98,6 +101,8 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SWIPE_RIGHT_TO_LEFT;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.IAP_SEARCH;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_FAVOURITE_JOURNEYS;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_DISCOUNT_MESSAGE;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_IS_DISCOUNT_SET;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_IS_MAINTENANCE_SET;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_IS_STRIKE_SET;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_LATEST_VERSION;
@@ -118,6 +123,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     AnalyticsHelper              analyticsHelper;
     BroadcastReceiver            messageReceiver;
     CustomIABHelper              iabHelper;
+    boolean shouldDisplayDiscountMessage = false;
 
     @BindView(R.id.btn_iap)
     Button btnIAP;
@@ -149,9 +155,12 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         analyticsHelper = AnalyticsHelper.getInstance(getViewContext());
         iabHelper = CustomIABHelper.getInstance(FavouriteJourneysActivity.this, this);
         checkIntro();
+        Log.d("onCreate token : " + FirebaseInstanceId.getInstance().getToken());
+
 //        MigrationHelper.migrateIfDue(getViewContext());
         presenter = new FavouritesPresenter(this);
 
+        checkIntent(getIntent());
 
         new Handler().postDelayed(() -> {
             fetchRemoteConfigs();
@@ -207,17 +216,26 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        checkIntent(intent);
+    }
+
+    @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inv) {
         if (CustomIABHelper.isOrderOk(result, inv)) {
             apply(btnIAP, GONE);
             CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
             lp.gravity = Gravity.BOTTOM | Gravity.CENTER;
             btnSearch.setLayoutParams(lp);
+            apply(this.rlMessage, GONE);
+            shouldDisplayDiscountMessage = false;
         } else {
             apply(btnIAP, VISIBLE);
             CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
             lp.gravity = Gravity.BOTTOM | Gravity.END;
             btnSearch.setLayoutParams(lp);
+            shouldDisplayDiscountMessage = true;
         }
     }
 
@@ -357,11 +375,13 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     }
 
     @Override
-    public void updateDashboard(String message, ViewsUtils.COLORS titleColor, boolean isUpdateMessage) {
+    public void updateDashboard(String message, ViewsUtils.COLORS titleColor, boolean isUpdateMessage, boolean isDiscountMessage) {
 
-        apply(this.rlMessage, VISIBLE);
-        this.tvMessage.setText(message);
-        this.tvMessage.setTextColor(ViewsUtils.getTimeDifferenceColor(getViewContext(), titleColor));
+        if (!isDiscountMessage || shouldDisplayDiscountMessage) {
+            apply(this.rlMessage, VISIBLE);
+            this.tvMessage.setText(message);
+            this.tvMessage.setTextColor(ViewsUtils.getTimeDifferenceColor(getViewContext(), titleColor));
+        }
 
         if (isUpdateMessage) {
             this.rlMessage.setOnClickListener(v -> {
@@ -371,6 +391,11 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
                 } catch (android.content.ActivityNotFoundException e) {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.play_store_web_url) + getPackageName())));
                 }
+            });
+        } else if (isDiscountMessage && shouldDisplayDiscountMessage) {
+            this.rlMessage.setOnClickListener(v -> {
+                analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_ON_SALE_CLICK);
+                startActivity(new Intent(FavouriteJourneysActivity.this, LicenseUpgradeActivity.class));
             });
         }
     }
@@ -418,18 +443,27 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 //                        updateDashboard(firebaseRemoteConfig.getString(FIREBASE_STRIKE), ViewsUtils.COLORS.GREEN, false);
 //                    } else {
                     if (firebaseRemoteConfig.getBoolean(FIREBASE_IS_STRIKE_SET)) {
-                        updateDashboard(firebaseRemoteConfig.getString(FIREBASE_STRIKE), ViewsUtils.COLORS.RED, false);
+                        updateDashboard(firebaseRemoteConfig.getString(FIREBASE_STRIKE), ViewsUtils.COLORS.RED, false, false);
                     } else if (firebaseRemoteConfig.getBoolean(FIREBASE_IS_MAINTENANCE_SET)) {
-                        updateDashboard(firebaseRemoteConfig.getString(FIREBASE_MAINTENANCE), ViewsUtils.COLORS.ORANGE, false);
+                        updateDashboard(firebaseRemoteConfig.getString(FIREBASE_MAINTENANCE), ViewsUtils.COLORS.ORANGE, false, false);
                     } else if (firebaseRemoteConfig.getLong(FIREBASE_LATEST_VERSION) > BuildConfig.VERSION_CODE) {
-                        updateDashboard(firebaseRemoteConfig.getString(FIREBASE_UPDATE_MESSAGE), ViewsUtils.COLORS.BLUE, true);
+                        updateDashboard(firebaseRemoteConfig.getString(FIREBASE_UPDATE_MESSAGE), ViewsUtils.COLORS.BLUE, true, false);
+                    } else if (FirebaseRemoteConfig.getInstance().getBoolean(FIREBASE_IS_DISCOUNT_SET)) {
+                        updateDashboard(FirebaseRemoteConfig.getInstance().getString(FIREBASE_DISCOUNT_MESSAGE), ViewsUtils.COLORS.ORANGE, false, true);
                     }
-//                    }
+//                    ServerConfigsHelper.setProUsersInSharedPreferences(FavouriteJourneysActivity.this, (int) firebaseRemoteConfig.getDouble(SP_SP_PRO_USERS_NUMBER));
+
                 })
                 .addOnFailureListener(this, e -> {
                     FirebaseCrash.report(new Exception("Firebase Remote Config FAILED in ADDONFAILURELISTENER"));
                     //TODO PERCHé REMOTECONFIG SUCCEDE SPESSO CHE FINISCE QUI?
                 });
+    }
+
+    private void checkIntent(Intent intent) {
+        if (intent.hasExtra("on_notification_click_action")) {
+            ClickActionHelper.startActivity(intent.getStringExtra("on_notification_click_action"), intent.getExtras(), this);
+        }
     }
 
     private Intent setISearchIntent(boolean isLeftToRightSwipe, PreferredJourney preferredJourney) {

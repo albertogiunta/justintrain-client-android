@@ -68,6 +68,9 @@
     <string name="about_twitter">Twitter</string>
     <string name="about_github">GitHub</string>
     <string name="about_website">Sito Web</string>
+
+    <string name="upgrade_pro_users_number">Altre %1$d persone sono già entrate nel Fan Club.\nUnisciti anche tu!</string>
+
     <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '   -->
     <string name="changelog">• Migliorata la ricerca delle stazioni: ora si può cercare per qualsiasi parola nel nome della stazione\n\n• <b>Risolto Bug</b> Ora i treni preferiti appaiono tutti e sempre in ordine di orario crescente\n\n• <b>Risolto Bug</b> Eliminato il problema dei treni fantasma in tarda notte (giuro, roba che neanche Ghostbusters)\n\n• Bug e UI fix generali\n\n
     </string>

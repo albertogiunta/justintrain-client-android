@@ -24,4 +24,8 @@
         <key>maintenance_news</key>
         <value></value>
     </entry>
+    <entry>
+        <key>pro_users</key>
+        <value>3</value>
+    </entry>
 </defaultsMap>

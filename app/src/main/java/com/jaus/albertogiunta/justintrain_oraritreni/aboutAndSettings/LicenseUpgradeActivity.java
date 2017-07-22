@@ -1,9 +1,11 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings;
 
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -30,11 +32,15 @@ import trikita.log.Log;
 
 import static butterknife.ButterKnife.apply;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.VISIBLE;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_PRO_USERS_NUMBER;
 
 //public class LicenseUpgradeActivity extends AppCompatActivity implements PurchasesUpdatedListener {
 public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelper.OnIabSetupFinishedListener, IabHelper.OnIabPurchaseFinishedListener {
 
     AnalyticsHelper analyticsHelper;
+
+    public static final String SKU_UPGRADE = "premium_upgrade_mp";
+    public static final String SKU_DONATION = "donate";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -44,11 +50,10 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
     Button  buySecond;
     @BindView(R.id.tv_already_pro)
     TextView alreadyPro;
+    @BindView(R.id.tv_pro_users_number)
+    TextView proUsersNumber;
 
     boolean isAlreadyPro = false;
-
-//    BillingClient mBillingClient;
-
     private IabHelper billingHelper;
 
 
@@ -64,17 +69,23 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-//        mBillingClient = new BillingClient.Builder(LicenseUpgradeActivity.this)
-//                .setListener(this)
-//                .build();
-
         billingHelper = new IabHelper(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnl+N1zhaAmBhLF54yJo7T+ku8m5c/XZEsZ3+zBb7HyKCxpGuQL4+oPTVSNRtNdXNCl2R0eqojv+f3sT6tWL2XHt1DK6F7rYVtvs8rmQR1himMDEV0Tgljn5uBQuMag9nvNeyGIAi1wQeRz9Hk8tGF+laZcD3phR6NFnrwebD8FkG0lc6XHKpjAzCsdu+YbyPH7JuFAUoi+Yrbvs50r0JzeUWqz+v427V4W4kQR9zAmN3evVmou1R+2WXPtD1wGMMSQAs2DOuxfgh85o4sRS21an8xQk/d70EX3E78O3iXzl76CKZNM54O2g8iE3tkNgGfeCkqs0m2v/2E6VDubVf3QIDAQAB");
         billingHelper.startSetup(this);
 
-        buyFirst.setOnClickListener(v -> onIAPButtonClicked());
-
+        buyFirst.setOnClickListener(v -> {
+            onIAPButtonClicked();
 //        analyticsHelper.logScreenEvent(SCREEN_UPGRADE_LICENSE, IAP_TOP);
+        });
+
+        buySecond.setOnClickListener(v -> {
+            onIAPButtonClicked();
 //        analyticsHelper.logScreenEvent(SCREEN_UPGRADE_LICENSE, IAP_BOTTOM);
+        });
+
+        Resources res = getResources();
+//        String text = String.format(res.getString(R.string.upgrade_pro_users_number), ServerConfigsHelper.getProUsersNumberFromSharedPreferences(LicenseUpgradeActivity.this));
+        String text = String.format(res.getString(R.string.upgrade_pro_users_number), ((int) FirebaseRemoteConfig.getInstance().getDouble(FIREBASE_PRO_USERS_NUMBER)));
+        proUsersNumber.setText(text);
 
     }
 
@@ -96,9 +107,9 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
 
     public void onIAPButtonClicked() {
         if (isAlreadyPro) {
-            purchaseItem("donate");
+            purchaseItem(SKU_DONATION);
         } else {
-            purchaseItem("premium_upgrade_mp");
+            purchaseItem(SKU_UPGRADE);
         }
     }
 
@@ -115,18 +126,27 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
     private void dealWithIabSetupSuccess(IabResult result) {
         billingHelper.queryInventoryAsync((result2, inv) -> {
 
+//            String textForBtn = "Upgrade PREMIUM a vita ("+ inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
+//            buyFirst.setText(textForBtn);
+//            buySecond.setText(textForBtn);
+
             if (CustomIABHelper.isOrderOk(result2, inv)) {
                 isAlreadyPro = true;
                 apply(alreadyPro, VISIBLE);
-                buyFirst.setText("SUPPORTA LO SVILUPPO (€2.49)");
-                buySecond.setText("SUPPORTA LO SVILUPPO (€2.49)");
+                String textForBtn = "SUPPORTA LO SVILUPPO ("+ inv.getSkuDetails(SKU_DONATION).getPrice() + ")";
+                buyFirst.setText(textForBtn);
+                buySecond.setText(textForBtn);
+            } else {
+                String textForBtn = "Upgrade PREMIUM a vita ("+ inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
+                buyFirst.setText(textForBtn);
+                buySecond.setText(textForBtn);
             }
 
             // TODO DEBUGGGGGG
             boolean debugPurchase = false;
             if (debugPurchase && CustomIABHelper.isOrderOk(result, inv)) {
-                billingHelper.consumeAsync(inv.getPurchase("premium_upgrade_mp"), (purchase, result1) -> {
-                    billingHelper.consumeAsync(inv.getPurchase("donate"), null);
+                billingHelper.consumeAsync(inv.getPurchase(SKU_UPGRADE), (purchase, result1) -> {
+                    billingHelper.consumeAsync(inv.getPurchase(SKU_DONATION), null);
                 });
                 SettingsPreferences.disableLiveNotification(LicenseUpgradeActivity.this);
                 SettingsPreferences.disableInstantDelay(LicenseUpgradeActivity.this);
@@ -167,9 +187,9 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
     public void onIabPurchaseFinished(IabResult result, Purchase info) {
         if (result.isFailure()) {
             dealWithPurchaseFailed(result);
-        } else if ("premium_upgrade_mp".equals(info.getSku())) {
+        } else if (SKU_UPGRADE.equals(info.getSku())) {
             dealWithPurchaseSuccessUpgrade(result, info);
-        } else if ("donate".equals(info.getSku())) {
+        } else if (SKU_DONATION.equals(info.getSku())) {
             dealWithPurchaseSuccessDonate(result, info);
         }
     }
@@ -189,8 +209,8 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
 
     protected void dealWithPurchaseSuccessDonate(IabResult result, Purchase info) {
         billingHelper.queryInventoryAsync(false, (result1, inv) -> {
-            billingHelper.consumeAsync(inv.getPurchase("donate"), null);
-            showDialogCustom(R.layout.dialog_gone_pro);
+            billingHelper.consumeAsync(inv.getPurchase(SKU_DONATION), null);
+            showDialogCustom(R.layout.dialog_donation);
         });
     }
 
@@ -209,15 +229,10 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
 
     private void showDialogCustom(int layout) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(LicenseUpgradeActivity.this);
-        View                view        = LayoutInflater.from(LicenseUpgradeActivity.this).inflate(R.layout.dialog_gone_pro, null);
+        View                view        = LayoutInflater.from(LicenseUpgradeActivity.this).inflate(layout, null);
         alertDialog.setView(view)
                 .setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
                 .create()
                 .show();
     }
-}
-
-
-enum DIALOG_LAYOUT {
-
 }

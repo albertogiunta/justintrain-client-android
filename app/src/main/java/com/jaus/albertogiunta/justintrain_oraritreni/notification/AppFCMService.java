@@ -43,8 +43,17 @@ public class AppFCMService extends FirebaseMessagingService {
                     .setSmallIcon(R.drawable.ic_notification2)
                     .setContentTitle(title)
                     .setContentText(body)
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(body)
+                            .setBigContentTitle(title)
+                            .setSummaryText(body))
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntent);
+
+            if (remoteMessage.getData().get("isDiscountNotification").equals("true")) {
+                ClickActionHelper.startActivity(remoteMessage.getData().get("on_notification_click_action"), null, this);
+            }
+
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(0, notificationBuilder.build());

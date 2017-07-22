@@ -45,6 +45,7 @@ public class CONST_ANALYTICS {
     public static final String ACTION_NO_SWIPE_BUT_CLICK             = "No swipe but click";
     public static final String ACTION_NO_SWIPE_BUT_LONG_CLICK        = "No swipe but long click";
     public static final String ACTION_ON_UPDATE_CLICK                = "Action on update click";
+    public static final String ACTION_ON_SALE_CLICK                  = "Action on update click";
     public static final String ACTION_CLICK_ON_FAV_SOLUTION          = "Action on favourite solution click";
     public static final String ACTION_CLICK_ON_FAV_SOLUTION_NOTIF    = "Action on favourite solution notification click";
 
