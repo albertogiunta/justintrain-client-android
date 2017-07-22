@@ -9,6 +9,8 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.Inventory
 
 import trikita.log.Log;
 
+import static com.jaus.albertogiunta.justintrain_oraritreni.aboutAndSettings.LicenseUpgradeActivity.SKU_UPGRADE;
+
 public class CustomIABHelper implements IabHelper.QueryInventoryFinishedListener {
 
     private IabHelper billingHelper;
@@ -51,13 +53,13 @@ public class CustomIABHelper implements IabHelper.QueryInventoryFinishedListener
 
     @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-        isPro = (inv.hasPurchase("premium_upgrade_mp") &&
-                inv.getPurchase("premium_upgrade_mp").getPurchaseState() == Purchase.PurchaseState.PURCHASED);
+        isPro = (inv.hasPurchase(SKU_UPGRADE) &&
+                inv.getPurchase(SKU_UPGRADE).getPurchaseState() == Purchase.PurchaseState.PURCHASED);
     }
 
     public static boolean isOrderOk(IabResult result, Inventory inv) {
         return result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_OK &&
-                inv.hasPurchase("premium_upgrade_mp") &&
-                (inv.getPurchase("premium_upgrade_mp").getPurchaseState() == Purchase.PurchaseState.PURCHASED);
+                inv.hasPurchase(SKU_UPGRADE) &&
+                (inv.getPurchase(SKU_UPGRADE).getPurchaseState() == Purchase.PurchaseState.PURCHASED);
     }
 }
