@@ -26,6 +26,9 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.Set
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import trikita.log.Log;
@@ -124,7 +127,9 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
     }
 
     private void dealWithIabSetupSuccess(IabResult result) {
-        billingHelper.queryInventoryAsync((result2, inv) -> {
+        List<String> l = new LinkedList<>();
+        l.add(SKU_DONATION);
+        billingHelper.queryInventoryAsync(true, l, (result2, inv) -> {
 
 //            String textForBtn = "Upgrade PREMIUM a vita ("+ inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
 //            buyFirst.setText(textForBtn);
