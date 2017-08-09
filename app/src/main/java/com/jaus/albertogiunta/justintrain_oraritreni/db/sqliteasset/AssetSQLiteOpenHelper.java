@@ -1,15 +1,12 @@
-package com.jaus.albertogiunta.justintrain_oraritreni.db;
+package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.db.SupportSQLiteOpenHelper;
-import android.arch.persistence.db.framework.FrameworkSQLiteDatabase;
 import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-
-import com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset.SQLiteAssetHelper;
 
 class AssetSQLiteOpenHelper implements SupportSQLiteOpenHelper {
     private final OpenHelper mDelegate;
@@ -27,7 +24,7 @@ class AssetSQLiteOpenHelper implements SupportSQLiteOpenHelper {
         return new OpenHelper(context, name, factory, version, errorHandler) {
             @Override
             public final void onCreate(SQLiteDatabase sqLiteDatabase) {
-                mWrappedDb = new FrameworkSQLiteDatabase(sqLiteDatabase);
+                mWrappedDb = new FrameworkSQLiteDatabase2(sqLiteDatabase);
                 callback.onCreate(mWrappedDb);
             }
 
@@ -81,7 +78,7 @@ class AssetSQLiteOpenHelper implements SupportSQLiteOpenHelper {
 
     abstract static class OpenHelper extends SQLiteAssetHelper {
 
-        FrameworkSQLiteDatabase mWrappedDb;
+        FrameworkSQLiteDatabase2 mWrappedDb;
 
         OpenHelper(Context context, String name,
                    SQLiteDatabase.CursorFactory factory, int version,
@@ -99,9 +96,9 @@ class AssetSQLiteOpenHelper implements SupportSQLiteOpenHelper {
             return getWrappedDb(db);
         }
 
-        FrameworkSQLiteDatabase getWrappedDb(SQLiteDatabase sqLiteDatabase) {
+        FrameworkSQLiteDatabase2 getWrappedDb(SQLiteDatabase sqLiteDatabase) {
             if (mWrappedDb == null) {
-                mWrappedDb = new FrameworkSQLiteDatabase(sqLiteDatabase);
+                mWrappedDb = new FrameworkSQLiteDatabase2(sqLiteDatabase);
             }
             return mWrappedDb;
         }

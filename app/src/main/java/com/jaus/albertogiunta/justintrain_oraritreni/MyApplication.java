@@ -1,10 +1,9 @@
 package com.jaus.albertogiunta.justintrain_oraritreni;
 
 import android.app.Application;
-import android.arch.persistence.room.Room;
 
+import com.idescout.sql.SqlScoutServer;
 import com.jaus.albertogiunta.justintrain_oraritreni.db.AppDatabase;
-import com.jaus.albertogiunta.justintrain_oraritreni.db.AssetSQLiteOpenHelperFactory;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -21,6 +20,8 @@ public class MyApplication extends Application {
         super.onCreate();
         JodaTimeAndroid.init(this);
 
+        SqlScoutServer.create(this, getPackageName());
+
 //        MobileAds.initialize(getApplicationContext(), "ca-app-pub-8963908741443055~4285788324");
 
         String fontPath = "fonts/rooneysans-medium.ttf";
@@ -31,10 +32,7 @@ public class MyApplication extends Application {
         );
 
         if (database == null) {
-            database = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "justintrain.db")
-                    .openHelperFactory(new AssetSQLiteOpenHelperFactory())
-                    .allowMainThreadQueries()
-                    .build();
+            database = AppDatabase.getAppDatabase(getBaseContext());
         }
 
         if (BuildConfig.DEBUG) {

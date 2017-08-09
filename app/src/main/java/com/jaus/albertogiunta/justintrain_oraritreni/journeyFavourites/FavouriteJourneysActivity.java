@@ -239,34 +239,6 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         }
     }
 
-    abstract private class BaseTask<T> extends AsyncTask<T, Void, List<Station>> {
-        Context app;
-
-        BaseTask(Context ctxt) {
-            app = ctxt.getApplicationContext();
-        }
-
-        @Override
-        public void onPostExecute(List<Station> result) {
-        }
-
-        List<Station> doQuery() {
-            return (MyApplication.database.stationDao().getAllByNameLong());
-        }
-    }
-
-    private class LoadCursorTask extends BaseTask<Void> {
-        private LoadCursorTask(Context ctxt) {
-            super(ctxt);
-        }
-
-        @Override
-        protected List<Station> doInBackground(Void... params) {
-            return (doQuery());
-        }
-    }
-
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -584,8 +556,33 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         } else {
 
         }
-
-
         return false;
+    }
+
+    abstract private class BaseTask<T> extends AsyncTask<T, Void, List<Station>> {
+        Context app;
+
+        BaseTask(Context ctxt) {
+            app = ctxt.getApplicationContext();
+        }
+
+        @Override
+        public void onPostExecute(List<Station> result) {
+        }
+
+        List<Station> doQuery() {
+            return (MyApplication.database.stationDao().getAllByNameLong());
+        }
+    }
+
+    private class LoadCursorTask extends BaseTask<Void> {
+        private LoadCursorTask(Context ctxt) {
+            super(ctxt);
+        }
+
+        @Override
+        protected List<Station> doInBackground(Void... params) {
+            return (doQuery());
+        }
     }
 }

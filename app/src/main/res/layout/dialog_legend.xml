@@ -196,9 +196,9 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="match_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-            >
+                >
 
             <ImageView
                     android:id="@+id/iv_pin"
@@ -215,15 +215,15 @@
             <TextView
                     android:id="@+id/tv_title4"
                     android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="8dp"
-                android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginStart="@dimen/margin_default"
                     android:layout_alignParentStart="true"
                     android:layout_toStartOf="@id/iv_pin"
-                android:textSize="@dimen/text_size_default"
+                    android:textSize="@dimen/text_size_default"
                     android:text="Una soluzione da salvare"
-                />
+                    />
 
             <me.grantland.widget.AutofitTextView
                     android:layout_width="wrap_content"
@@ -238,7 +238,76 @@
                     android:textColor="@color/txt_grey"
                     android:text="Premendo su quest'icona potrai avere un treno/soluzione tra le notifiche, sempre a portata di mano prima o durante il viaggio!"
                     />
-    </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+            <TextView
+                    android:id="@+id/tv_p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_big_plus"
+                    android:textStyle="bold"
+                    fontPath="@string/font_path_bold"
+                    android:textColor="@color/txt_yellow"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="44dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:background="@drawable/border_filled_3"
+                    android:text="@string/p"
+                    tools:visibility="visible"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_a"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_big_plus"
+                    android:textStyle="bold"
+                    fontPath="@string/font_path_bold"
+                    android:textColor="@color/txt_yellow"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_default_minus"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:background="@drawable/border_filled_3"
+                    android:text="@string/a"
+                    tools:visibility="visible"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_title6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/tv_p"
+                    android:textSize="@dimen/text_size_default"
+                    android:text="Non è Pubblica Amministrazione"
+                    />
+
+            <me.grantland.widget.AutofitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/tv_p"
+                    android:layout_below="@id/tv_title6"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:maxLines="5"
+                    android:textColor="@color/txt_grey"
+                    android:text="Queste icone nella lista di stazioni di un treno ti indicheranno le TUE stazioni di Partenza e Arrivo. Comodo no?"
+                    />
+        </RelativeLayout>
 
     </LinearLayout>
 
