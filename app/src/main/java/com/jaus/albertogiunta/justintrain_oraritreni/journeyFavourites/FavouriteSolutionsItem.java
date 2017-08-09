@@ -180,7 +180,7 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                     if (!solution.hasChanges()) {
                         APINetworkingFactory
                                 .createRetrofitService(JourneyService.class)
-                                .getDelayMinimal("xxx", "xxx", solution.getTrainId())
+                                .getDelayMinimal(solution.getTrainId())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(trainHeader -> {
                                     if (trainHeader.getTrainStatusCode() > 1) {
@@ -204,7 +204,7 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
 
                         for (Journey.Solution.Change c : solution.getChangesList()) {
                             obsList.add(APINetworkingFactory.createRetrofitService(JourneyService.class)
-                                    .getDelayMinimal("xxx", "xxx", c.getTrainId())
+                                    .getDelayMinimal(c.getTrainId())
                                     .observeOn(AndroidSchedulers.mainThread()));
                         }
 
