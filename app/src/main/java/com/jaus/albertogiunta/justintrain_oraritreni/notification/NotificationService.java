@@ -101,7 +101,7 @@ public class NotificationService extends IntentService {
 
                 getData(journeyDepartureStationId,
                         journeyArrivalStationId,
-                        trainId, context, justUpdate);
+                        trainId, context, justUpdate, true);
 
             } catch (Exception e) {
                 FirebaseCrash.report(new Exception("Requested notification and Station was not found. SOLUTION IS " + sol.toString() + " AND REQUESTED STATIONSs ARE " + sol.getChangesList().get(indexOfJourneyToBeNotified).getDepartureStationName() + " " + sol.getChangesList().get(indexOfJourneyToBeNotified).getArrivalStationName()));
@@ -114,12 +114,12 @@ public class NotificationService extends IntentService {
 
             getData(journeyDepartureStationId,
                     journeyArrivalStationId,
-                    trainId, context, justUpdate);
+                    trainId, context, justUpdate, true);
         }
     }
 
-    private static void getData(String journeyDepartureStationId, String journeyArrivalStationId, String trainId, Context context, boolean justUpdate) {
-        Log.d("getData:", journeyDepartureStationId, journeyArrivalStationId, trainId);
+    private static void getData(String journeyDepartureStationId, String journeyArrivalStationId, String trainId, Context context, boolean justUpdate, boolean shouldPriorityBeHigh) {
+        Log.d("getData:", journeyDepartureStationId, journeyArrivalStationId, trainId, justUpdate, shouldPriorityBeHigh);
         Intent notificationErrorIntent = new Intent(NOTIFICATION_ERROR_EVENT);
 
         APINetworkingFactory.createRetrofitService(JourneyService.class)
@@ -128,7 +128,7 @@ public class NotificationService extends IntentService {
                 .subscribe(trainHeader -> {
                     if (justUpdate) {
                         Log.d("onNext: just updating");
-                        TrainNotification.notify(context, trainHeader, true);
+                        TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh);
                         return;
                     }
                     if (trainHeader.getJourneyArrivalStationVisited()) {
@@ -144,7 +144,7 @@ public class NotificationService extends IntentService {
                                         try {
                                             journeyDepartureStationId2 = DatabaseHelper.getStation4DatabaseObject(l.get(i + 1).getDepartureStationName()).getStationShortId();
                                             journeyArrivalStationId2 = DatabaseHelper.getStation4DatabaseObject(l.get(i + 1).getArrivalStationName()).getStationShortId();
-                                            getData(journeyDepartureStationId2, journeyArrivalStationId2, l.get(i + 1).getTrainId(), context, false);
+                                            getData(journeyDepartureStationId2, journeyArrivalStationId2, l.get(i + 1).getTrainId(), context, false, true);
                                         } catch (Exception e) {
                                             FirebaseCrash.report(new Exception("Requested new train in notification and Station was not found. SOLUTION IS " + s.toString() + " AND REQUESTED STATIONSs ARE " + l.get(i + 1).getDepartureStationName() + " " + l.get(i + 1).getArrivalStationName()));
                                             notificationErrorIntent.putExtra(NOTIFICATION_ERROR_MESSAGE, NOTIFICATION_ERROR_MESSAGE_STATION_NOT_FOUND);
@@ -153,17 +153,17 @@ public class NotificationService extends IntentService {
                                         return;
                                     } else {
                                         Log.d("onNext: displaying the last train of the solution (which has arrived)");
-                                        TrainNotification.notify(context, trainHeader, true);
+                                        TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh);
                                     }
                                 }
                             }
                         } else {
                             Log.d("onNext: displaying a single train solution which has arrived");
-                            TrainNotification.notify(context, trainHeader, true);
+                            TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh);
                         }
                     } else {
                         Log.d("onNext: displaying a train of a solution which hasnt arrived yet");
-                        TrainNotification.notify(context, trainHeader, true);
+                        TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh);
                     }
                 }, throwable -> {
                     Log.d(throwable.getMessage());
@@ -190,12 +190,12 @@ public class NotificationService extends IntentService {
                     TrainHeader trainHeader = gson.fromJson(intent.getStringExtra(EXTRA_NOTIFICATION_DATA), TrainHeader.class);
                     getData(trainHeader.getJourneyDepartureStationId(),
                             trainHeader.getJourneyArrivalStationId(),
-                            trainHeader.getTrainId(), getApplicationContext(), false);
+                            trainHeader.getTrainId(), getApplicationContext(), false, false);
                 } else {
                     Journey.Solution s = gson.fromJson(NotificationPreferences.getNotificationSolutionString(getBaseContext()), Journey.Solution.class);
                     getData(s.getDepartureStationShortId(),
                             s.getArrivalStationShortId(),
-                            s.getTrainId(), getApplicationContext(), false);
+                            s.getTrainId(), getApplicationContext(), false, false);
                 }
             }
         }

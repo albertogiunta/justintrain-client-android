@@ -2,7 +2,6 @@ package com.jaus.albertogiunta.justintrain_oraritreni;
 
 import android.app.Application;
 
-import com.idescout.sql.SqlScoutServer;
 import com.jaus.albertogiunta.justintrain_oraritreni.db.AppDatabase;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -19,8 +18,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         JodaTimeAndroid.init(this);
-
-        SqlScoutServer.create(this, getPackageName());
 
 //        MobileAds.initialize(getApplicationContext(), "ca-app-pub-8963908741443055~4285788324");
 

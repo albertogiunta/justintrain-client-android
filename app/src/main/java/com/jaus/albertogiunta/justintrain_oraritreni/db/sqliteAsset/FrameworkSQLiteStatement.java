@@ -1,4 +1,4 @@
-package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset;
+package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset;
 /*
  * Copyright (C) 2016 The Android Open Source Project
  *
@@ -22,7 +22,7 @@ import android.database.sqlite.SQLiteStatement;
 /**
  * Delegates all calls to a {@link SQLiteStatement}.
  */
-class FrameworkSQLiteStatement2 implements SupportSQLiteStatement {
+class FrameworkSQLiteStatement implements SupportSQLiteStatement {
     private final SQLiteStatement mDelegate;
 
     /**
@@ -31,7 +31,7 @@ class FrameworkSQLiteStatement2 implements SupportSQLiteStatement {
      * @param delegate The SQLiteStatement to delegate calls to.
      */
     @SuppressWarnings("WeakerAccess")
-    public FrameworkSQLiteStatement2(SQLiteStatement delegate) {
+    public FrameworkSQLiteStatement(SQLiteStatement delegate) {
         mDelegate = delegate;
     }
 

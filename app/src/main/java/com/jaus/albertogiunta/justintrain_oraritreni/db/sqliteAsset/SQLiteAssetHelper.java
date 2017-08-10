@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset;
+package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset;
 
 import android.content.Context;
 import android.database.DatabaseErrorHandler;
@@ -323,9 +323,9 @@ public class SQLiteAssetHelper extends SQLiteOpenHelper {
             try {
                 Log.w(TAG, "processing upgrade: " + path);
                 InputStream is  = mContext.getAssets().open(path);
-                String      sql = com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset.Utils.convertStreamToString(is);
+                String      sql = com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset.Utils.convertStreamToString(is);
                 if (sql != null) {
-                    List<String> cmds = com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset.Utils.splitSqlScript(sql, ';');
+                    List<String> cmds = com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset.Utils.splitSqlScript(sql, ';');
                     for (String cmd : cmds) {
                         if (cmd.trim().length() > 0) {
                             db.execSQL(cmd);
@@ -450,13 +450,13 @@ public class SQLiteAssetHelper extends SQLiteOpenHelper {
                 f.mkdir();
             }
             if (isZip) {
-                ZipInputStream zis = com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset.Utils.getFileFromZip(is);
+                ZipInputStream zis = com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset.Utils.getFileFromZip(is);
                 if (zis == null) {
                     throw new SQLiteAssetException("Archive is missing a SQLite database file");
                 }
-                com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset.Utils.writeExtractedFileToDisk(zis, new FileOutputStream(dest));
+                com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset.Utils.writeExtractedFileToDisk(zis, new FileOutputStream(dest));
             } else {
-                com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset.Utils.writeExtractedFileToDisk(is, new FileOutputStream(dest));
+                com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset.Utils.writeExtractedFileToDisk(is, new FileOutputStream(dest));
             }
 
             Log.w(TAG, "database copy complete");

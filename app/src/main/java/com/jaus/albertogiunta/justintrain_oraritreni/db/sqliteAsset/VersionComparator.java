@@ -1,8 +1,8 @@
-package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset;
+package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset;
 
 import android.util.Log;
 
-import com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset.SQLiteAssetHelper.SQLiteAssetException;
+import com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset.SQLiteAssetHelper.SQLiteAssetException;
 
 import java.util.Comparator;
 import java.util.regex.Matcher;
@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  */
 class VersionComparator implements Comparator<String> {
 
-    private static final String TAG = com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset.SQLiteAssetHelper.class.getSimpleName();
+    private static final String TAG = com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset.SQLiteAssetHelper.class.getSimpleName();
 
     private Pattern pattern = Pattern
             .compile(".*_upgrade_([0-9]+)-([0-9]+).*");

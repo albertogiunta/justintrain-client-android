@@ -1,4 +1,4 @@
-package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset;
+package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset;
 
 import android.arch.persistence.db.SupportSQLiteProgram;
 import android.database.sqlite.SQLiteProgram;
@@ -6,10 +6,10 @@ import android.database.sqlite.SQLiteProgram;
 /**
  * An wrapper around {@link SQLiteProgram} to implement {@link SupportSQLiteProgram} API.
  */
-class FrameworkSQLiteProgram2 implements SupportSQLiteProgram {
+class FrameworkSQLiteProgram implements SupportSQLiteProgram {
     private final SQLiteProgram mDelegate;
 
-    FrameworkSQLiteProgram2(SQLiteProgram delegate) {
+    FrameworkSQLiteProgram(SQLiteProgram delegate) {
         mDelegate = delegate;
     }
 

@@ -1,4 +1,4 @@
-package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset;
+package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset;
 
 import android.arch.persistence.db.SupportSQLiteOpenHelper;
 

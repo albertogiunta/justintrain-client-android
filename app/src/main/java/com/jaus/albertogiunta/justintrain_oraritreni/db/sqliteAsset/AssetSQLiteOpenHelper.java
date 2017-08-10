@@ -1,4 +1,4 @@
-package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset;
+package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.db.SupportSQLiteOpenHelper;
@@ -24,7 +24,7 @@ class AssetSQLiteOpenHelper implements SupportSQLiteOpenHelper {
         return new OpenHelper(context, name, factory, version, errorHandler) {
             @Override
             public final void onCreate(SQLiteDatabase sqLiteDatabase) {
-                mWrappedDb = new FrameworkSQLiteDatabase2(sqLiteDatabase);
+                mWrappedDb = new FrameworkSQLiteDatabase(sqLiteDatabase);
                 callback.onCreate(mWrappedDb);
             }
 
@@ -78,7 +78,7 @@ class AssetSQLiteOpenHelper implements SupportSQLiteOpenHelper {
 
     abstract static class OpenHelper extends SQLiteAssetHelper {
 
-        FrameworkSQLiteDatabase2 mWrappedDb;
+        FrameworkSQLiteDatabase mWrappedDb;
 
         OpenHelper(Context context, String name,
                    SQLiteDatabase.CursorFactory factory, int version,
@@ -96,9 +96,9 @@ class AssetSQLiteOpenHelper implements SupportSQLiteOpenHelper {
             return getWrappedDb(db);
         }
 
-        FrameworkSQLiteDatabase2 getWrappedDb(SQLiteDatabase sqLiteDatabase) {
+        FrameworkSQLiteDatabase getWrappedDb(SQLiteDatabase sqLiteDatabase) {
             if (mWrappedDb == null) {
-                mWrappedDb = new FrameworkSQLiteDatabase2(sqLiteDatabase);
+                mWrappedDb = new FrameworkSQLiteDatabase(sqLiteDatabase);
             }
             return mWrappedDb;
         }

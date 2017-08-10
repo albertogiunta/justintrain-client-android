@@ -45,7 +45,7 @@ public class TrainNotification {
      * Shows the notification, or updates a previously shown notification of
      * this type, with the given parameters.
      */
-    static void notify(final Context context, TrainHeader trainHeader, boolean hasVibration) {
+    static void notify(final Context context, TrainHeader trainHeader, boolean hasVibration, boolean shouldPriorityBeHigh) {
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
@@ -84,8 +84,8 @@ public class TrainNotification {
                 .setColor(ViewsUtils.getColor(context, R.color.btn_dark_cyan))
                 .setContentTitle(title)
                 .setContentText(text)
+//                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 // Use a default priority (recognized on devices running Android 4.1 or later)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 // Set ticker text (preview) information for this notification.
                 .setTicker(buildTicker(trainHeader))
                 // Show expanded text content on devices running Android 4.1 or later.
@@ -105,6 +105,11 @@ public class TrainNotification {
                 .setOngoing(true)
                 .setContentIntent(intent);
 
+        if (shouldPriorityBeHigh) {
+            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+        } else {
+            builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        }
 
         if (!hasVibration || !SettingsPreferences.isVibrationEnabled(context)) {
             builder.setVibrate(new long[]{-1});

@@ -1,4 +1,4 @@
-package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset;/*
+package com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset;/*
  * Copyright (C) 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,7 @@ import java.util.Locale;
  * Delegates all calls to an implementation of {@link SQLiteDatabase}.
  */
 @SuppressWarnings("unused")
-class FrameworkSQLiteDatabase2 implements SupportSQLiteDatabase {
+class FrameworkSQLiteDatabase implements SupportSQLiteDatabase {
     private static final String[] CONFLICT_VALUES    = new String[]
             {"", " OR ROLLBACK ", " OR ABORT ", " OR FAIL ", " OR IGNORE ", " OR REPLACE "};
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
@@ -51,13 +51,13 @@ class FrameworkSQLiteDatabase2 implements SupportSQLiteDatabase {
      * @param delegate The delegate to receive all calls.
      */
     @SuppressWarnings("WeakerAccess")
-    public FrameworkSQLiteDatabase2(SQLiteDatabase delegate) {
+    public FrameworkSQLiteDatabase(SQLiteDatabase delegate) {
         mDelegate = delegate;
     }
 
     @Override
     public SupportSQLiteStatement compileStatement(String sql) {
-        return new FrameworkSQLiteStatement2(mDelegate.compileStatement(sql));
+        return new FrameworkSQLiteStatement(mDelegate.compileStatement(sql));
     }
 
     @Override
@@ -155,7 +155,7 @@ class FrameworkSQLiteDatabase2 implements SupportSQLiteDatabase {
     @Override
     public Cursor query(final SupportSQLiteQuery supportQuery) {
         return mDelegate.rawQueryWithFactory((db, masterQuery, editTable, query) -> {
-            supportQuery.bindTo(new FrameworkSQLiteProgram2(query));
+            supportQuery.bindTo(new FrameworkSQLiteProgram(query));
             return new SQLiteCursor(masterQuery, editTable, query);
         }, supportQuery.getSql(), EMPTY_STRING_ARRAY, null);
     }
@@ -165,7 +165,7 @@ class FrameworkSQLiteDatabase2 implements SupportSQLiteDatabase {
     public Cursor query(final SupportSQLiteQuery supportQuery,
                         CancellationSignal cancellationSignal) {
         return mDelegate.rawQueryWithFactory((db, masterQuery, editTable, query) -> {
-            supportQuery.bindTo(new FrameworkSQLiteProgram2(query));
+            supportQuery.bindTo(new FrameworkSQLiteProgram(query));
             return new SQLiteCursor(masterQuery, editTable, query);
         }, supportQuery.getSql(), EMPTY_STRING_ARRAY, null, cancellationSignal);
     }

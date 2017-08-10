@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteasset.AssetSQLiteOpenHelperFactory;
+import com.jaus.albertogiunta.justintrain_oraritreni.db.sqliteAsset.AssetSQLiteOpenHelperFactory;
 
 @Database(entities = {Station.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
