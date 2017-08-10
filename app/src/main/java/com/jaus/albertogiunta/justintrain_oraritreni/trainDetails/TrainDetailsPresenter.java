@@ -285,7 +285,7 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
                 departureStation,
                 arrivalStation,
                 solution,
-                getIndexOfTrainFromPosition(position));
+                getIndexOfTrainFromPosition(position), true, true);
     }
 
     @Override

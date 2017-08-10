@@ -152,7 +152,7 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                             departureStation,
                             arrivalStation,
                             solution,
-                            null);
+                            null, true, true);
                     AnimationUtils.animOnPress(v, AnimationUtils.ANIM_TYPE.MEDIUM);
                 });
 

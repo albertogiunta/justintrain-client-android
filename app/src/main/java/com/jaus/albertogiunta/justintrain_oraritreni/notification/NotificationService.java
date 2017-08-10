@@ -68,15 +68,14 @@ public class NotificationService extends IntentService {
         super.onDestroy();
     }
 
-    public static void startActionStartNotification(Context context, PreferredStation journeyDepartureStation, PreferredStation journeyArrivalStation, Journey.Solution sol, Integer indexOfJourneyToBeNotified) {
+    public static void startActionStartNotification(Context context, PreferredStation journeyDepartureStation, PreferredStation journeyArrivalStation, Journey.Solution sol, Integer indexOfJourneyToBeNotified, Boolean shouldPriorityBeHigh, Boolean registerScreenOnIfPro) {
         String  trainId;
         String  journeyDepartureStationId = journeyDepartureStation.getStationShortId();
         String  journeyArrivalStationId   = journeyArrivalStation.getStationShortId();
         boolean justUpdate                = indexOfJourneyToBeNotified != null;
 
-        IntentFilter      filter    = new IntentFilter(Intent.ACTION_SCREEN_ON);
-
-        if (SettingsPreferences.isLiveNotificationEnabled(context)) {
+        if (registerScreenOnIfPro && SettingsPreferences.isLiveNotificationEnabled(context)) {
+            IntentFilter      filter    = new IntentFilter(Intent.ACTION_SCREEN_ON);
             BroadcastReceiver mReceiver = new ScreenOnReceiver();
             context.registerReceiver(mReceiver, filter);
         }
@@ -101,7 +100,7 @@ public class NotificationService extends IntentService {
 
                 getData(journeyDepartureStationId,
                         journeyArrivalStationId,
-                        trainId, context, justUpdate, true);
+                        trainId, context, justUpdate, shouldPriorityBeHigh);
 
             } catch (Exception e) {
                 FirebaseCrash.report(new Exception("Requested notification and Station was not found. SOLUTION IS " + sol.toString() + " AND REQUESTED STATIONSs ARE " + sol.getChangesList().get(indexOfJourneyToBeNotified).getDepartureStationName() + " " + sol.getChangesList().get(indexOfJourneyToBeNotified).getArrivalStationName()));
@@ -114,7 +113,7 @@ public class NotificationService extends IntentService {
 
             getData(journeyDepartureStationId,
                     journeyArrivalStationId,
-                    trainId, context, justUpdate, true);
+                    trainId, context, justUpdate, shouldPriorityBeHigh);
         }
     }
 
@@ -193,9 +192,16 @@ public class NotificationService extends IntentService {
                             trainHeader.getTrainId(), getApplicationContext(), false, false);
                 } else {
                     Journey.Solution s = gson.fromJson(NotificationPreferences.getNotificationSolutionString(getBaseContext()), Journey.Solution.class);
-                    getData(s.getDepartureStationShortId(),
-                            s.getArrivalStationShortId(),
-                            s.getTrainId(), getApplicationContext(), false, false);
+                    if (s.hasChanges()) {
+                        startActionStartNotification(getApplicationContext(),
+                                new PreferredStation(s.getDepartureStationShortId(), s.getDepartureStationId(), s.getDepartureStationName(), s.getDepartureStationName()),
+                                new PreferredStation(s.getArrivalStationShortId(), s.getArrivalStationId(), s.getArrivalStationName(), s.getArrivalStationName()),
+                                s, null, false, false);
+                    } else {
+                        getData(s.getDepartureStationShortId(),
+                                s.getArrivalStationShortId(),
+                                s.getTrainId(), getApplicationContext(), false, false);
+                    }
                 }
             }
         }

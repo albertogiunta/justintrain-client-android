@@ -212,7 +212,7 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
                 departureStation,
                 arrivalStation,
                 journeySolutions.get(elementIndex),
-                null);
+                null, true, true);
     }
 
     @Override
