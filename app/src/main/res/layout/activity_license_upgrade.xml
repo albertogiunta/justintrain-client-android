@@ -123,6 +123,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:background="@drawable/ic_no_ads"
+                            android:contentDescription="No Ads"
                             />
                 </LinearLayout>
 

@@ -18,7 +18,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         JodaTimeAndroid.init(this);
-
+//        this.deleteDatabase("justintrain.db");
 //        MobileAds.initialize(getApplicationContext(), "ca-app-pub-8963908741443055~4285788324");
 
         String fontPath = "fonts/rooneysans-medium.ttf";

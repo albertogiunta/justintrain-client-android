@@ -7,23 +7,21 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "station")
 public class Station {
 
-    //    @DatabaseField(generatedId = true)
     @PrimaryKey
     private Integer sid;
 
-    //    @DatabaseField(columnName = "name_short")
     @ColumnInfo(name = "name_short")
     private String  nameShort;
 
-    //    @DatabaseField(columnName = "name_long")
     @ColumnInfo(name = "name_long")
     private String  nameLong;
 
-    //    @DatabaseField(columnName = "id_short")
+    @ColumnInfo(name = "name_fancy")
+    private String nameFancy;
+
     @ColumnInfo(name = "id_short")
     private String  stationShortId;
 
-    //    @DatabaseField(columnName = "id_long")
     @ColumnInfo(name = "id_long")
     private String  stationLongId;
 
@@ -49,6 +47,14 @@ public class Station {
 
     public void setStationLongId(String stationLongId) {
         this.stationLongId = stationLongId;
+    }
+
+    public String getNameFancy() {
+        return nameFancy;
+    }
+
+    public void setNameFancy(String nameFancy) {
+        this.nameFancy = nameFancy;
     }
 
     public String getNameShort() {

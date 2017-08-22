@@ -30,7 +30,7 @@ public class StationSearchActivity extends AppCompatActivity implements Searched
 
     @BindView(R.id.rv_searched_stations) RecyclerView rvSearchedStations;
     SearchedStationsAdapter adapter;
-    List<String> stationNames = new LinkedList<>(DatabaseHelper.getElementByNameLong(""));
+    List<String> stationNames = new LinkedList<>(DatabaseHelper.getElementByNameFancy(""));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +70,9 @@ public class StationSearchActivity extends AppCompatActivity implements Searched
             @Override
             public boolean onQueryTextChange(String newText) {
                 stationNames.clear();
-                stationNames.addAll(DatabaseHelper.getElementByNameLong(newText));
+                stationNames.addAll(DatabaseHelper.getElementByNameFancy(newText));
                 if (stationNames.size() == 0) {
-                    stationNames.addAll(DatabaseHelper.getElementByNameLong(newText.trim()));
+                    stationNames.addAll(DatabaseHelper.getElementByNameFancy(newText.trim()));
                 }
                 try {
                     adapter.notifyDataSetChanged(); //TODO possibile bug http://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in

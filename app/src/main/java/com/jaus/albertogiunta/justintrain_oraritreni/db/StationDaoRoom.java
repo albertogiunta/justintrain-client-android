@@ -9,7 +9,10 @@ import java.util.List;
 public interface StationDaoRoom {
 
     @Query("SELECT * FROM station")
-    List<Station> getAllByNameLong();
+    List<Station> getAll();
+
+    @Query("SELECT * FROM station WHERE name_fancy LIKE :nameFancy OR name_fancy LIKE :nameFancy2")
+    List<Station> getAllByNameFancy(String nameFancy, String nameFancy2);
 
     @Query("SELECT * FROM station WHERE name_long LIKE :nameLong1 OR name_long LIKE :nameLong2")
     List<Station> getAllByNameLong(String nameLong1, String nameLong2);

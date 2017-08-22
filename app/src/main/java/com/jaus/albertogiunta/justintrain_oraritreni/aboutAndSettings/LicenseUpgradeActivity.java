@@ -42,15 +42,15 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
 
     AnalyticsHelper analyticsHelper;
 
-    public static final String SKU_UPGRADE = "premium_upgrade_mp";
+    public static final String SKU_UPGRADE  = "premium_upgrade_mp";
     public static final String SKU_DONATION = "donate";
 
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    Toolbar  toolbar;
     @BindView(R.id.btn_iap_first)
-    Button  buyFirst;
+    Button   buyFirst;
     @BindView(R.id.btn_iap_second)
-    Button  buySecond;
+    Button   buySecond;
     @BindView(R.id.tv_already_pro)
     TextView alreadyPro;
     @BindView(R.id.tv_pro_users_number)
@@ -134,17 +134,20 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
 //            String textForBtn = "Upgrade PREMIUM a vita ("+ inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
 //            buyFirst.setText(textForBtn);
 //            buySecond.setText(textForBtn);
-
-            if (CustomIABHelper.isOrderOk(result2, inv)) {
-                isAlreadyPro = true;
-                apply(alreadyPro, VISIBLE);
-                String textForBtn = "SUPPORTA LO SVILUPPO ("+ inv.getSkuDetails(SKU_DONATION).getPrice() + ")";
-                buyFirst.setText(textForBtn);
-                buySecond.setText(textForBtn);
+            if (inv != null) {
+                if (CustomIABHelper.isOrderOk(result2, inv)) {
+                    isAlreadyPro = true;
+                    apply(alreadyPro, VISIBLE);
+                    String textForBtn = "SUPPORTA LO SVILUPPO (" + inv.getSkuDetails(SKU_DONATION).getPrice() + ")";
+                    buyFirst.setText(textForBtn);
+                    buySecond.setText(textForBtn);
+                } else {
+                    String textForBtn = "Upgrade PREMIUM a vita (" + inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
+                    buyFirst.setText(textForBtn);
+                    buySecond.setText(textForBtn);
+                }
             } else {
-                String textForBtn = "Upgrade PREMIUM a vita ("+ inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
-                buyFirst.setText(textForBtn);
-                buySecond.setText(textForBtn);
+                FirebaseCrash.report(new Exception("USER TRIED TO BUY AND INVENTORY WAS NULL!"));
             }
 
             // TODO DEBUGGGGGG
@@ -161,6 +164,8 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
     }
 
     private void dealWithIabSetupFailure() {
+        Log.d("dealWithIabSetupFailure: setup failed!!!");
+        FirebaseCrash.report(new Exception("IAB SETUP FAILED!"));
     }
 
     protected void purchaseItem(String sku) {

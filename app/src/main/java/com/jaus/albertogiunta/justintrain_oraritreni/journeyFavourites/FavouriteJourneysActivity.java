@@ -520,11 +520,11 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
             Dialog dialog = alertDialog.show();
 
-            RelativeLayout rlSearchAR             = (RelativeLayout) view.findViewById(R.id.rl_search_ar);
-            TextView       searchAR               = (TextView) view.findViewById(R.id.tv_search_ar);
-            RelativeLayout rlSearchRA             = (RelativeLayout) view.findViewById(R.id.rl_search_ra);
-            TextView       searchRA               = (TextView) view.findViewById(R.id.tv_search_ra);
-            RelativeLayout rlRemoveFromFavourites = (RelativeLayout) view.findViewById(R.id.rl_remove_from_favourites);
+            RelativeLayout rlSearchAR             = view.findViewById(R.id.rl_search_ar);
+            TextView       searchAR               = view.findViewById(R.id.tv_search_ar);
+            RelativeLayout rlSearchRA             = view.findViewById(R.id.rl_search_ra);
+            TextView       searchRA               = view.findViewById(R.id.tv_search_ra);
+            RelativeLayout rlRemoveFromFavourites = view.findViewById(R.id.rl_remove_from_favourites);
 
             searchAR.setText("Da " + preferredJourney.getStation1().getNameShort() + " a " + preferredJourney.getStation2().getNameShort());
             searchRA.setText("Da " + preferredJourney.getStation2().getNameShort() + " a " + preferredJourney.getStation1().getNameShort());
@@ -571,7 +571,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         }
 
         List<Station> doQuery() {
-            return (MyApplication.database.stationDao().getAllByNameLong());
+            return (MyApplication.database.stationDao().getAll());
         }
     }
 
