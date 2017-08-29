@@ -16,12 +16,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.jaus.albertogiunta.justintrain_oraritreni.BuildConfig;
 import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.CustomIABHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabResult;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.Purchase;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.SettingsPreferences;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -128,13 +130,14 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
 
     private void dealWithIabSetupSuccess(IabResult result) {
         List<String> l = new LinkedList<>();
+        l.add(SKU_UPGRADE);
         l.add(SKU_DONATION);
         billingHelper.queryInventoryAsync(true, l, (result2, inv) -> {
 
-//            String textForBtn = "Upgrade PREMIUM a vita ("+ inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
+//            String textForBtn = "Upqgrade PREMIUM a vita ("+ inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
 //            buyFirst.setText(textForBtn);
 //            buySecond.setText(textForBtn);
-            if (inv != null) {
+            if (inv != null && inv.getSkuDetails(SKU_UPGRADE) != null) {
                 if (CustomIABHelper.isOrderOk(result2, inv)) {
                     isAlreadyPro = true;
                     apply(alreadyPro, VISIBLE);
@@ -152,12 +155,17 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
 
             // TODO DEBUGGGGGG
             boolean debugPurchase = false;
+            if (!BuildConfig.DEBUG) debugPurchase = false;
             if (debugPurchase && CustomIABHelper.isOrderOk(result, inv)) {
-                billingHelper.consumeAsync(inv.getPurchase(SKU_UPGRADE), (purchase, result1) -> {
-                    billingHelper.consumeAsync(inv.getPurchase(SKU_DONATION), null);
-                });
-                SettingsPreferences.disableLiveNotification(LicenseUpgradeActivity.this);
-                SettingsPreferences.disableInstantDelay(LicenseUpgradeActivity.this);
+                if (inv != null && inv.hasPurchase(SKU_UPGRADE)) {
+                    billingHelper.consumeAsync(inv.getPurchase(SKU_UPGRADE), (purchase, result1) -> {
+                        if (inv.hasPurchase(SKU_DONATION)) {
+                            billingHelper.consumeAsync(inv.getPurchase(SKU_DONATION), null);
+                        }
+                    });
+                    SettingsPreferences.disableLiveNotification(LicenseUpgradeActivity.this);
+                    SettingsPreferences.disableInstantDelay(LicenseUpgradeActivity.this);
+                }
             }
             // TODO END DEBUGGGGGG
         });
@@ -206,11 +214,13 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
 
     protected void dealWithPurchaseFailed(IabResult result) {
         Log.d("Error purchasing: " + result);
+        ProPreferences.disablePro(LicenseUpgradeActivity.this);
         FirebaseCrash.report(new Exception("Purchase failed. Code: " + result.getResponse() + " " + result.getMessage()));
     }
 
     protected void dealWithPurchaseSuccessUpgrade(IabResult result, Purchase info) {
         billingHelper.queryInventoryAsync(false, (result1, inv) -> {
+            ProPreferences.enablePro(LicenseUpgradeActivity.this);
             SettingsPreferences.enableLiveNotification(LicenseUpgradeActivity.this);
             SettingsPreferences.enableInstantDelay(LicenseUpgradeActivity.this);
             showDialogCustom(R.layout.dialog_gone_pro);

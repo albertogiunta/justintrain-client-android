@@ -16,7 +16,6 @@ public class DatabaseHelper {
 
     public static List<String> getElementByNameFancy(String stationName) {
         return Stream
-//                .of(MyApplication.database.stationDao().getAll(stationName + "%", "% " + stationName + "%"))
                 .of(MyApplication.database.stationDao().getAllByNameFancy(stationName + "%", "% " + stationName + "%"))
                 .map(Station::getNameFancy).collect(Collectors.toList());
     }

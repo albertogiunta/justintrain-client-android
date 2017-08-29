@@ -41,8 +41,8 @@
     <string name="app_id">ca-app-pub-8963908741443055~4285788324</string>
     <string name="journey_id_real">ca-app-pub-8963908741443055/9768933920</string>
     <string name="details_id_real">ca-app-pub-8963908741443055/8152599923</string>
-    <string name="journey_id_test">ca-app-pub-3940256099942544/2793859312</string>
-    <string name="details_id_test">ca-app-pub-3940256099942544/2793859312</string>
+    <!--<string name="journey_id_test">ca-app-pub-3940256099942544/2793859312</string>-->
+    <!--<string name="details_id_test">ca-app-pub-3940256099942544/2793859312</string>-->
 
     <string name="static_shortcut_disabled_message">Non ancora disponibile</string>
     <string name="static_shortcut_long_label">Cerca</string>
@@ -72,7 +72,24 @@
     <string name="upgrade_pro_users_number">Altre %1$d persone sono già entrate nel Fan Club.\nUnisciti anche tu!</string>
 
     <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '   -->
-    <string name="changelog">• Migliorata la ricerca delle stazioni: ora si può cercare per qualsiasi parola nel nome della stazione\n\n• <b>Risolto Bug</b> Ora i treni preferiti appaiono tutti e sempre in ordine di orario crescente\n\n• <b>Risolto Bug</b> Eliminato il problema dei treni fantasma in tarda notte (giuro, roba che neanche Ghostbusters)\n\n• Bug e UI fix generali\n\n
+    <string name="changelog">
+        Col più grosso update di sempre, ecco che arrivano tante <b>nuove funzionalità e miglioramenti</b>:
+        \n\n
+        <b><i>PRO</i></b> <b>Nuove funzionalità per i tuoi treni preferiti</b>: con la nuova grafica, sapere qual è il prossimo treno da prendere o quanto ritardo ha non richiede nemmeno un tap!
+        \n\n
+        <b><i>PRO</i></b> <b>Notifiche in REAL TIME </b> sempre aggiornate all\'ultimo istante!
+        \n\n
+        <b><i>PRO</i></b> <b>Nessuna pubblicità</b>!
+        \n\n
+        Dimezzato lo spazio occupato dall\'applicazione sul telefono (a chi non fa comodo qualche MB in più?)
+        \n\n
+        Migliorata la lista delle Stazioni
+        \n\n
+        Migliorato il supporto ai BUS
+        \n\n
+        Adesso è possibile spostare l\'app sulla scheda SD
+        \n\n
+        Tanti bug Fix e miglioramenti generali
     </string>
     <string name="play_store_native_url">market://details?id=</string>
     <string name="play_store_web_url">https://play.google.com/store/apps/details?id=</string>

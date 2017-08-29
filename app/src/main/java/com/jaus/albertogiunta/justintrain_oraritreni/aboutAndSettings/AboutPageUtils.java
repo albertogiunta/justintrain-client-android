@@ -45,9 +45,9 @@ public class AboutPageUtils {
                 })
                 .create();
 
-        Button email    = (Button) view.findViewById(R.id.btn_email);
-        Button twitter  = (Button) view.findViewById(R.id.btn_twitter);
-        Button telegram = (Button) view.findViewById(R.id.btn_telegram);
+        Button email    = view.findViewById(R.id.btn_email);
+        Button twitter  = view.findViewById(R.id.btn_twitter);
+        Button telegram = view.findViewById(R.id.btn_telegram);
 
         email.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_SEND);

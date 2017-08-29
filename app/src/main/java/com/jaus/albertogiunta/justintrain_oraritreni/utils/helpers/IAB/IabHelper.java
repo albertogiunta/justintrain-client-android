@@ -253,7 +253,7 @@ public class IabHelper {
             }
         };
 
-        boolean attempt = mContext.bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND").setPackage("com.android.vending"),
+        boolean attempt = mContext.getApplicationContext().bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND").setPackage("com.android.vending"),
                 mServiceConn, Context.BIND_AUTO_CREATE);
 
         if (!attempt) {
@@ -615,6 +615,8 @@ public class IabHelper {
             }
         } catch (RemoteException e) {
             throw new IabException(IABHELPER_REMOTE_EXCEPTION, "Remote exception while consuming. PurchaseInfo: " + itemInfo, e);
+        } catch (NullPointerException e) {
+            Log.d("consume: ", e.getMessage());
         }
     }
 

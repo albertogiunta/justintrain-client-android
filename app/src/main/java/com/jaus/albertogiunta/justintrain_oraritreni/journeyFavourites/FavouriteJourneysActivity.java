@@ -69,6 +69,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.Inventory
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.ServerConfigsHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.ShortcutHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.MigrationHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.SettingsPreferences;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.SharedPreferencesHelper;
 
@@ -141,6 +142,8 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     @BindView((R.id.fab_search_journey))
     FloatingActionButton btnSearch;
 
+    Menu menu;
+
     Gson gson = new GsonBuilder()
             .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
             .registerTypeAdapterFactory(new PostProcessingEnabler())
@@ -177,7 +180,6 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         rvFavouriteJourneys.setAdapter(adapter);
         rvFavouriteJourneys.setLayoutManager(new LinearLayoutManager(this));
         adapter.setSwipeEnabled(true);
-
 
         btnSearch.setScaleX(0);
         btnSearch.setScaleY(0);
@@ -224,6 +226,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inv) {
         if (CustomIABHelper.isOrderOk(result, inv)) {
+            ProPreferences.enablePro(getViewContext());
             apply(btnIAP, GONE);
             CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
             lp.gravity = Gravity.BOTTOM | Gravity.CENTER;
@@ -231,12 +234,14 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             apply(this.rlMessage, GONE);
             shouldDisplayDiscountMessage = false;
         } else {
+            ProPreferences.disablePro(getViewContext());
             apply(btnIAP, VISIBLE);
             CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
             lp.gravity = Gravity.BOTTOM | Gravity.END;
             btnSearch.setLayoutParams(lp);
             shouldDisplayDiscountMessage = true;
         }
+        setVisibilityOfProBedge();
     }
 
     @Override
@@ -248,7 +253,16 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.default_menu, menu);
+        this.menu = menu;
+        setVisibilityOfProBedge();
         return true;
+    }
+
+    private void setVisibilityOfProBedge() {
+        if (ProPreferences.isPro(getViewContext()) && menu != null) {
+            MenuItem item = menu.findItem(R.id.label_pro);
+            item.setVisible(true);
+        }
     }
 
     @Override
@@ -286,6 +300,14 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             case R.id.action_about:
                 FavouriteJourneysActivity.this.startActivity(new Intent(FavouriteJourneysActivity.this, AboutActivity.class));
                 return true;
+            case R.id.label_pro:
+//                AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(FavouriteJourneysActivity.this);
+//                View view2 = LayoutInflater.from(FavouriteJourneysActivity.this).inflate(R.layout.dialog_legend, null);
+//                alertDialog2.setView(view2)
+//                        .setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
+//                        .create()
+//                        .show();
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -300,7 +322,6 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter(NotificationService.NOTIFICATION_ERROR_EVENT));
         btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(0);
         presenter.setState(getIntent().getExtras());
-
         iabHelper.isUserPro(this);
     }
 

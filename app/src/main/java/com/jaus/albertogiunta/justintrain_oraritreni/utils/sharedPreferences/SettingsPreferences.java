@@ -204,10 +204,10 @@ public class SettingsPreferences {
         enableAllCategories(context);
     }
 
-    private static void setNewSettingsNotPreviouslyIncludedBefore27(Context context) {
+    private static void setNewSettingsNotPreviouslyIncludedBefore30(Context context) {
         // 27 - 1.0.0
-        enableInstantDelay(context);
-        enableLiveNotification(context);
+        disableInstantDelay(context);
+        disableLiveNotification(context);
     }
 
     public static void setDefaultSharedPreferencesOnFirstStart(Context context) {
@@ -220,7 +220,7 @@ public class SettingsPreferences {
         setNewSettingsNotPreviouslyIncludedBefore6(context);
         setNewSettingsNotPreviouslyIncludedBefore12(context);
         setNewSettingsNotPreviouslyIncludedBefore13(context);
-        setNewSettingsNotPreviouslyIncludedBefore27(context);
+        setNewSettingsNotPreviouslyIncludedBefore30(context);
     }
 
     // inclusion of settings - update together with onFirstStart
@@ -231,8 +231,8 @@ public class SettingsPreferences {
         if (getPreviouslySavedVersionCode(context) < 13) {
             setNewSettingsNotPreviouslyIncludedBefore13(context);
         }
-        if (getPreviouslySavedVersionCode(context) < 27) {
-            setNewSettingsNotPreviouslyIncludedBefore27(context);
+        if (getPreviouslySavedVersionCode(context) < 30) {
+            setNewSettingsNotPreviouslyIncludedBefore30(context);
         }
     }
 

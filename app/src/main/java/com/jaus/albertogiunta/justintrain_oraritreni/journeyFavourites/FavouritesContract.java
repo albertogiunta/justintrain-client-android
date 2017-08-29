@@ -61,5 +61,6 @@ interface FavouritesContract {
          * @param arrivalStation arrival station
          */
         void removeFavourite(PreferredStation departureStation, PreferredStation arrivalStation);
+
     }
 }

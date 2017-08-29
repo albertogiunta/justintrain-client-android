@@ -4,12 +4,13 @@ public class CONST_SP_V0 {
 
     public static final int SP_VERSION = 0;
 
-    public static final String SP_SP_SAVED_VERSION          = "prefs>prevLaunchVersionCode";
-    public static final String SP_SP_VERSION                = "prefs>prevLaunchSPVersion";
-    public static final String SP_SP_SERVER_CONFIG          = "prefs>serverConfig"; // should not be existing anymore
-    public static final String SP_SP_PRO_USERS_NUMBER       = "prefs>proUsersNumber";
-    public static final String SP_SP_FIRST_START            = "settings>isFirstStart";
-    public static final String SP_SETT_LIGHTNING            = "settings>isLightningEnabled";
+    public static final String SP_SP_IS_PRO           = "prefs>isPro";
+    public static final String SP_SP_SAVED_VERSION    = "prefs>prevLaunchVersionCode";
+    public static final String SP_SP_VERSION          = "prefs>prevLaunchSPVersion";
+    public static final String SP_SP_SERVER_CONFIG    = "prefs>serverConfig"; // should not be existing anymore
+    public static final String SP_SP_PRO_USERS_NUMBER = "prefs>proUsersNumber";
+    public static final String SP_SP_FIRST_START      = "settings>isFirstStart";
+    public static final String SP_SETT_LIGHTNING      = "settings>isLightningEnabled";
     public static final String SP_SETT_NOTIF_VIBRATION      = "settings>isNotifVibrationEnabled";
     public static final String SP_SETT_NOTIF_LIVE           = "settings>isNotifLiveEnabled";
     public static final String SP_SETT_INSTANT_DELAY        = "settings>isInstantDelayEnabled";

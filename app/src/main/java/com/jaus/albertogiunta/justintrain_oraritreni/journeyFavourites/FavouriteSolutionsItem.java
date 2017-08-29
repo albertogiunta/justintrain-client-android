@@ -115,7 +115,7 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
         private void bindPreferredSolutionsButtons(AnalyticsHelper analyticsHelper, Context context, Map<String, Journey.Solution> preferredSolutions, List<RelativeLayout> solutionsViewsList, PreferredJourney preferredJourney, PreferredStation departureStation, PreferredStation arrivalStation) {
 
             Button    trainDetailsBtn;
-            ImageView notifcationIV;
+            ImageView notificationIV;
 //            Button    delayView;
             int i = 0;
             Gson gson = new GsonBuilder()
@@ -133,8 +133,8 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                     apply(solutionsViewsList.get(i), VISIBLE);
                 }
 
-                trainDetailsBtn = (Button) solutionsViewsList.get(i).findViewById(R.id.btn_solution_time);
-                notifcationIV = (ImageView) solutionsViewsList.get(i).findViewById(R.id.btn_pin);
+                trainDetailsBtn = solutionsViewsList.get(i).findViewById(R.id.btn_solution_time);
+                notificationIV = solutionsViewsList.get(i).findViewById(R.id.btn_pin);
                 trainDetailsBtn.setText(solution.getDepartureTimeReadable() + " " + SEPARATOR + " " + solution.getArrivalTimeReadable());
 
                 trainDetailsBtn.setOnClickListener(v -> {
@@ -145,7 +145,7 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                     context.startActivity(intent);
                 });
 
-                notifcationIV.setOnClickListener(v -> {
+                notificationIV.setOnClickListener(v -> {
                     analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_CLICK_ON_FAV_SOLUTION_NOTIF);
                     NotificationPreferences.setNotificationData(context, preferredJourney, solution);
                     NotificationService.startActionStartNotification(context,
@@ -156,7 +156,7 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                     AnimationUtils.animOnPress(v, AnimationUtils.ANIM_TYPE.MEDIUM);
                 });
 
-                AnimationUtils.onCompare(notifcationIV);
+                AnimationUtils.onCompare(notificationIV);
 
                 if (SettingsPreferences.isInstantDelayEnabled(context) &&
                         DateTime.now().toLocalTime().isBefore(solution.getDepartureTime().toLocalTime())) {
@@ -173,8 +173,8 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                         DateTime.now().toLocalTime().isBefore(solution.getArrivalTime().toLocalTime())) {
                     final int   j           = i;
 
-                    Button      delayView   = (Button) solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
-                    ImageButton warningView = (ImageButton) solutionsViewsList.get(j).findViewById(R.id.iv_warning);
+                    Button      delayView   = solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
+                    ImageButton warningView = solutionsViewsList.get(j).findViewById(R.id.iv_warning);
 //                    apply(warningView, GONE);
 //                    apply(delayView, GONE);
                     if (!solution.hasChanges()) {

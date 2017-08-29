@@ -15,7 +15,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 26
         multiDexEnabled true
-        versionCode 27
+        versionCode 33
         versionName "1.0.0"
         vectorDrawables.useSupportLibrary = true
 
@@ -82,8 +82,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
 //    compile 'com.facebook.stetho:stetho:1.4.2'
-    // used for analytics
-    // used for notifications
     compile 'co.trikita:log:1.1.5'
     compile 'com.google.firebase:firebase-core:11.0.4'
     compile 'com.google.firebase:firebase-messaging:11.0.4'

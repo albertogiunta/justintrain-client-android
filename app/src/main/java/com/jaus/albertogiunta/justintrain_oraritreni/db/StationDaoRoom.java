@@ -23,9 +23,9 @@ public interface StationDaoRoom {
     @Query("SELECT * FROM station WHERE name_short LIKE :nameShort")
     List<Station> getAllByNameShort(String nameShort);
 
-    @Query("SELECT * FROM station WHERE name_short LIKE :name OR name_long LIKE :name")
+    @Query("SELECT * FROM station WHERE name_fancy LIKE :name OR name_long LIKE :name OR name_short LIKE :name")
     Station getByWhateverName(String name);
 
-    @Query("SELECT count(1) FROM station WHERE name_short LIKE :name OR name_long LIKE :name")
+    @Query("SELECT count(1) FROM station WHERE name_fancy LIKE :name OR name_short LIKE :name OR name_long LIKE :name")
     boolean isStationNameValid(String name);
 }
