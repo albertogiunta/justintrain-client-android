@@ -311,7 +311,6 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
             default:
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
