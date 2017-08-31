@@ -30,7 +30,7 @@ public class StationSearchActivity extends AppCompatActivity implements Searched
 
     @BindView(R.id.rv_searched_stations) RecyclerView rvSearchedStations;
     SearchedStationsAdapter adapter;
-    List<String> stationNames = new LinkedList<>(DatabaseHelper.getElementByNameFancy(""));
+    List<String> stationNames = new LinkedList<>(DatabaseHelper.getAll());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

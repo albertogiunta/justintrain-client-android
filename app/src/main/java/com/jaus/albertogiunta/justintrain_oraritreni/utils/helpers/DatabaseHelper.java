@@ -14,9 +14,16 @@ import java.util.List;
 
 public class DatabaseHelper {
 
+    public static List<String> getAll() {
+        return Stream
+                .of(MyApplication.database.stationDao().getAll())
+                .map(Station::getNameFancy).collect(Collectors.toList());
+    }
+
+
     public static List<String> getElementByNameFancy(String stationName) {
         return Stream
-                .of(MyApplication.database.stationDao().getAllByNameFancy(stationName + "%", "% " + stationName + "%"))
+                .of(MyApplication.database.stationDao().getAllByNameFancy("" + stationName + "%", "%_" + stationName + "%"))
                 .map(Station::getNameFancy).collect(Collectors.toList());
     }
 
