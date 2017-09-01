@@ -29,7 +29,7 @@
                 android:layout_below="@id/iv_cup"
                 android:layout_centerHorizontal="true"
                 android:textAlignment="center"
-                android:text="COMPLIMENTI!\n\nHai sbloccato la versione PRO di JustInTrain.\n\nOra non ti resta che goderti tutte le nuove funzionalità che hai a disposizione!"
+                android:text="COMPLIMENTI!\n\nHai sbloccato la versione PRO di JustInTrain.\n\nOra non ti resta che goderti tutte le nuove funzionalità che hai a disposizione!\n\nNB: clicca sul bottone PRO nella schermata home per sapere come funzionano le nuove funzionalità!"
                 fontPath="@string/font_path_bold"
                 />
 

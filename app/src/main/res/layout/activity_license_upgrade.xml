@@ -101,7 +101,7 @@
                     android:textAllCaps="true"
                     android:textSize="@dimen/text_size_default_minus"
                     fontPath="@string/font_path_bold"
-                    android:text="Perchè?"
+                    android:text="Perchè dovrei?"
                     />
 
             <LinearLayout
@@ -166,7 +166,7 @@
                             android:textColor="@color/txt_white"
                             fontPath="@string/font_path_standard"
                             android:textSize="@dimen/text_size_smaller"
-                            android:text="Perché diciamocelo, la pubblicità non piace a nessuno."
+                            android:text="Perché per cominciare diciamocelo, la pubblicità non piace a nessuno."
                             />
                 </LinearLayout>
             </LinearLayout>
@@ -231,7 +231,7 @@
                             android:textColor="@color/txt_white"
                             fontPath="@string/font_path_standard"
                             android:textSize="@dimen/text_size_smaller"
-                            android:text="Per sapere proattivamente i ritardi dei tuoi treni preferiti senza dover muovere un muscolo, e appena apri l’app."
+                            android:text="Per sapere in maniera istantanea i ritardi dei tuoi treni preferiti senza dover muovere un muscolo, e appena apri l’app."
                             />
                 </LinearLayout>
             </LinearLayout>
@@ -296,7 +296,7 @@
                             android:textColor="@color/txt_white"
                             fontPath="@string/font_path_standard"
                             android:textSize="@dimen/text_size_smaller"
-                            android:text="Quando impostate, le notifiche si aggiorneranno in automatico ogni volta che accendi lo schermo."
+                            android:text="Quando impostate e con l'app in background, le notifiche si aggiorneranno in automatico ogni volta che accendi lo schermo, anche dalla schermata di blocco."
                             />
                 </LinearLayout>
             </LinearLayout>

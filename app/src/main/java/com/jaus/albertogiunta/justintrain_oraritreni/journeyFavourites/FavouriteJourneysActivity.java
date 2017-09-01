@@ -301,14 +301,13 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
                 FavouriteJourneysActivity.this.startActivity(new Intent(FavouriteJourneysActivity.this, AboutActivity.class));
                 return true;
             case R.id.label_pro:
-//                AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(FavouriteJourneysActivity.this);
-//                View view2 = LayoutInflater.from(FavouriteJourneysActivity.this).inflate(R.layout.dialog_legend, null);
-//                alertDialog2.setView(view2)
-//                        .setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
-//                        .create()
-//                        .show();
+                AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(FavouriteJourneysActivity.this);
+                View view2 = LayoutInflater.from(FavouriteJourneysActivity.this).inflate(R.layout.dialog_pro_legend, null);
+                alertDialog2.setView(view2)
+                        .setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
+                        .create()
+                        .show();
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }

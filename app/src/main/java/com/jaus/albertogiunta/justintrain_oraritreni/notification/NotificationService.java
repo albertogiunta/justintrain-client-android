@@ -49,6 +49,8 @@ public class NotificationService extends IntentService {
 
     AnalyticsHelper analyticsHelper;
 
+    static BroadcastReceiver mReceiver = new ScreenOnReceiver();
+
     Gson gson = new GsonBuilder()
             .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
             .create();
@@ -61,11 +63,23 @@ public class NotificationService extends IntentService {
     public void onCreate() {
         super.onCreate();
         analyticsHelper = AnalyticsHelper.getInstance(getBaseContext());
+        registerScreenOnReceiver(true, NotificationService.this);
     }
 
     @Override
     public void onDestroy() {
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+            mReceiver = null;
+        }
         super.onDestroy();
+    }
+
+    public static void registerScreenOnReceiver(boolean registerScreenOnIfPro, Context context) {
+        if (registerScreenOnIfPro && SettingsPreferences.isLiveNotificationEnabled(context)) {
+            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+            context.registerReceiver(mReceiver, filter);
+        }
     }
 
     public static void startActionStartNotification(Context context, PreferredStation journeyDepartureStation, PreferredStation journeyArrivalStation, Journey.Solution sol, Integer indexOfJourneyToBeNotified, Boolean shouldPriorityBeHigh, Boolean registerScreenOnIfPro) {
@@ -74,11 +88,7 @@ public class NotificationService extends IntentService {
         String  journeyArrivalStationId   = journeyArrivalStation.getStationShortId();
         boolean justUpdate                = indexOfJourneyToBeNotified != null;
 
-        if (registerScreenOnIfPro && SettingsPreferences.isLiveNotificationEnabled(context)) {
-            IntentFilter      filter    = new IntentFilter(Intent.ACTION_SCREEN_ON);
-            BroadcastReceiver mReceiver = new ScreenOnReceiver();
-            context.registerReceiver(mReceiver, filter);
-        }
+        registerScreenOnReceiver(registerScreenOnIfPro, context);
 
         if (sol.hasChanges()) {
             if (indexOfJourneyToBeNotified == null) {

@@ -64,7 +64,7 @@ public class SettingsActivity extends AppCompatActivity implements IabHelper.Que
         View           view1;
         LayoutInflater inflater = LayoutInflater.from(this);
         view1 = inflater.inflate(R.layout.activity_about_settings, null);
-        linearLayout = (LinearLayout) view1.findViewById(R.id.ll_container);
+        linearLayout = view1.findViewById(R.id.ll_container);
 
         this.iabHelper = CustomIABHelper.getInstance(SettingsActivity.this, this);
 
@@ -98,7 +98,7 @@ public class SettingsActivity extends AppCompatActivity implements IabHelper.Que
                 .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Vibrazione nella notifica", "Quando la attivi o la aggiorni", SettingsPreferences.isVibrationEnabled(this), true, false, isPro, SP_SETT_NOTIF_VIBRATION, SETTINGS_ENABLE_VIBRATION, SETTINGS_DISABLE_VIBRATION)
                         .build())
                 // LIVE NOTIFICATION
-                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Notifiche LIVE (PRO)", "Sempre aggiornate all'ultimo secondo", SettingsPreferences.isLiveNotificationEnabled(this), true, true, isPro, SP_SETT_NOTIF_LIVE, SETTINGS_ENABLE_LIVE_NOTIFICATION, SETTINGS_DISABLE_LIVE_NOTIFICATION)
+                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Notifiche LIVE (PRO)", "Sempre aggiornate all'ultimo secondo (con app in background)", SettingsPreferences.isLiveNotificationEnabled(this), true, true, isPro, SP_SETT_NOTIF_LIVE, SETTINGS_ENABLE_LIVE_NOTIFICATION, SETTINGS_DISABLE_LIVE_NOTIFICATION)
                         .build())
                 .addItem(new ItemBuilder(this, linearLayout).addItemGroupHeader("Risultati").build())
                 // SMART AUTOSCROLL (LIGHTNING)
