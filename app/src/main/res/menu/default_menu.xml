@@ -18,7 +18,7 @@
         <menu>
             <item
                     android:id="@+id/action_join"
-                    android:title="Entra nel Fun Club"
+                    android:title="Entra nel Fan Club"
                     android:icon="@drawable/ic_heart_outline"
                     app:showAsAction="always"
                     />
