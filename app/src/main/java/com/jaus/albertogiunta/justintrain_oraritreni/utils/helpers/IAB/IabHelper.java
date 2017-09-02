@@ -15,6 +15,8 @@
 
 package com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -49,8 +51,8 @@ import java.util.List;
  * you may call other methods.
  *
  * After setup is complete, you may query whether the user owns a given item or
- * not by calling {@link #isOwned}, get all items owned with {@link #getOwnedSkus},
- * get an item's price with {@link #getPrice}, amongst others (see documentation
+ * not by calling isOwned, get all items owned with getOwnedSkus,
+ * get an item's price with getPrice, amongst others (see documentation
  * for specific methods).
  *
  * Please notice that the object will only have knowledge about owned items; it
@@ -58,13 +60,13 @@ import java.util.List;
  * that are not owned by the user, because the server will not automatically
  * provide those. In order to query information for an item that's not owned
  * (such as to display the price to the user before a purchase), you should first
- * bring the item's sku to the object's knowledge by calling {@link #addSku} and then perform an
+ * bring the item's sku to the object's knowledge by calling addSku and then perform an
  * inventory refresh by calling
- * {@link #refreshInventory()} or its corresponding asynchronous version {@link
- * #refreshInventoryAsync}.
+ * refreshInventory() or its corresponding asynchronous version
+ * refreshInventoryAsync.
  *
  * If you know the skus of all the items that you can possibly be interested in,
- * you can call {@link #addSku} for those items before {@link #startSetup}, and
+ * you can call addSku for those items before {@link #startSetup}, and
  * that way all the information about them will be available from the start,
  * with no need to refresh the inventory later.
  *
@@ -489,8 +491,8 @@ public class IabHelper {
     /**
      * Queries the inventory. This will query all owned items from the server, as well as
      * information on additional skus, if specified. This method may block or take long to execute.
-     * Do not call from a UI thread. For that, use the non-blocking version {@link
-     * #refreshInventoryAsync}.
+     * Do not call from a UI thread. For that, use the non-blocking version
+     * refreshInventoryAsync.
      *
      * @param querySkuDetails if true, SKU details (price, description, etc) will be queried as
      * well
@@ -665,7 +667,7 @@ public class IabHelper {
     }
 
     /**
-     * Same as {@link consumeAsync}, but for multiple items at once.
+     * Same as consumeAsync, but for multiple items at once.
      *
      * @param purchases The list of PurchaseInfo objects representing the purchases to consume.
      * @param listener The listener to notify when the consumption operation finishes.
@@ -776,6 +778,10 @@ public class IabHelper {
 
         do {
             logDebug("Calling getPurchases with continuation token: " + continueToken);
+            if (mService == null || mContext == null) {
+                logError("Our service and/or our context are null.  Exiting.");
+                return IABHELPER_UNKNOWN_ERROR;
+            }
             Bundle ownedItems = mService.getPurchases(3, mContext.getPackageName(),
                     ITEM_TYPE_INAPP, continueToken);
 
@@ -918,6 +924,7 @@ public class IabHelper {
     }
 
     void logError(String msg) {
+        FirebaseCrash.report(new Exception("In-app billing error: " + msg));
         Log.e(mDebugTag, "In-app billing error: " + msg);
     }
 

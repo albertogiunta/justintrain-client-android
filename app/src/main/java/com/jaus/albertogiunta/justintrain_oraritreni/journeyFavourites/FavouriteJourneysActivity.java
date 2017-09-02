@@ -60,6 +60,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.tutorial.IntroActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_VERSION_TAG;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.CustomIABHelper;
@@ -488,7 +489,9 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     }
 
     Handler handler = new Handler(message -> {
-        AboutPageUtils.showChangelog(this);
+        if (SettingsPreferences.getPreviouslySavedVersionCode(getViewContext()) < CONST_VERSION_TAG.V100) {
+            AboutPageUtils.showChangelog(this);
+        }
         return false;
     });
 

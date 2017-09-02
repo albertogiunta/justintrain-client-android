@@ -1,5 +1,7 @@
 package com.jaus.albertogiunta.justintrain_oraritreni;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import android.app.Application;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.db.AppDatabase;
@@ -35,6 +37,8 @@ public class MyApplication extends Application {
             this.deleteDatabase("justintrain.db");
             database = AppDatabase.getAppDatabase(getBaseContext(), true);
         }
+
+        FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG);
 
         if (BuildConfig.DEBUG) {
 //            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()

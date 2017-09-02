@@ -202,15 +202,17 @@ public class NotificationService extends IntentService {
                             trainHeader.getTrainId(), getApplicationContext(), false, false);
                 } else {
                     Journey.Solution s = gson.fromJson(NotificationPreferences.getNotificationSolutionString(getBaseContext()), Journey.Solution.class);
-                    if (s.hasChanges()) {
-                        startActionStartNotification(getApplicationContext(),
-                                new PreferredStation(s.getDepartureStationShortId(), s.getDepartureStationId(), s.getDepartureStationName(), s.getDepartureStationName()),
-                                new PreferredStation(s.getArrivalStationShortId(), s.getArrivalStationId(), s.getArrivalStationName(), s.getArrivalStationName()),
-                                s, null, false, false);
-                    } else {
-                        getData(s.getDepartureStationShortId(),
-                                s.getArrivalStationShortId(),
-                                s.getTrainId(), getApplicationContext(), false, false);
+                    if (s != null) {
+                        if (s.hasChanges()) {
+                            startActionStartNotification(getApplicationContext(),
+                                    new PreferredStation(s.getDepartureStationShortId(), s.getDepartureStationId(), s.getDepartureStationName(), s.getDepartureStationName()),
+                                    new PreferredStation(s.getArrivalStationShortId(), s.getArrivalStationId(), s.getArrivalStationName(), s.getArrivalStationName()),
+                                    s, null, false, false);
+                        } else {
+                            getData(s.getDepartureStationShortId(),
+                                    s.getArrivalStationShortId(),
+                                    s.getTrainId(), getApplicationContext(), false, false);
+                        }
                     }
                 }
             }
