@@ -123,12 +123,14 @@
             android:layout_marginBottom="18dp"
             android:layout_centerHorizontal="true"
             android:textAllCaps="false"
-            android:text="Ottieni le nuove feature esclusive!\nEntra a far parte del Fan Club "
+            android:text="Ottieni le nuove feature esclusive!\nEntra a far parte del Fan Club"
             android:paddingStart="@dimen/margin_big"
             android:paddingEnd="@dimen/margin_big"
             android:paddingTop="@dimen/margin_small"
             android:paddingBottom="@dimen/margin_small"
             android:background="@drawable/bg_button_selector_green"
+            android:lines="2"
+            android:maxLines="4"
             />
 
     <android.support.design.widget.FloatingActionButton

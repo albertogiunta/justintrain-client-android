@@ -88,9 +88,45 @@
                     android:paddingEnd="@dimen/margin_very_big"
                     android:layout_gravity="center_horizontal"
                     fontPath="@string/font_path_bold"
-                    android:text="Upgrade PREMIUM a vita"
+                    tools:text="Upgrade PREMIUM a vita"
                     android:background="@drawable/bg_button_selector_yellow"
                     />
+
+            <LinearLayout
+                    android:id="@+id/ll_already_pro_for_paypal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    >
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/txt_white"
+                        android:textSize="@dimen/text_size_smaller"
+                        android:layout_gravity="center_horizontal"
+                        android:textAlignment="center"
+                        android:layout_marginTop="@dimen/margin_small"
+                        fontPath="@string/font_path_standard"
+                        android:text="OPPURE"
+                        />
+
+                <Button
+                        android:id="@+id/btn_donate_paypal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_default_plus"
+                        android:layout_marginBottom="@dimen/margin_default_plus"
+                        android:paddingStart="@dimen/margin_very_big"
+                        android:paddingEnd="@dimen/margin_very_big"
+                        android:layout_gravity="center_horizontal"
+                        fontPath="@string/font_path_bold"
+                        android:text="DONA QUANTO VUOI CON PAYPAL"
+                        android:background="@drawable/bg_button_selector_yellow"
+                        />
+
+            </LinearLayout>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -457,7 +493,7 @@
                     android:paddingEnd="@dimen/margin_very_big"
                     android:layout_gravity="center_horizontal"
                     fontPath="@string/font_path_bold"
-                    android:text="Upgrade PREMIUM a vita"
+                    tools:text="Upgrade PREMIUM a vita"
                     android:background="@drawable/bg_button_selector_yellow"
                     />
 

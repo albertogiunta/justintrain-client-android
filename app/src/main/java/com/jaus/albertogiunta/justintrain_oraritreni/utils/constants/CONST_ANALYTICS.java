@@ -17,6 +17,7 @@ public class CONST_ANALYTICS {
     public static final String IAP_SEARCH        = "IAP tap search screen";
     public static final String IAP_TOP           = "IAP tap button top";
     public static final String IAP_BOTTOM        = "IAP tap button bottom";
+    public static final String IAP_PAYPAL        = "IAP tap button paypal";
 
     // ERRORS
     public static final String ERROR_REFRESH                  = "Error refresh";

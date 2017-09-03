@@ -6,6 +6,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -32,12 +33,20 @@ import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import trikita.log.Log;
 
 import static butterknife.ButterKnife.apply;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.GONE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.VISIBLE;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.IAP_BOTTOM;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.IAP_PAYPAL;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.IAP_TOP;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_UPGRADE_LICENSE;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_IAP_BTN_MESSAGE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_PRO_USERS_NUMBER;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_SHOW_MONEY_IN_IAP;
 
 //public class LicenseUpgradeActivity extends AppCompatActivity implements PurchasesUpdatedListener {
 public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelper.OnIabSetupFinishedListener, IabHelper.OnIabPurchaseFinishedListener {
@@ -50,13 +59,18 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
     @BindView(R.id.toolbar)
     Toolbar  toolbar;
     @BindView(R.id.btn_iap_first)
-    Button   buyFirst;
+    Button   btnBuyFirst;
     @BindView(R.id.btn_iap_second)
-    Button   buySecond;
+    Button   btnBuySecond;
     @BindView(R.id.tv_already_pro)
-    TextView alreadyPro;
+    TextView tvAlreadyPro;
+    @BindView(R.id.btn_donate_paypal)
+    Button   btnAlreadyProPaypal;
     @BindView(R.id.tv_pro_users_number)
-    TextView proUsersNumber;
+    TextView tvProUsersNumber;
+
+    @BindViews({R.id.tv_already_pro, R.id.ll_already_pro_for_paypal})
+    List<View> alreadyProViews = new LinkedList<>();
 
     boolean isAlreadyPro = false;
     private IabHelper billingHelper;
@@ -77,20 +91,26 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
         billingHelper = new IabHelper(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnl+N1zhaAmBhLF54yJo7T+ku8m5c/XZEsZ3+zBb7HyKCxpGuQL4+oPTVSNRtNdXNCl2R0eqojv+f3sT6tWL2XHt1DK6F7rYVtvs8rmQR1himMDEV0Tgljn5uBQuMag9nvNeyGIAi1wQeRz9Hk8tGF+laZcD3phR6NFnrwebD8FkG0lc6XHKpjAzCsdu+YbyPH7JuFAUoi+Yrbvs50r0JzeUWqz+v427V4W4kQR9zAmN3evVmou1R+2WXPtD1wGMMSQAs2DOuxfgh85o4sRS21an8xQk/d70EX3E78O3iXzl76CKZNM54O2g8iE3tkNgGfeCkqs0m2v/2E6VDubVf3QIDAQAB");
         billingHelper.startSetup(this);
 
-        buyFirst.setOnClickListener(v -> {
+        btnBuyFirst.setOnClickListener(v -> {
             onIAPButtonClicked();
-//        analyticsHelper.logScreenEvent(SCREEN_UPGRADE_LICENSE, IAP_TOP);
+            analyticsHelper.logScreenEvent(SCREEN_UPGRADE_LICENSE, IAP_TOP);
         });
 
-        buySecond.setOnClickListener(v -> {
+        btnBuySecond.setOnClickListener(v -> {
             onIAPButtonClicked();
-//        analyticsHelper.logScreenEvent(SCREEN_UPGRADE_LICENSE, IAP_BOTTOM);
+            analyticsHelper.logScreenEvent(SCREEN_UPGRADE_LICENSE, IAP_BOTTOM);
         });
 
-        Resources res = getResources();
-//        String text = String.format(res.getString(R.string.upgrade_pro_users_number), ServerConfigsHelper.getProUsersNumberFromSharedPreferences(LicenseUpgradeActivity.this));
-        String text = String.format(res.getString(R.string.upgrade_pro_users_number), ((int) FirebaseRemoteConfig.getInstance().getDouble(FIREBASE_PRO_USERS_NUMBER)));
-        proUsersNumber.setText(text);
+        btnAlreadyProPaypal.setOnClickListener(v -> {
+            Uri    uri    = Uri.parse("https://www.paypal.me/albertogiunta");
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+            analyticsHelper.logScreenEvent(SCREEN_UPGRADE_LICENSE, IAP_PAYPAL);
+        });
+
+        Resources res          = getResources();
+        String    proUsrNumber = String.format(res.getString(R.string.upgrade_pro_users_number), ((int) FirebaseRemoteConfig.getInstance().getDouble(FIREBASE_PRO_USERS_NUMBER)));
+        tvProUsersNumber.setText(proUsrNumber);
 
     }
 
@@ -133,21 +153,26 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
         l.add(SKU_UPGRADE);
         l.add(SKU_DONATION);
         billingHelper.queryInventoryAsync(true, l, (result2, inv) -> {
-
-//            String textForBtn = "Upqgrade PREMIUM a vita ("+ inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
-//            buyFirst.setText(textForBtn);
-//            buySecond.setText(textForBtn);
             if (inv != null && inv.getSkuDetails(SKU_UPGRADE) != null) {
                 if (CustomIABHelper.isOrderOk(result2, inv)) {
                     isAlreadyPro = true;
-                    apply(alreadyPro, VISIBLE);
-                    String textForBtn = "SUPPORTA LO SVILUPPO (" + inv.getSkuDetails(SKU_DONATION).getPrice() + ")";
-                    buyFirst.setText(textForBtn);
-                    buySecond.setText(textForBtn);
+                    apply(alreadyProViews, VISIBLE);
+                    String textForBtn = "SUPPORTA LO SVILUPPO";
+                    if (FirebaseRemoteConfig.getInstance().getBoolean(FIREBASE_SHOW_MONEY_IN_IAP)) {
+                        String money = "(" + inv.getSkuDetails(SKU_DONATION).getPrice() + ")";
+                        textForBtn += " " + money;
+                    }
+                    btnBuyFirst.setText(textForBtn);
+                    btnBuySecond.setText(textForBtn);
                 } else {
-                    String textForBtn = "Upgrade PREMIUM a vita (" + inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
-                    buyFirst.setText(textForBtn);
-                    buySecond.setText(textForBtn);
+                    apply(alreadyProViews, GONE);
+                    String textForBtn = FirebaseRemoteConfig.getInstance().getString(FIREBASE_IAP_BTN_MESSAGE);
+                    if (FirebaseRemoteConfig.getInstance().getBoolean(FIREBASE_SHOW_MONEY_IN_IAP)) {
+                        String money = "(" + inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
+                        textForBtn += " " + money;
+                    }
+                    btnBuyFirst.setText(textForBtn);
+                    btnBuySecond.setText(textForBtn);
                 }
             } else {
                 FirebaseCrash.report(new Exception("USER TRIED TO BUY AND INVENTORY WAS NULL!"));
@@ -178,7 +203,10 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
 
     protected void purchaseItem(String sku) {
         try {
-            billingHelper.launchPurchaseFlow(this, sku, 123, this);
+            if (billingHelper != null) {
+                billingHelper.flagEndAsync();
+                billingHelper.launchPurchaseFlow(this, sku, 123, this);
+            }
         } catch (IllegalStateException e) {
             Log.d("purchaseItem: exception");
         }
@@ -186,8 +214,16 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        billingHelper.handleActivityResult(requestCode, resultCode, data);
+        if (billingHelper == null) return;
+        // Pass on the activity result to the helper for handling
+        if (!billingHelper.handleActivityResult(requestCode, resultCode, data)) {
+            // not handled, so handle it ourselves (here's where you'd
+            // perform any handling of activity results not related to in-app
+            // billing...
+            super.onActivityResult(requestCode, resultCode, data);
+        } else {
+            Log.d("onActivityResult handled by IABUtil.");
+        }
     }
 
     /**

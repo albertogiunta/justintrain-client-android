@@ -1,6 +1,5 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.journeyFavourites;
 
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
@@ -60,7 +59,6 @@ import com.jaus.albertogiunta.justintrain_oraritreni.tutorial.IntroActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils;
-import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_VERSION_TAG;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.CustomIABHelper;
@@ -111,6 +109,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_MAINTENANCE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_STRIKE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_UPDATE_MESSAGE;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_UPGRADE_BTN_HOME_MESSAGE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_FROM_SWIPE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_STATIONS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_FIRST_START;
@@ -207,8 +206,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             }
         };
 
-        btnIAP.setText(btnIAP.getText().toString() + new String(Character.toChars(0x21AA)));
-
+        apply(btnIAP, GONE);
         btnIAP.setOnClickListener(v -> {
             analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, IAP_SEARCH);
             Intent i = new Intent(FavouriteJourneysActivity.this, LicenseUpgradeActivity.class);
@@ -429,11 +427,8 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
                     if (task.isSuccessful()) {
                         firebaseRemoteConfig.activateFetched();
                     } else {
-                        FirebaseCrash.report(new Exception("Firebase Remote Config FAILED in ADDONCOMPLETELISTENER"));
+//                        FirebaseCrash.report(new Exception("Firebase Remote Config FAILED in ADDONCOMPLETELISTENER"));
                     }
-//                    if (BuildConfig.DEBUG) {
-//                        updateDashboard(firebaseRemoteConfig.getString(FIREBASE_STRIKE), ViewsUtils.COLORS.GREEN, false);
-//                    } else {
                     if (firebaseRemoteConfig.getBoolean(FIREBASE_IS_STRIKE_SET)) {
                         updateDashboard(firebaseRemoteConfig.getString(FIREBASE_STRIKE), ViewsUtils.COLORS.RED, false, false);
                     } else if (firebaseRemoteConfig.getBoolean(FIREBASE_IS_MAINTENANCE_SET)) {
@@ -443,12 +438,14 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
                     } else if (FirebaseRemoteConfig.getInstance().getBoolean(FIREBASE_IS_DISCOUNT_SET)) {
                         updateDashboard(FirebaseRemoteConfig.getInstance().getString(FIREBASE_DISCOUNT_MESSAGE), ViewsUtils.COLORS.ORANGE, false, true);
                     }
-//                    ServerConfigsHelper.setProUsersInSharedPreferences(FavouriteJourneysActivity.this, (int) firebaseRemoteConfig.getDouble(SP_SP_PRO_USERS_NUMBER));
 
+                    btnIAP.setText(FirebaseRemoteConfig.getInstance().getString(FIREBASE_UPGRADE_BTN_HOME_MESSAGE).replace("\\n", System.getProperty("line.separator"))
+                            + " " + new String(Character.toChars(0x21AA)));
+                    apply(btnIAP, VISIBLE);
                 })
                 .addOnFailureListener(this, e -> {
-                    FirebaseCrash.report(new Exception("Firebase Remote Config FAILED in ADDONFAILURELISTENER"));
-                    //TODO PERCHé REMOTECONFIG SUCCEDE SPESSO CHE FINISCE QUI?
+                    apply(btnIAP, VISIBLE);
+//                    FirebaseCrash.report(new Exception("Firebase Remote Config FAILED in ADDONFAILURELISTENER"));
                 });
     }
 
@@ -489,9 +486,9 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     }
 
     Handler handler = new Handler(message -> {
-        if (SettingsPreferences.getPreviouslySavedVersionCode(getViewContext()) < CONST_VERSION_TAG.V100) {
-            AboutPageUtils.showChangelog(this);
-        }
+//        if (SettingsPreferences.getPreviouslySavedVersionCode(getViewContext()) < CONST_VERSION_TAG.V100) {
+        AboutPageUtils.showChangelog(this);
+//        }
         return false;
     });
 

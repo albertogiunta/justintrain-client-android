@@ -68,9 +68,13 @@ public class NotificationService extends IntentService {
 
     @Override
     public void onDestroy() {
-        if (mReceiver != null) {
-            unregisterReceiver(mReceiver);
-            mReceiver = null;
+        try {
+            if (mReceiver != null) {
+                unregisterReceiver(mReceiver);
+                mReceiver = null;
+            }
+        } catch (Exception e) {
+            Log.e("onDestroy: " + e.getMessage());
         }
         super.onDestroy();
     }

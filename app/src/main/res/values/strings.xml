@@ -73,6 +73,10 @@
 
     <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '   -->
     <string name="changelog">
+        Risolti alcuni bug che causavano il crash dell\'applicazione su alcuni device dopo il recente aggiornamento
+        \n\n
+        <b><u>Novità Versione 1.0.0</u></b>
+        \n
         Col più grosso update di sempre, ecco che arrivano tante <b>nuove funzionalità e miglioramenti</b>:
         \n\n
         <b><i>PRO</i></b> <b>Nuove funzionalità per i tuoi treni preferiti</b>: con la nuova grafica, sapere qual è il prossimo treno da prendere o quanto ritardo ha non richiede nemmeno un tap!
