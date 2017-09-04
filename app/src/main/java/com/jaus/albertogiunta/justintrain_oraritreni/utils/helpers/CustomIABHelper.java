@@ -46,8 +46,12 @@ public class CustomIABHelper implements IabHelper.QueryInventoryFinishedListener
     }
 
     public void isUserPro(IabHelper.QueryInventoryFinishedListener listener) {
-        if (isSetupDone) {
-            billingHelper.queryInventoryAsync(false, listener);
+        if (billingHelper.isSetupDone() && !billingHelper.isAsyncInProgress()) {
+            try {
+                billingHelper.queryInventoryAsync(false, listener);
+            } catch (Exception e) {
+                Log.e(e.getMessage());
+            }
         }
     }
 

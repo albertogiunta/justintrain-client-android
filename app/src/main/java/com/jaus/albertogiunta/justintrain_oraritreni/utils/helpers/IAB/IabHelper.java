@@ -917,6 +917,14 @@ public class IabHelper {
         }).start();
     }
 
+    public boolean isAsyncInProgress() {
+        return mAsyncInProgress;
+    }
+
+    public boolean isSetupDone() {
+        return mSetupDone;
+    }
+
     void logDebug(String msg) {
         if (mDebugLog) {
             Log.d(mDebugTag, msg);

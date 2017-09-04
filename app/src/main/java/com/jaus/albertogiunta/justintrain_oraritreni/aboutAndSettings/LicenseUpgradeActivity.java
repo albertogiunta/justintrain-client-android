@@ -152,48 +152,50 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
         List<String> l = new LinkedList<>();
         l.add(SKU_UPGRADE);
         l.add(SKU_DONATION);
-        billingHelper.queryInventoryAsync(true, l, (result2, inv) -> {
-            if (inv != null && inv.getSkuDetails(SKU_UPGRADE) != null) {
-                if (CustomIABHelper.isOrderOk(result2, inv)) {
-                    isAlreadyPro = true;
-                    apply(alreadyProViews, VISIBLE);
-                    String textForBtn = "SUPPORTA LO SVILUPPO";
-                    if (FirebaseRemoteConfig.getInstance().getBoolean(FIREBASE_SHOW_MONEY_IN_IAP)) {
-                        String money = "(" + inv.getSkuDetails(SKU_DONATION).getPrice() + ")";
-                        textForBtn += " " + money;
-                    }
-                    btnBuyFirst.setText(textForBtn);
-                    btnBuySecond.setText(textForBtn);
-                } else {
-                    apply(alreadyProViews, GONE);
-                    String textForBtn = FirebaseRemoteConfig.getInstance().getString(FIREBASE_IAP_BTN_MESSAGE);
-                    if (FirebaseRemoteConfig.getInstance().getBoolean(FIREBASE_SHOW_MONEY_IN_IAP)) {
-                        String money = "(" + inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
-                        textForBtn += " " + money;
-                    }
-                    btnBuyFirst.setText(textForBtn);
-                    btnBuySecond.setText(textForBtn);
-                }
-            } else {
-                FirebaseCrash.report(new Exception("USER TRIED TO BUY AND INVENTORY WAS NULL!"));
-            }
-
-            // TODO DEBUGGGGGG
-            boolean debugPurchase = false;
-            if (!BuildConfig.DEBUG) debugPurchase = false;
-            if (debugPurchase && CustomIABHelper.isOrderOk(result, inv)) {
-                if (inv != null && inv.hasPurchase(SKU_UPGRADE)) {
-                    billingHelper.consumeAsync(inv.getPurchase(SKU_UPGRADE), (purchase, result1) -> {
-                        if (inv.hasPurchase(SKU_DONATION)) {
-                            billingHelper.consumeAsync(inv.getPurchase(SKU_DONATION), null);
+        if (billingHelper.isSetupDone() && !billingHelper.isAsyncInProgress()) {
+            billingHelper.queryInventoryAsync(true, l, (result2, inv) -> {
+                if (inv != null && inv.getSkuDetails(SKU_UPGRADE) != null) {
+                    if (CustomIABHelper.isOrderOk(result2, inv)) {
+                        isAlreadyPro = true;
+                        apply(alreadyProViews, VISIBLE);
+                        String textForBtn = "SUPPORTA LO SVILUPPO";
+                        if (FirebaseRemoteConfig.getInstance().getBoolean(FIREBASE_SHOW_MONEY_IN_IAP)) {
+                            String money = "(" + inv.getSkuDetails(SKU_DONATION).getPrice() + ")";
+                            textForBtn += " " + money;
                         }
-                    });
-                    SettingsPreferences.disableLiveNotification(LicenseUpgradeActivity.this);
-                    SettingsPreferences.disableInstantDelay(LicenseUpgradeActivity.this);
+                        btnBuyFirst.setText(textForBtn);
+                        btnBuySecond.setText(textForBtn);
+                    } else {
+                        apply(alreadyProViews, GONE);
+                        String textForBtn = FirebaseRemoteConfig.getInstance().getString(FIREBASE_IAP_BTN_MESSAGE);
+                        if (FirebaseRemoteConfig.getInstance().getBoolean(FIREBASE_SHOW_MONEY_IN_IAP)) {
+                            String money = "(" + inv.getSkuDetails(SKU_UPGRADE).getPrice() + ")";
+                            textForBtn += " " + money;
+                        }
+                        btnBuyFirst.setText(textForBtn);
+                        btnBuySecond.setText(textForBtn);
+                    }
+                } else {
+                    FirebaseCrash.report(new Exception("USER TRIED TO BUY AND INVENTORY WAS NULL!"));
                 }
-            }
-            // TODO END DEBUGGGGGG
-        });
+
+                // TODO DEBUGGGGGG
+                boolean debugPurchase = false;
+                if (!BuildConfig.DEBUG) debugPurchase = false;
+                if (debugPurchase && CustomIABHelper.isOrderOk(result, inv)) {
+                    if (inv != null && inv.hasPurchase(SKU_UPGRADE)) {
+                        billingHelper.consumeAsync(inv.getPurchase(SKU_UPGRADE), (purchase, result1) -> {
+                            if (inv.hasPurchase(SKU_DONATION)) {
+                                billingHelper.consumeAsync(inv.getPurchase(SKU_DONATION), null);
+                            }
+                        });
+                        SettingsPreferences.disableLiveNotification(LicenseUpgradeActivity.this);
+                        SettingsPreferences.disableInstantDelay(LicenseUpgradeActivity.this);
+                    }
+                }
+                // TODO END DEBUGGGGGG
+            });
+        }
     }
 
     private void dealWithIabSetupFailure() {
@@ -255,19 +257,23 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
     }
 
     protected void dealWithPurchaseSuccessUpgrade(IabResult result, Purchase info) {
-        billingHelper.queryInventoryAsync(false, (result1, inv) -> {
-            ProPreferences.enablePro(LicenseUpgradeActivity.this);
-            SettingsPreferences.enableLiveNotification(LicenseUpgradeActivity.this);
-            SettingsPreferences.enableInstantDelay(LicenseUpgradeActivity.this);
-            showDialogCustom(R.layout.dialog_gone_pro);
-        });
+        if (billingHelper.isSetupDone() && !billingHelper.isAsyncInProgress()) {
+            billingHelper.queryInventoryAsync(false, (result1, inv) -> {
+                ProPreferences.enablePro(LicenseUpgradeActivity.this);
+                SettingsPreferences.enableLiveNotification(LicenseUpgradeActivity.this);
+                SettingsPreferences.enableInstantDelay(LicenseUpgradeActivity.this);
+                showDialogCustom(R.layout.dialog_gone_pro);
+            });
+        }
     }
 
     protected void dealWithPurchaseSuccessDonate(IabResult result, Purchase info) {
-        billingHelper.queryInventoryAsync(false, (result1, inv) -> {
-            billingHelper.consumeAsync(inv.getPurchase(SKU_DONATION), null);
-            showDialogCustom(R.layout.dialog_donation);
-        });
+        if (billingHelper.isSetupDone() && !billingHelper.isAsyncInProgress()) {
+            billingHelper.queryInventoryAsync(false, (result1, inv) -> {
+                billingHelper.consumeAsync(inv.getPurchase(SKU_DONATION), null);
+                showDialogCustom(R.layout.dialog_donation);
+            });
+        }
     }
 
     @Override

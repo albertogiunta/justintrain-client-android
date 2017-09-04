@@ -224,21 +224,25 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
     @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-        if (CustomIABHelper.isOrderOk(result, inv)) {
-            ProPreferences.enablePro(getViewContext());
-            apply(btnIAP, GONE);
-            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
-            lp.gravity = Gravity.BOTTOM | Gravity.CENTER;
-            btnSearch.setLayoutParams(lp);
-            apply(this.rlMessage, GONE);
-            shouldDisplayDiscountMessage = false;
+        if (result.isFailure()) {
+
         } else {
-            ProPreferences.disablePro(getViewContext());
-            apply(btnIAP, VISIBLE);
-            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
-            lp.gravity = Gravity.BOTTOM | Gravity.END;
-            btnSearch.setLayoutParams(lp);
-            shouldDisplayDiscountMessage = true;
+            if (CustomIABHelper.isOrderOk(result, inv)) {
+                ProPreferences.enablePro(getViewContext());
+                apply(btnIAP, GONE);
+                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
+                lp.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                btnSearch.setLayoutParams(lp);
+                apply(this.rlMessage, GONE);
+                shouldDisplayDiscountMessage = false;
+            } else {
+                ProPreferences.disablePro(getViewContext());
+                apply(btnIAP, VISIBLE);
+                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
+                lp.gravity = Gravity.BOTTOM | Gravity.END;
+                btnSearch.setLayoutParams(lp);
+                shouldDisplayDiscountMessage = true;
+            }
         }
         setVisibilityOfProBedge();
     }
@@ -439,12 +443,16 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
                         updateDashboard(FirebaseRemoteConfig.getInstance().getString(FIREBASE_DISCOUNT_MESSAGE), ViewsUtils.COLORS.ORANGE, false, true);
                     }
 
-                    btnIAP.setText(FirebaseRemoteConfig.getInstance().getString(FIREBASE_UPGRADE_BTN_HOME_MESSAGE).replace("\\n", System.getProperty("line.separator"))
-                            + " " + new String(Character.toChars(0x21AA)));
-                    apply(btnIAP, VISIBLE);
+                    if (shouldDisplayDiscountMessage) {
+                        btnIAP.setText(FirebaseRemoteConfig.getInstance().getString(FIREBASE_UPGRADE_BTN_HOME_MESSAGE).replace("\\n", System.getProperty("line.separator"))
+                                + " " + new String(Character.toChars(0x21AA)));
+                        apply(btnIAP, VISIBLE);
+                    }
                 })
                 .addOnFailureListener(this, e -> {
-                    apply(btnIAP, VISIBLE);
+                    if (shouldDisplayDiscountMessage) {
+                        apply(btnIAP, VISIBLE);
+                    }
 //                    FirebaseCrash.report(new Exception("Firebase Remote Config FAILED in ADDONFAILURELISTENER"));
                 });
     }
