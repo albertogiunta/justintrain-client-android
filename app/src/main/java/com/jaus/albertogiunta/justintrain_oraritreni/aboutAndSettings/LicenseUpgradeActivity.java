@@ -25,7 +25,6 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabHelper
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabResult;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.Purchase;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences;
-import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.SettingsPreferences;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -189,8 +188,8 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
                                 billingHelper.consumeAsync(inv.getPurchase(SKU_DONATION), null);
                             }
                         });
-                        SettingsPreferences.disableLiveNotification(LicenseUpgradeActivity.this);
-                        SettingsPreferences.disableInstantDelay(LicenseUpgradeActivity.this);
+                        ProPreferences.disableLiveNotification(LicenseUpgradeActivity.this);
+                        ProPreferences.disableInstantDelay(LicenseUpgradeActivity.this);
                     }
                 }
                 // TODO END DEBUGGGGGG
@@ -260,8 +259,8 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
         if (billingHelper.isSetupDone() && !billingHelper.isAsyncInProgress()) {
             billingHelper.queryInventoryAsync(false, (result1, inv) -> {
                 ProPreferences.enablePro(LicenseUpgradeActivity.this);
-                SettingsPreferences.enableLiveNotification(LicenseUpgradeActivity.this);
-                SettingsPreferences.enableInstantDelay(LicenseUpgradeActivity.this);
+                ProPreferences.enableLiveNotification(LicenseUpgradeActivity.this);
+                ProPreferences.enableInstantDelay(LicenseUpgradeActivity.this);
                 showDialogCustom(R.layout.dialog_gone_pro);
             });
         }

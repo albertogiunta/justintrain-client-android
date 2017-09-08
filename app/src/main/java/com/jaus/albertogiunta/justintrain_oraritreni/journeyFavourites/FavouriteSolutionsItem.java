@@ -29,7 +29,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationU
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.NotificationPreferences;
-import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.SettingsPreferences;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
@@ -158,17 +158,19 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
 
                 AnimationUtils.onCompare(notificationIV);
 
-                if (SettingsPreferences.isInstantDelayEnabled(context) &&
+                if (ProPreferences.isInstantDelayEnabled(context) &&
                         DateTime.now().toLocalTime().isBefore(solution.getDepartureTime().toLocalTime())) {
 
                     if (i < boldIndex) {
                         boldIndex = i;
                         trainDetailsBtn.setTypeface(null, Typeface.BOLD);
+                    } else {
+                        trainDetailsBtn.setTypeface(null, Typeface.NORMAL);
                     }
 
                 }
 
-                if (SettingsPreferences.isInstantDelayEnabled(context) &&
+                if (ProPreferences.isInstantDelayEnabled(context) &&
                         DateTime.now().toLocalTime().isAfter(solution.getDepartureTime().minusMinutes(60).toLocalTime()) &&
                         DateTime.now().toLocalTime().isBefore(solution.getArrivalTime().toLocalTime())) {
                     final int   j           = i;

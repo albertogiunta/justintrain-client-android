@@ -74,7 +74,7 @@
                     android:textAlignment="center"
                     android:layout_marginTop="@dimen/margin_small"
                     fontPath="@string/font_path_standard"
-                    android:text="* Sei un utente PRO"
+                    android:text="* Sei già un utente PRO"
                     android:visibility="gone"
                     />
 

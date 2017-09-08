@@ -131,8 +131,8 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
     @BindView(R.id.rv_favourite_journeys)
     RecyclerView rvFavouriteJourneys;
-    @BindView(R.id.ll_add_favourite)
-    LinearLayout llAddFavourite;
+    @BindView(R.id.ll_no_favourites)
+    LinearLayout llNoFavourite;
     FavouriteJourneysAdapter adapter;
     @BindView(R.id.rl_message)
     CardView rlMessage;
@@ -228,15 +228,16 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
         } else {
             if (CustomIABHelper.isOrderOk(result, inv)) {
-                ProPreferences.enablePro(getViewContext());
+//                ProPreferences.enableAllPro(getViewContext());
                 apply(btnIAP, GONE);
                 CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
                 lp.gravity = Gravity.BOTTOM | Gravity.CENTER;
                 btnSearch.setLayoutParams(lp);
                 apply(this.rlMessage, GONE);
                 shouldDisplayDiscountMessage = false;
+                invalidateOptionsMenu();
             } else {
-                ProPreferences.disablePro(getViewContext());
+                ProPreferences.disableAllPro(getViewContext());
                 apply(btnIAP, VISIBLE);
                 CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
                 lp.gravity = Gravity.BOTTOM | Gravity.END;
@@ -266,6 +267,14 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             MenuItem item = menu.findItem(R.id.label_pro);
             item.setVisible(true);
         }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (!shouldDisplayDiscountMessage) {
+            menu.findItem(R.id.action_join).setTitle("Supporta l'app");
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -356,7 +365,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         snackbar.show();
     }
 
-    @OnClick({R.id.fab_search_journey, R.id.ll_add_favourite})
+    @OnClick({R.id.fab_search_journey})
     public void search() {
         analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_SEARCH_JOURNEY_FROM_FAVOURITES);
         Intent myIntent = new Intent(FavouriteJourneysActivity.this, JourneySearchActivity.class);
@@ -397,13 +406,13 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     @Override
     public void displayFavouriteJourneys() {
         apply(rvFavouriteJourneys, VISIBLE);
-        apply(llAddFavourite, GONE);
+        apply(llNoFavourite, GONE);
     }
 
     @Override
     public void displayEntryButton() {
         apply(rvFavouriteJourneys, GONE);
-        apply(llAddFavourite, VISIBLE);
+        apply(llNoFavourite, VISIBLE);
     }
 
     @Override

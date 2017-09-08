@@ -30,7 +30,8 @@
     <string name="action_reply">Reply</string>
     <string name="title_favourite_journeys">Tratte Preferite</string>
     <string name="subtitle_favourite_journeys">Scorri a destra o sinistra per i dettagli</string>
-    <string name="btn_favourite_journeys">Cerca e aggiungi una tratta ai Preferiti!</string>
+    <string name="btn_favourite_journeys">Cerca e aggiungi la tua prima tratta ai Preferiti!</string>
+    <string name="title_no_favourites"><b>Cerca</b> ed <b>aggiungi</b> ai preferiti\nla tua prima tratta!\n\nÈ il modo migliore di sfruttare\ntutte le comodità di JustInTrain!</string>
     <string name="notification">Notifica</string>
     <string name="minus_hour">-1 h</string>
     <string name="plus_hour">+1 h</string>

@@ -20,7 +20,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.networking.JourneyService;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.DatabaseHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.NotificationPreferences;
-import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.SettingsPreferences;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences;
 
 import org.joda.time.DateTime;
 
@@ -80,7 +80,7 @@ public class NotificationService extends IntentService {
     }
 
     public static void registerScreenOnReceiver(boolean registerScreenOnIfPro, Context context) {
-        if (registerScreenOnIfPro && SettingsPreferences.isLiveNotificationEnabled(context)) {
+        if (registerScreenOnIfPro && ProPreferences.isLiveNotificationEnabled(context)) {
             IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
             context.registerReceiver(mReceiver, filter);
         }
@@ -135,13 +135,15 @@ public class NotificationService extends IntentService {
         Log.d("getData:", journeyDepartureStationId, journeyArrivalStationId, trainId, justUpdate, shouldPriorityBeHigh);
         Intent notificationErrorIntent = new Intent(NOTIFICATION_ERROR_EVENT);
 
+        boolean isCompactNotificationEnabled = ProPreferences.isCompactNotificationEnabled(context);
+
         APINetworkingFactory.createRetrofitService(JourneyService.class)
                 .getDelay(journeyDepartureStationId, journeyArrivalStationId, trainId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(trainHeader -> {
                     if (justUpdate) {
                         Log.d("onNext: just updating");
-                        TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh);
+                        TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
                         return;
                     }
                     if (trainHeader.getJourneyArrivalStationVisited()) {
@@ -166,17 +168,17 @@ public class NotificationService extends IntentService {
                                         return;
                                     } else {
                                         Log.d("onNext: displaying the last train of the solution (which has arrived)");
-                                        TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh);
+                                        TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
                                     }
                                 }
                             }
                         } else {
                             Log.d("onNext: displaying a single train solution which has arrived");
-                            TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh);
+                            TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
                         }
                     } else {
                         Log.d("onNext: displaying a train of a solution which hasnt arrived yet");
-                        TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh);
+                        TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
                     }
                 }, throwable -> {
                     Log.d(throwable.getMessage());

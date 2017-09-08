@@ -16,6 +16,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.CustomIABHelp
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabResult;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.Inventory;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.SettingsPreferences;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -39,6 +40,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INCLUDE_CHANGES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INSTANT_DELAY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_LIGHTNING;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_COMPACT;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_LIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_VIBRATION;
 
@@ -91,14 +93,17 @@ public class SettingsActivity extends AppCompatActivity implements IabHelper.Que
         View aboutPage = new AboutPageBuilder(this)
                 .addItem(new ItemBuilder(this, linearLayout).addItemGroupHeader("Preferiti").build())
                 // FAV TRAIN VIBRATION
-                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Ritardo istantaneo (PRO)", "Quando accedi alla schermata iniziale", SettingsPreferences.isInstantDelayEnabled(this), true, true, isPro, SP_SETT_INSTANT_DELAY, SETTINGS_ENABLE_INSTANT_DELAY, SETTINGS_DISABLE_INSTANT_DELAY)
+                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Ritardo ISTANTANEO (PRO)", "Quando accedi alla schermata iniziale", ProPreferences.isInstantDelayEnabled(this), true, true, isPro, SP_SETT_INSTANT_DELAY, SETTINGS_ENABLE_INSTANT_DELAY, SETTINGS_DISABLE_INSTANT_DELAY)
                         .build())
                 .addItem(new ItemBuilder(this, linearLayout).addItemGroupHeader("Notifica").build())
                 // NOTIFICATION VIBRATION
                 .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Vibrazione nella notifica", "Quando la attivi o la aggiorni", SettingsPreferences.isVibrationEnabled(this), true, false, isPro, SP_SETT_NOTIF_VIBRATION, SETTINGS_ENABLE_VIBRATION, SETTINGS_DISABLE_VIBRATION)
                         .build())
                 // LIVE NOTIFICATION
-                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Notifiche LIVE (PRO)", "Sempre aggiornate all'ultimo secondo (con app in background)", SettingsPreferences.isLiveNotificationEnabled(this), true, true, isPro, SP_SETT_NOTIF_LIVE, SETTINGS_ENABLE_LIVE_NOTIFICATION, SETTINGS_DISABLE_LIVE_NOTIFICATION)
+                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Notifiche LIVE (PRO)", "Sempre aggiornate all'ultimo secondo (con app in background)", ProPreferences.isLiveNotificationEnabled(this), true, true, isPro, SP_SETT_NOTIF_LIVE, SETTINGS_ENABLE_LIVE_NOTIFICATION, SETTINGS_DISABLE_LIVE_NOTIFICATION)
+                        .build())
+                // LIVE NOTIFICATION
+                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Notifiche COMPATTE (PRO)", "Per vedere tutte le informazioni che ti servono in maniera sempre più veloce", ProPreferences.isCompactNotificationEnabled(this), true, true, isPro, SP_SETT_NOTIF_COMPACT, SETTINGS_ENABLE_LIVE_NOTIFICATION, SETTINGS_DISABLE_LIVE_NOTIFICATION)
                         .build())
                 .addItem(new ItemBuilder(this, linearLayout).addItemGroupHeader("Risultati").build())
                 // SMART AUTOSCROLL (LIGHTNING)

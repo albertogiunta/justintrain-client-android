@@ -205,7 +205,7 @@ class JourneyResultsAdapter extends RecyclerView.Adapter {
             isFilled = solution.getTimeDifference() != null;
             isSuppressed = !solution.hasChanges() && solution.getTrainStatusCode() != null && solution.getTrainStatusCode() == 2;
             hasAlert = !solution.hasChanges() && solution.getTrainStatusCode() != null && solution.getTrainStatusCode() != 1 && solution.getTrainStatusCode() != 2;
-            isOnTime = solution.getTimeDifference() != null && solution.getTimeDifference() == 0;
+            isOnTime = solution.getTimeDifference() != null && solution.getTimeDifference() <= 0;
             hasEmptyRightSide = false;
             coincidenceToBeMissed = false;
 

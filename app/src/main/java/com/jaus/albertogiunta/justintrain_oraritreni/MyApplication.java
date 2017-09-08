@@ -33,7 +33,12 @@ public class MyApplication extends Application {
             database = AppDatabase.getAppDatabase(getBaseContext(), false);
         }
 
-        if (database.stationDao().getAll().size() == 0) {
+        try {
+            if (database.stationDao().getAll().size() == 0) {
+                this.deleteDatabase("justintrain.db");
+                database = AppDatabase.getAppDatabase(getBaseContext(), true);
+            }
+        } catch (Exception e) {
             this.deleteDatabase("justintrain.db");
             database = AppDatabase.getAppDatabase(getBaseContext(), true);
         }

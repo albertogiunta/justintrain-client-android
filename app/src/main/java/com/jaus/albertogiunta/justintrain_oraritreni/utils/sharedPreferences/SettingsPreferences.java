@@ -11,29 +11,18 @@ import java.util.List;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.PREFIX_CATEGORIES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_GET_PREEMPTIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INCLUDE_CHANGES;
-import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INSTANT_DELAY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_LIGHTNING;
-import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_LIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_VIBRATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_FIRST_START;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_SAVED_VERSION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_VERSION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_VERSION;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences.disableCompactNotification;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences.disableInstantDelay;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences.disableLiveNotification;
 
 public class SettingsPreferences {
 
-    // instant delay
-    public static boolean isInstantDelayEnabled(Context context) {
-        return SharedPreferencesHelper.getSharedPreferenceBoolean(context, SP_SETT_INSTANT_DELAY, true);
-    }
-
-    public static void enableInstantDelay(Context context) {
-        enableGenericSetting(context, SP_SETT_INSTANT_DELAY);
-    }
-
-    public static void disableInstantDelay(Context context) {
-        disableGenericSetting(context, SP_SETT_INSTANT_DELAY);
-    }
 
     // vibration
     public static boolean isVibrationEnabled(Context context) {
@@ -46,19 +35,6 @@ public class SettingsPreferences {
 
     public static void disableVibration(Context context) {
         disableGenericSetting(context, SP_SETT_NOTIF_VIBRATION);
-    }
-
-    // live notification
-    public static boolean isLiveNotificationEnabled(Context context) {
-        return SharedPreferencesHelper.getSharedPreferenceBoolean(context, SP_SETT_NOTIF_VIBRATION, true);
-    }
-
-    public static void enableLiveNotification(Context context) {
-        enableGenericSetting(context, SP_SETT_NOTIF_LIVE);
-    }
-
-    public static void disableLiveNotification(Context context) {
-        disableGenericSetting(context, SP_SETT_NOTIF_LIVE);
     }
 
     // lightning
@@ -210,6 +186,11 @@ public class SettingsPreferences {
         disableLiveNotification(context);
     }
 
+    private static void setNewSettingsNotPreviouslyIncludedBefore43(Context context) {
+        // 43 - 1.0.0
+        disableCompactNotification(context);
+    }
+
     public static void setDefaultSharedPreferencesOnFirstStart(Context context) {
         // preferences
         SharedPreferencesHelper.setSharedPreferenceBoolean(context, SP_SP_FIRST_START, false);
@@ -221,6 +202,7 @@ public class SettingsPreferences {
         setNewSettingsNotPreviouslyIncludedBefore12(context);
         setNewSettingsNotPreviouslyIncludedBefore13(context);
         setNewSettingsNotPreviouslyIncludedBefore30(context);
+        setNewSettingsNotPreviouslyIncludedBefore43(context);
     }
 
     // inclusion of settings - update together with onFirstStart
@@ -233,6 +215,9 @@ public class SettingsPreferences {
         }
         if (getPreviouslySavedVersionCode(context) < 30) {
             setNewSettingsNotPreviouslyIncludedBefore30(context);
+        }
+        if (getPreviouslySavedVersionCode(context) < 43) {
+            setNewSettingsNotPreviouslyIncludedBefore43(context);
         }
     }
 

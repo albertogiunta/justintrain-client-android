@@ -45,7 +45,7 @@ public class TrainNotification {
      * Shows the notification, or updates a previously shown notification of
      * this type, with the given parameters.
      */
-    static void notify(final Context context, TrainHeader trainHeader, boolean hasVibration, boolean shouldPriorityBeHigh) {
+    static void notify(final Context context, TrainHeader trainHeader, boolean hasVibration, boolean shouldPriorityBeHigh, boolean isCompatNotificationEnabled) {
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
@@ -57,7 +57,7 @@ public class TrainNotification {
 //        final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.example_picture);
 
         final String title = buildTitle(trainHeader);
-        final String text = buildBody(trainHeader);
+        final String text = buildBody(trainHeader, isCompatNotificationEnabled);
         final String smallText = buildSmallText(trainHeader);
 
         Intent iUpdate = new Intent(context, NotificationService.class);
@@ -153,21 +153,37 @@ public class TrainNotification {
                 .build();
     }
 
-    private static String buildBody(TrainHeader data) {
+    private static String buildBody(TrainHeader data, boolean isCompatNotificationEnabled) {
         String delayPlusProgress = "";
-        if (data.isDeparted()) {
-            delayPlusProgress = new Builder()
-                    .withString(buildTimeDifferenceString(data.getTimeDifference()))
-                    .withEndingSymbol("|")
-                    .withString(buildProgressString(data.getProgress()))
-                    .build();
-
+        if (isCompatNotificationEnabled) {
+            if (data.isDeparted()) {
+                delayPlusProgress = new Builder()
+                        .withString(buildTimeDifferenceStringPro(data.getTimeDifference()))
+                        .withEndingSymbol("|")
+                        .withString(buildPredictorPro(data))
+                        .withEndingSymbol("|")
+                        .withString(buildProgressStringPro(data.getProgress()))
+                        .build();
+            } else {
+                delayPlusProgress = new Builder()
+                        .withString("Il treno non è ancora partito")
+                        .build();
+            }
+            return delayPlusProgress;
         } else {
-            delayPlusProgress = new Builder()
-                    .withString("Il treno non è ancora partito")
-                    .build();
+            if (data.isDeparted()) {
+                delayPlusProgress = new Builder()
+                        .withString(buildTimeDifferenceStringNormal(data.getTimeDifference()))
+                        .withEndingSymbol("|")
+                        .withString(buildProgressStringNormal(data.getProgress()))
+                        .build();
+            } else {
+                delayPlusProgress = new Builder()
+                        .withString("Il treno non è ancora partito")
+                        .build();
+            }
+            return delayPlusProgress + "\n" + buildPredictorNormal(data);
         }
-        return delayPlusProgress + "\n" + buildPredictor(data);
     }
 
     private static String buildSmallText(TrainHeader data) {
@@ -176,9 +192,9 @@ public class TrainNotification {
 
     private static String buildTicker(TrainHeader data) {
         return new Builder()
-                .withString(buildTimeDifferenceString(data.getTimeDifference()))
+                .withString(buildTimeDifferenceStringNormal(data.getTimeDifference()))
                 .withEndingSymbol("|")
-                .withString(buildProgressString(data.getProgress()))
+                .withString(buildProgressStringNormal(data.getProgress()))
                 .build();
     }
 
@@ -186,7 +202,7 @@ public class TrainNotification {
         return (stationName.length() > 5 ? stationName.substring(0, 3) + "." : stationName).toUpperCase();
     }
 
-    private static String buildTimeDifferenceString(int timeDifference) {
+    private static String buildTimeDifferenceStringNormal(int timeDifference) {
         String time = Integer.toString(Math.abs(timeDifference)) + "'";
         String delay = "Ritardo: ";
         String ontime = "Anticipo: ";
@@ -200,7 +216,17 @@ public class TrainNotification {
         return time;
     }
 
-    private static String buildProgressString(int progress) {
+    private static String buildTimeDifferenceStringPro(int timeDifference) {
+        String time = Integer.toString(Math.abs(timeDifference)) + "'";
+        if (timeDifference > 0) {
+            time = "+"+ time;
+        } else if (timeDifference < 0) {
+            time = "-" + time;
+        }
+        return time;
+    }
+
+    private static String buildProgressStringNormal(int progress) {
         String progr = "Andamento: ";
         switch (progress) {
             case 0:
@@ -214,7 +240,21 @@ public class TrainNotification {
         }
     }
 
-    private static String buildPredictor(TrainHeader data) {
+    private static String buildProgressStringPro(int progress) {
+        String progr = "";
+        switch (progress) {
+            case 0:
+                return progr + "Costante";
+            case 1:
+                return progr + "Recuperando";
+            case 2:
+                return progr + "Rallentando";
+            default:
+                return "";
+        }
+    }
+
+    private static String buildPredictorNormal(TrainHeader data) {
         String prediction = "Probabile arrivo a ";
         String station;
 
@@ -245,10 +285,42 @@ public class TrainNotification {
                 prediction += (" tra più di " + hours + " ore");
             }
         }
-
         return prediction;
     }
 
+    private static String buildPredictorPro(TrainHeader data) {
+        String prediction = "";
+        String station;
+
+        if (!data.getJourneyDepartureStationVisited()) {
+            station = data.getJourneyDepartureStationName();
+            if (data.getDeparturePlatform() != null && !data.getDeparturePlatform().equalsIgnoreCase(""))
+                station += " (Bin. " + data.getDeparturePlatform() + ")";
+        } else if (!data.getJourneyArrivalStationVisited()) {
+            station = data.getJourneyArrivalStationName();
+        } else {
+            return "Treno arrivato a " + data.getJourneyArrivalStationName();
+        }
+
+
+        int eta = data.getETAToNextJourneyStation();
+        if (eta == 0) {
+            prediction += "Adesso";
+        } else if (eta == 1) {
+            prediction += ("Tra " + eta + "'");
+        } else if (eta > 1) {
+            if (eta < 60) {
+                prediction += ("Tra " + eta + "'");
+            } else if (eta / 60 < 2) {
+                prediction += ("Tra più di " + 1 + " ora");
+            } else {
+                int hours = eta / 60;
+                prediction += ("Tra più di " + hours + " ore");
+            }
+        }
+        prediction += " a " + station;
+        return prediction;
+    }
 
     private static String buildLastSeenString(String time, String station) {
         return time.length() > 0 && station.length() > 0 ? "Visto alle " + time + " a " + station : "";

@@ -55,4 +55,7 @@
     <color name="about_separator_color">#e1e1e1</color>
     <color name="about_item_text_color">#7c7c7c</color>
     <color name="about_text_color">#595959</color>
+
+    <color name="ic_as_background">#b8d8ff</color>
+    <color name="ic_as_background2">#8ec0fc</color>
 </resources>
