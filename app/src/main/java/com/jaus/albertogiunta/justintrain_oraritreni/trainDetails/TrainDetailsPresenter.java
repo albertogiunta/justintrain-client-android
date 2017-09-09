@@ -177,6 +177,7 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
     public void refreshRequested() {
         trainList.clear();
         trainStopList.clear();
+        view.updateTrainDetails();
         updateRequested();
     }
 
@@ -231,6 +232,7 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
     @Override
     public List<Object> getFlatTrainList() {
         trainStopList.clear();
+        view.updateTrainDetails();
         for (int i = 0; i < trainList.size(); i++) {
             Train            t  = new Train(trainList.get(i));
             List<Train.Stop> sl = t.getStops() != null ? t.getStops() : new LinkedList<>();

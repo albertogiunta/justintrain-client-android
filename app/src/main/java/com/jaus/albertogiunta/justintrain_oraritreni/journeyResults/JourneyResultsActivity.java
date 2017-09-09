@@ -35,6 +35,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.networking.DateTimeAdapter;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.PostProcessingEnabler;
 import com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.WrapContentLinearLayoutManager;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_ERROR_BTN_STATUS;
@@ -142,7 +143,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements
         btnHeaderToggleFavorite.setOnClickListener(v -> presenter.onFavouriteButtonClick());
 
         rvJourneySolutions.setHasFixedSize(true);
-        rvJourneySolutions.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        rvJourneySolutions.setLayoutManager(new WrapContentLinearLayoutManager(getViewContext(), LinearLayoutManager.VERTICAL, false));
 
         journeyResultsAdapter = new JourneyResultsAdapter(this, presenter);
         rvJourneySolutions.setAdapter(journeyResultsAdapter);

@@ -56,7 +56,7 @@
             android:id="@+id/ll_changelog"
             android:layout_below="@id/btn_email"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="@dimen/margin_default"
             android:weightSum="1"
@@ -76,7 +76,7 @@
 
         <ScrollView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_default"
                 android:layout_marginStart="@dimen/margin_default"
                 android:layout_marginEnd="@dimen/margin_default"

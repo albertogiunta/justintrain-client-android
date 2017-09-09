@@ -136,7 +136,6 @@ public class TrainDetailsActivity extends AppCompatActivity implements
         adapter = new TrainDetailsAdapter(getApplicationContext(), presenter);
         rvTrainDetails.setAdapter(adapter);
         rvTrainDetails.setHasFixedSize(true);
-//        rvTrainDetails.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rvTrainDetails.setLayoutManager(new WrapContentLinearLayoutManager(getViewContext(), LinearLayoutManager.VERTICAL, false));
         rvTrainDetails.addOnScrollListener(new HideShowScrollListener() {
             @Override

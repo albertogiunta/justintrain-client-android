@@ -108,6 +108,42 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_compact_notif"
+                    android:contentDescription="Compact Notifications"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_bold"
+                    android:text="Notifiche COMPATTE"
+                    android:textAlignment="center"
+                    android:layout_marginTop="@dimen/margin_small"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_standard"
+                    android:textSize="@dimen/text_size_smaller"
+                    android:text="Tutte le informazioni nella notifica appariranno in una sola riga, in maniera più compatta ed intuitiva.\n\nIn questo modo avrai accesso a tutte le informazioni di cui potresti aver bisogno in maniera istantanea."
+                    android:layout_marginTop="@dimen/margin_small"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_default"
+                >
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:background="@drawable/ic_no_ads"
                     android:contentDescription="No Ads"
                     />

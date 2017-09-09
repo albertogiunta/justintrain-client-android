@@ -74,27 +74,13 @@
 
     <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '   -->
     <string name="changelog">
-        Ancora tanti bug fix
+        <b><u>PRO</u></b>\n
+        <b>Nuova funzionalità</b>: notifiche compatte (premi sul bottone PRO nella schermata principale per scoprire di più!)
         \n\n
-        <b><u>Novità Versione 1.0.0</u></b>
-        \n
-        Col più grosso update di sempre, ecco che arrivano tante <b>nuove funzionalità e miglioramenti</b>:
+        <b><u>Inoltre:</u></b>\n
+        Miglioramenti generali alle notifiche
         \n\n
-        <b><i>PRO</i></b> <b>Nuove funzionalità per i tuoi treni preferiti</b>: con la nuova grafica, sapere qual è il prossimo treno da prendere o quanto ritardo ha non richiede nemmeno un tap!
-        \n\n
-        <b><i>PRO</i></b> <b>Notifiche in REAL TIME </b> sempre aggiornate all\'ultimo istante!
-        \n\n
-        <b><i>PRO</i></b> <b>Nessuna pubblicità</b>!
-        \n\n
-        Dimezzato lo spazio occupato dall\'applicazione sul telefono (a chi non fa comodo qualche MB in più?)
-        \n\n
-        Migliorata la lista delle Stazioni
-        \n\n
-        Migliorato il supporto ai BUS
-        \n\n
-        Adesso è possibile spostare l\'app sulla scheda SD
-        \n\n
-        Tanti bug Fix e miglioramenti generali
+        Bug e UI fix generali
     </string>
     <string name="play_store_native_url">market://details?id=</string>
     <string name="play_store_web_url">https://play.google.com/store/apps/details?id=</string>
