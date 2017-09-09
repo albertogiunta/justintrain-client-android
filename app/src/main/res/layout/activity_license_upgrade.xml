@@ -390,7 +390,6 @@
                             android:paddingEnd="4dp"
                             android:paddingTop="2dp"
                             android:paddingBottom="2dp"
-                            android:id="@+id/textView2"
                             />
 
                     <TextView

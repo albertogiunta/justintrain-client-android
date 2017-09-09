@@ -284,6 +284,10 @@ public class JourneyResultsActivity extends AppCompatActivity implements
                     i = new Intent(Settings.ACTION_SETTINGS);
                     startActivity(i);
                     break;
+                case GO_TO_SEARCH:
+                    i = new Intent(JourneyResultsActivity.this, JourneySearchActivity.class);
+                    startActivity(i);
+                    break;
                 case SEND_REPORT:
                     analyticsHelper.logScreenEvent(SCREEN_JOURNEY_RESULTS, ERROR_SERVER);
                     FirebaseCrash.report(new Exception(SCREEN_JOURNEY_RESULTS + ERROR_SERVER + ": " +

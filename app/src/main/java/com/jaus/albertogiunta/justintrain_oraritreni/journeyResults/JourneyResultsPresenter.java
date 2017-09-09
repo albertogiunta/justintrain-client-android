@@ -158,9 +158,13 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
                     arrivalStation.getStationShortId(),
                     null, SettingsPreferences.isPreemptiveEnabled(view.getViewContext()), true, true, this);
         } else {
-            new SearchAfterTimeStrategy().searchJourney(isNewSearch, departureStation.getStationShortId(),
-                    arrivalStation.getStationShortId(),
-                    dateTime, false, true, false, this);
+            if (departureStation == null || arrivalStation == null) {
+                view.showErrorMessage("Si è verificato un problema", "Prova ad effettuare nuovamente la ricerca", ENUM_ERROR_BTN_STATUS.GO_TO_SEARCH);
+            } else {
+                new SearchAfterTimeStrategy().searchJourney(isNewSearch, departureStation.getStationShortId(),
+                        arrivalStation.getStationShortId(),
+                        dateTime, false, true, false, this);
+            }
         }
     }
 
