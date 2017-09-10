@@ -38,7 +38,6 @@ public class LicencesActivity extends AppCompatActivity {
         licenses.add(Licenses.fromGitHubApacheV2("jakewharton/butterknife"));
         licenses.add(Licenses.fromGitHubApacheV2("evant/gradle-retrolambda"));
         licenses.add(Licenses.fromGitHubApacheV2("google/gson", Licenses.FILE_NO_EXTENSION));
-        licenses.add(Licenses.fromGitHubApacheV2("realm/realm-java", Licenses.FILE_NO_EXTENSION));
         licenses.add(Licenses.fromGitHubApacheV2("yshrsmz/LicenseAdapter", Licenses.FILE_NO_EXTENSION));
         licenses.add(Licenses.fromGitHubMIT("zserge/log", Licenses.FILE_NO_EXTENSION));
         licenses.add(Licenses.fromGitHubApacheV2("dlew/joda-time-android", Licenses.FILE_NO_EXTENSION));
@@ -55,7 +54,7 @@ public class LicencesActivity extends AppCompatActivity {
                 Licenses.FILE_NO_EXTENSION));
 
         LicenseAdapter adapter = new LicenseAdapter(licenses);
-        RecyclerView   list    = (RecyclerView) findViewById(R.id.list);
+        RecyclerView   list    = findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         list.setAdapter(adapter);
 

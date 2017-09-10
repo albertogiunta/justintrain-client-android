@@ -398,7 +398,7 @@
                             android:textColor="@color/txt_white"
                             fontPath="@string/font_path_standard"
                             android:textSize="@dimen/text_size_smaller"
-                            android:text="Per poter guardare la notifica e capire tutto e subito quello che ha da dirti (tutte le info ."
+                            android:text="Le informazioni nella notifica saranno mostrate in maniera più compatta e intuitiva, per renderne ancora più veloce e comoda la consultazione."
                             />
                 </LinearLayout>
             </LinearLayout>

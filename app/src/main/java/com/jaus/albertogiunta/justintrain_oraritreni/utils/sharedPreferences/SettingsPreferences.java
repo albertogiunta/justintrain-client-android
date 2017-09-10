@@ -186,7 +186,7 @@ public class SettingsPreferences {
         disableLiveNotification(context);
     }
 
-    private static void setNewSettingsNotPreviouslyIncludedBefore43(Context context) {
+    private static void setNewSettingsNotPreviouslyIncludedBefore44(Context context) {
         // 43 - 1.0.0
         disableCompactNotification(context);
     }
@@ -202,7 +202,7 @@ public class SettingsPreferences {
         setNewSettingsNotPreviouslyIncludedBefore12(context);
         setNewSettingsNotPreviouslyIncludedBefore13(context);
         setNewSettingsNotPreviouslyIncludedBefore30(context);
-        setNewSettingsNotPreviouslyIncludedBefore43(context);
+        setNewSettingsNotPreviouslyIncludedBefore44(context);
     }
 
     // inclusion of settings - update together with onFirstStart
@@ -216,8 +216,8 @@ public class SettingsPreferences {
         if (getPreviouslySavedVersionCode(context) < 30) {
             setNewSettingsNotPreviouslyIncludedBefore30(context);
         }
-        if (getPreviouslySavedVersionCode(context) < 43) {
-            setNewSettingsNotPreviouslyIncludedBefore43(context);
+        if (getPreviouslySavedVersionCode(context) < 44) {
+            setNewSettingsNotPreviouslyIncludedBefore44(context);
         }
     }
 

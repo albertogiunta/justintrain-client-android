@@ -149,6 +149,9 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             .registerTypeAdapterFactory(new PostProcessingEnabler())
             .create();
 
+    boolean isFirstStart            = false;
+    boolean isFirstStartAfterUpdate = false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -228,7 +231,10 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
         } else {
             if (CustomIABHelper.isOrderOk(result, inv)) {
-//                ProPreferences.enableAllPro(getViewContext());
+                ProPreferences.enablePro(getViewContext());
+                if (isFirstStart) ProPreferences.enableAllPro(getViewContext());
+                if (isFirstStartAfterUpdate && SettingsPreferences.getPreviouslySavedVersionCode(getViewContext()) < 44)
+                    ProPreferences.enableCompactNotification(getViewContext());
                 apply(btnIAP, GONE);
                 CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
                 lp.gravity = Gravity.BOTTOM | Gravity.CENTER;
@@ -485,14 +491,15 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
     private void checkIntro() {
         MigrationHelper.migrateIfDue(getViewContext());
-        boolean isFirstStart = SharedPreferencesHelper.getSharedPreferenceBoolean(getViewContext(), SP_SP_FIRST_START, true);
+        isFirstStart = SharedPreferencesHelper.getSharedPreferenceBoolean(getViewContext(), SP_SP_FIRST_START, true);
         if (isFirstStart) {
             SettingsPreferences.setDefaultSharedPreferencesOnFirstStart(getViewContext());
             Intent i = new Intent(FavouriteJourneysActivity.this, IntroActivity.class);
             startActivity(i);
         } else {
             int     savedVersion            = SettingsPreferences.getPreviouslySavedVersionCode(getViewContext());
-            boolean isFirstStartAfterUpdate = savedVersion < BuildConfig.VERSION_CODE;
+
+            isFirstStartAfterUpdate = savedVersion < BuildConfig.VERSION_CODE;
 
             if (isFirstStartAfterUpdate) {
                 SettingsPreferences.setNewSettingsNotPreviouslyIncludedBefore(getViewContext());
