@@ -135,7 +135,7 @@ public class NotificationService extends IntentService {
         Log.d("getData:", journeyDepartureStationId, journeyArrivalStationId, trainId, justUpdate, shouldPriorityBeHigh);
         Intent notificationErrorIntent = new Intent(NOTIFICATION_ERROR_EVENT);
 
-        boolean isCompactNotificationEnabled = ProPreferences.isCompactNotificationEnabled(context);
+        boolean isCompactNotificationEnabled = ProPreferences.isPro(context) && ProPreferences.isCompactNotificationEnabled(context);
 
         APINetworkingFactory.createRetrofitService(JourneyService.class)
                 .getDelay(journeyDepartureStationId, journeyArrivalStationId, trainId)

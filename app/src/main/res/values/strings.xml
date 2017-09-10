@@ -75,12 +75,12 @@
     <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '   -->
     <string name="changelog">
         <b><u>PRO</u></b>\n
-        <b>Nuova funzionalità</b>: arrivano le notifiche COMPATTE!
+        • <b>Nuova funzionalità</b>: arrivano le notifiche COMPATTE!
         \n\n
         <b><u>Inoltre:</u></b>\n
-        Miglioramenti generali alle notifiche
+        • Miglioramenti generali alle notifiche
         \n\n
-        Bug e UI fix generali
+        • Bug e UI fix generali
     </string>
     <string name="play_store_native_url">market://details?id=</string>
     <string name="play_store_web_url">https://play.google.com/store/apps/details?id=</string>

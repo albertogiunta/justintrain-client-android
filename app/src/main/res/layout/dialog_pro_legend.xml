@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/txt_white"
                 fontPath="@string/font_path_bold"
-                android:text="Scopri come usare tutte le funzionalità PRO!"
+                android:text="Scopri come usare tutte le funzionalità PRO!\n\nRicorda che puoi abilitarle/disabilitarle comodamente dalla schermata delle impostazioni."
                 android:layout_margin="@dimen/margin_default"
                 android:textSize="@dimen/text_size_default_minus"
                 android:textAlignment="center"

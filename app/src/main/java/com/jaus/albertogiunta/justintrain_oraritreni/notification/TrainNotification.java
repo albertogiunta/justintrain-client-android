@@ -166,7 +166,9 @@ public class TrainNotification {
                         .build();
             } else {
                 delayPlusProgress = new Builder()
-                        .withString("Il treno non è ancora partito")
+                        .withString("Non partito")
+                        .withEndingSymbol("|")
+                        .withString(buildPredictorPro(data))
                         .build();
             }
             return delayPlusProgress;

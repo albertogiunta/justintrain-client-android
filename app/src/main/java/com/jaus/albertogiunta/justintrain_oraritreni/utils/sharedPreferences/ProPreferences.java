@@ -22,7 +22,7 @@ public class ProPreferences {
         ProPreferences.disablePro(context);
         ProPreferences.disableLiveNotification(context);
         ProPreferences.disableInstantDelay(context);
-        ProPreferences.enableCompactNotification(context);
+        ProPreferences.disableCompactNotification(context);
     }
 
     // instant delay

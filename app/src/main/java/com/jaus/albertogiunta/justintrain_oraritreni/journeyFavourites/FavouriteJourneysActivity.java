@@ -233,7 +233,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             if (CustomIABHelper.isOrderOk(result, inv)) {
                 ProPreferences.enablePro(getViewContext());
                 if (isFirstStart) ProPreferences.enableAllPro(getViewContext());
-                if (isFirstStartAfterUpdate && SettingsPreferences.getPreviouslySavedVersionCode(getViewContext()) < 44)
+                if (isFirstStartAfterUpdate && SettingsPreferences.getPreviouslySavedVersionCode(getViewContext()) < 46)
                     ProPreferences.enableCompactNotification(getViewContext());
                 apply(btnIAP, GONE);
                 CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
