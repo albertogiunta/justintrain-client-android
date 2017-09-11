@@ -151,6 +151,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
     boolean isFirstStart            = false;
     boolean isFirstStartAfterUpdate = false;
+    Integer previousVersionCode     = 40;
 
 
     @Override
@@ -233,7 +234,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             if (CustomIABHelper.isOrderOk(result, inv)) {
                 ProPreferences.enablePro(getViewContext());
                 if (isFirstStart) ProPreferences.enableAllPro(getViewContext());
-                if (isFirstStartAfterUpdate && SettingsPreferences.getPreviouslySavedVersionCode(getViewContext()) < 46)
+                if (isFirstStartAfterUpdate && previousVersionCode < 47)
                     ProPreferences.enableCompactNotification(getViewContext());
                 apply(btnIAP, GONE);
                 CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
@@ -497,9 +498,9 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             Intent i = new Intent(FavouriteJourneysActivity.this, IntroActivity.class);
             startActivity(i);
         } else {
-            int     savedVersion            = SettingsPreferences.getPreviouslySavedVersionCode(getViewContext());
+            previousVersionCode = SettingsPreferences.getPreviouslySavedVersionCode(getViewContext());
 
-            isFirstStartAfterUpdate = savedVersion < BuildConfig.VERSION_CODE;
+            isFirstStartAfterUpdate = previousVersionCode < BuildConfig.VERSION_CODE;
 
             if (isFirstStartAfterUpdate) {
                 SettingsPreferences.setNewSettingsNotPreviouslyIncludedBefore(getViewContext());
