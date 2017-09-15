@@ -156,7 +156,7 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
                 setFavouriteButtonStatus();
                 view.showSnackbar("Tratta rimossa dai Preferiti", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_SHORT);
             } else {
-                if (PreferredStationsPreferences.isPossibleToSaveMoreJourneys(view.getViewContext())) {
+                if (PreferredStationsPreferences.isPossibleToSaveMorePreferredJourneys(view.getViewContext())) {
                     PreferredStationsPreferences.setPreferredJourney(view.getViewContext(),
                             new PreferredJourney(departureStation, arrivalStation));
                     setFavouriteButtonStatus();

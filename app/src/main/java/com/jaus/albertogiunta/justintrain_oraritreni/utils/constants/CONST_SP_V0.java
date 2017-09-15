@@ -21,6 +21,7 @@ public class CONST_SP_V0 {
     public static final String SP_NOTIFICATION_PREF_JOURNEY = "notification>notifiedPrefJourney";
 
     public static final String PREFIX_PREF_JOURNEY         = "prefJourney>";
+    public static final String PREFIX_REC_JOURNEY          = "recJourney>";
     public static final String PREFIX_PREF_SOLUTION        = "prefTrain>";
     public static final String FAV_TRAIN_JOURNEY_SEPARATOR = "%";
     public static final String PREFIX_CATEGORIES           = "searchCategories>";

@@ -77,10 +77,12 @@ class FavouritesPresenter implements FavouritesContract.Presenter {
         recyclerViewList.clear();
 
         List<PreferredJourney> newPreferredJourneys = PreferredStationsPreferences.getAllPreferredJourneys(view.getViewContext());
+        List<PreferredJourney> recentJourneys       = PreferredStationsPreferences.getAllPreferredJourneys(view.getViewContext());
+
         if (newPreferredJourneys != null) {
             this.preferredJourneys.addAll(newPreferredJourneys);
             for (PreferredJourney j : this.preferredJourneys) {
-                recyclerViewList.add(new FavouriteJourneysItem(j));
+                recyclerViewList.add(new FavouriteJourneysItem(j, true));
                 recyclerViewList.add(new FavouriteSolutionsItem(view.getViewContext(), j));
             }
         }

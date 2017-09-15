@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -40,6 +41,7 @@ public class TrainNotification {
      * The unique identifier for this type of notification.
      */
     private static final String TRAIN_NOTIFICATION_TAG = "trainNotification";
+    private static final String CHANNEL_ID             = "trainNotification";
 
     /**
      * Shows the notification, or updates a previously shown notification of
@@ -77,18 +79,16 @@ public class TrainNotification {
         int refreshIc = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.drawable.ic_refresh : R.drawable.ic_refresh2;
         int closeIc = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.drawable.ic_close : R.drawable.ic_close2;
 
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        initChannels(context);
+
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setDefaults(Notification.DEFAULT_SOUND)
                 // Set required fields, including the small icon, the notification title, and text.
                 .setSmallIcon(R.drawable.ic_notification2)
                 .setColor(ViewsUtils.getColor(context, R.color.btn_dark_cyan))
                 .setContentTitle(title)
                 .setContentText(text)
-//                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                // Use a default priority (recognized on devices running Android 4.1 or later)
-                // Set ticker text (preview) information for this notification.
                 .setTicker(buildTicker(trainHeader))
-                // Show expanded text content on devices running Android 4.1 or later.
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(text)
                         .setBigContentTitle(title)
@@ -103,7 +103,8 @@ public class TrainNotification {
                         PendingIntent.getService(context, 1001, iStop, PendingIntent.FLAG_UPDATE_CURRENT))
                 .setAutoCancel(false)
                 .setOngoing(true)
-                .setContentIntent(intent);
+                .setContentIntent(intent)
+                .setChannelId(CHANNEL_ID);
 
         if (shouldPriorityBeHigh) {
             builder.setPriority(NotificationCompat.PRIORITY_HIGH);
@@ -122,11 +123,15 @@ public class TrainNotification {
     private static void notify(final Context context, final Notification notification) {
         final NotificationManager nm = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            nm.notify(TRAIN_NOTIFICATION_TAG, 0, notification);
-        } else {
-            nm.notify(TRAIN_NOTIFICATION_TAG.hashCode(), notification);
-        }
+        nm.notify(TRAIN_NOTIFICATION_TAG, 0, notification);
+    }
+
+    public static void initChannels(Context context) {
+        if (Build.VERSION.SDK_INT < 26) return;
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel channel             = new NotificationChannel(CHANNEL_ID, "Train Notification", NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription("Queste notifiche servono a fornire informazioni sul treno che stai seguendo.");
+        notificationManager.createNotificationChannel(channel);
     }
 
     /**

@@ -21,10 +21,12 @@ import me.grantland.widget.AutofitTextView;
 public class FavouriteJourneysItem extends AbstractFlexibleItem<FavouriteJourneysItem.SimpleViewHolder> {
 
     PreferredJourney preferredJourney;
+    boolean isPreferredInsteadOfRecent = false;
 
-    public FavouriteJourneysItem(PreferredJourney journey) {
+    public FavouriteJourneysItem(PreferredJourney journey, boolean isPreferred) {
         super();
         this.preferredJourney = journey;
+        this.isPreferredInsteadOfRecent = isPreferred;
         setDraggable(false);
         setSwipeable(true);
     }
@@ -36,7 +38,7 @@ public class FavouriteJourneysItem extends AbstractFlexibleItem<FavouriteJourney
 
     @Override
     public int getLayoutRes() {
-        return R.layout.item_favourite_journey;
+        return isPreferredInsteadOfRecent ? R.layout.item_favourite_journey : R.layout.item_recent_journey;
     }
 
     @Override

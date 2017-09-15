@@ -53,13 +53,13 @@ public class PreferredStationsPreferences {
 
 //    ------------------------------------------------------------------------------------------------------------------------
 
-    public static boolean isPossibleToSaveMoreJourneys(Context context) {
+    public static boolean isPossibleToSaveMorePreferredJourneys(Context context) {
         return getAllPreferredJourneys(context).size() < 5;
     }
 
 //    ------------------------------------------------------------------------------------------------------------------------
 
-    public static boolean isPossibleToSaveMoreSolutions(PreferredStation station) {
+    public static boolean isPossibleToSaveMorePreferredSolutions(PreferredStation station) {
         return station.getPreferredSolutions().size() < 3;
     }
 
@@ -101,7 +101,7 @@ public class PreferredStationsPreferences {
                 return;
             }
 
-            if (!isPossibleToSaveMoreSolutions(station)) {
+            if (!isPossibleToSaveMorePreferredSolutions(station)) {
                 throw new IndexOutOfBoundsException("Impossible to save more than 3 solutions for this journey station");
             }
 
