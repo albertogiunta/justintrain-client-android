@@ -54,6 +54,8 @@ interface FavouritesContract {
 
         List<AbstractFlexibleItem> getRecyclerViewList();
 
+        void addNewFavourite(PreferredStation departureStation, PreferredStation arrivalStation);
+
         /**
          * Removes the specified favourite journey
          *
@@ -61,6 +63,8 @@ interface FavouritesContract {
          * @param arrivalStation arrival station
          */
         void removeFavourite(PreferredStation departureStation, PreferredStation arrivalStation);
+
+        void removeRecent(PreferredStation departureStation, PreferredStation arrivalStation);
 
     }
 }

@@ -20,8 +20,8 @@ import me.grantland.widget.AutofitTextView;
 
 public class FavouriteJourneysItem extends AbstractFlexibleItem<FavouriteJourneysItem.SimpleViewHolder> {
 
-    PreferredJourney preferredJourney;
-    boolean isPreferredInsteadOfRecent = false;
+    private PreferredJourney preferredJourney;
+    private boolean isPreferredInsteadOfRecent = false;
 
     public FavouriteJourneysItem(PreferredJourney journey, boolean isPreferred) {
         super();
@@ -54,6 +54,10 @@ public class FavouriteJourneysItem extends AbstractFlexibleItem<FavouriteJourney
 
     public PreferredJourney getPreferredJourney() {
         return this.preferredJourney;
+    }
+
+    public boolean isPreferredInsteadOfRecent() {
+        return this.isPreferredInsteadOfRecent;
     }
 
     static final class SimpleViewHolder extends FlexibleViewHolder {

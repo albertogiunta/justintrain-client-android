@@ -81,10 +81,29 @@
             />
 
     <RelativeLayout
-            android:id="@+id/rl_remove_from_favourites"
+            android:id="@+id/rl_transform_into_favourites"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_below="@id/tv_header2"
+            android:background="?selectableItemBackground"
+            android:visibility="gone"
+            >
+        <TextView
+                android:id="@+id/tv_transform_into_favourites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_centerVertical="true"
+                android:textSize="@dimen/text_size_default"
+                android:text="Sposta in Tratte Preferite"
+                />
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:id="@+id/rl_remove_from_favourites"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/rl_transform_into_favourites"
             android:background="?selectableItemBackground"
             >
         <TextView
@@ -94,7 +113,7 @@
                 android:layout_marginStart="@dimen/margin_default"
                 android:layout_centerVertical="true"
                 android:textSize="@dimen/text_size_default"
-                android:text="Rimuovi tratta dai preferiti"
+                android:text="Rimuovi tratta dalla lista"
                 />
     </RelativeLayout>
 

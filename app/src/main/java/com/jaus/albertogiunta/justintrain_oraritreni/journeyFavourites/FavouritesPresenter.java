@@ -7,8 +7,10 @@ import android.support.design.widget.Snackbar;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredJourney;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_HOME_HEADER;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.PreferredStationsPreferences;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.RecentStationsPreferences;
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
@@ -19,11 +21,13 @@ class FavouritesPresenter implements FavouritesContract.Presenter {
 
     private FavouritesContract.View    view;
     private List<PreferredJourney>     preferredJourneys;
+    private List<PreferredJourney>     recentJourneys;
     private List<AbstractFlexibleItem> recyclerViewList;
 
     FavouritesPresenter(FavouritesContract.View view) {
         this.view = view;
         preferredJourneys = new LinkedList<>();
+        recentJourneys = new LinkedList<>();
         recyclerViewList = new LinkedList<>();
         updatePreferredJourneys();
     }
@@ -35,9 +39,10 @@ class FavouritesPresenter implements FavouritesContract.Presenter {
 
     @Override
     public void setState(Bundle bundle) {
-        // removeFavourite andthread checkintro pass ùa null bundle here from the view, watch out!
+        // removeFavourite and thread checkintro pass ùa null bundle here from the view, watch out!
         updatePreferredJourneys();
-        if (this.preferredJourneys != null && this.preferredJourneys.size() > 0) {
+        if ((this.preferredJourneys != null && this.preferredJourneys.size() > 0) ||
+                (this.recentJourneys != null && this.recentJourneys.size() > 0)) {
             view.displayFavouriteJourneys();
             view.updateFavouritesList();
         } else {
@@ -61,9 +66,33 @@ class FavouritesPresenter implements FavouritesContract.Presenter {
     }
 
     @Override
+    public void addNewFavourite(PreferredStation departureStation, PreferredStation arrivalStation) {
+        if (PreferredStationsPreferences.isPossibleToSaveMorePreferredJourneys(view.getViewContext())) {
+
+            if (!PreferredStationsPreferences.isJourneyAlreadyPreferred(view.getViewContext(), departureStation, arrivalStation)) {
+                PreferredStationsPreferences.setPreferredJourney(view.getViewContext(),
+                        new PreferredJourney(departureStation, arrivalStation));
+                view.showSnackbar("Tratta aggiunta ai Preferiti", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_SHORT);
+            } else {
+                view.showSnackbar("La tratta è già tra i preferiti!", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);
+            }
+        } else {
+            view.showSnackbar("Impossibile salvare più di 5 tratte preferite!", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);
+        }
+        setState(null);
+    }
+
+    @Override
     public void removeFavourite(PreferredStation departureStation, PreferredStation arrivalStation) {
         PreferredStationsPreferences.removePreferredJourney(view.getViewContext(), departureStation, arrivalStation);
         view.showSnackbar("Tratta rimossa dai Preferiti", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_SHORT);
+        setState(null);
+    }
+
+    @Override
+    public void removeRecent(PreferredStation departureStation, PreferredStation arrivalStation) {
+        RecentStationsPreferences.removeRecentJourney(view.getViewContext(), departureStation, arrivalStation);
+        view.showSnackbar("Tratta rimossa dai Recenti", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_SHORT);
         setState(null);
     }
 
@@ -74,17 +103,30 @@ class FavouritesPresenter implements FavouritesContract.Presenter {
         }
 
         preferredJourneys.clear();
+        recentJourneys.clear();
         recyclerViewList.clear();
 
         List<PreferredJourney> newPreferredJourneys = PreferredStationsPreferences.getAllPreferredJourneys(view.getViewContext());
-        List<PreferredJourney> recentJourneys       = PreferredStationsPreferences.getAllPreferredJourneys(view.getViewContext());
+        List<PreferredJourney> newRecentJourneys    = RecentStationsPreferences.getAllRecentJourneys(view.getViewContext());
 
         if (newPreferredJourneys != null) {
             this.preferredJourneys.addAll(newPreferredJourneys);
+            if (!this.preferredJourneys.isEmpty())
+                recyclerViewList.add(new FavouriteHeaderItem(ENUM_HOME_HEADER.FAVOURITES, false));
             for (PreferredJourney j : this.preferredJourneys) {
                 recyclerViewList.add(new FavouriteJourneysItem(j, true));
                 recyclerViewList.add(new FavouriteSolutionsItem(view.getViewContext(), j));
             }
+        }
+
+        if (newRecentJourneys != null) {
+            this.recentJourneys.addAll(newRecentJourneys);
+            if (!this.recentJourneys.isEmpty())
+                recyclerViewList.add(new FavouriteHeaderItem(ENUM_HOME_HEADER.RECENT, false));
+            for (PreferredJourney j : this.recentJourneys) {
+                recyclerViewList.add(new FavouriteJourneysItem(j, false));
+            }
+            recyclerViewList.add(new FavouriteHeaderItem(ENUM_HOME_HEADER.RECENT, true));
         }
     }
 }

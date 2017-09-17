@@ -99,6 +99,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SEARCH_JOURNEY_FROM_FAVOURITES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SWIPE_LEFT_TO_RIGHT;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SWIPE_RIGHT_TO_LEFT;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_TRANSFORM_TO_FAVS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.IAP_SEARCH;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_FAVOURITE_JOURNEYS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_DISCOUNT_MESSAGE;
@@ -553,6 +554,8 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_NO_SWIPE_BUT_CLICK);
         Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (presenter.getRecyclerViewList().get(position) instanceof FavouriteJourneysItem) {
+            boolean isFavourite = ((FavouriteJourneysItem) presenter.getRecyclerViewList().get(position)).isPreferredInsteadOfRecent();
+            Log.d("onItemClick: ", position, presenter.getPreferredJourneys().size());
             vibe.vibrate(25);
             PreferredJourney preferredJourney = ((FavouriteJourneysItem) presenter.getRecyclerViewList().get(position)).getPreferredJourney();
 
@@ -564,14 +567,17 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
             Dialog dialog = alertDialog.show();
 
-            RelativeLayout rlSearchAR             = view.findViewById(R.id.rl_search_ar);
-            TextView       searchAR               = view.findViewById(R.id.tv_search_ar);
-            RelativeLayout rlSearchRA             = view.findViewById(R.id.rl_search_ra);
-            TextView       searchRA               = view.findViewById(R.id.tv_search_ra);
-            RelativeLayout rlRemoveFromFavourites = view.findViewById(R.id.rl_remove_from_favourites);
+            RelativeLayout rlSearchAR       = view.findViewById(R.id.rl_search_ar);
+            TextView       searchAR         = view.findViewById(R.id.tv_search_ar);
+            RelativeLayout rlSearchRA       = view.findViewById(R.id.rl_search_ra);
+            TextView       searchRA         = view.findViewById(R.id.tv_search_ra);
+            RelativeLayout rlRemoveFromList = view.findViewById(R.id.rl_remove_from_favourites);
+            RelativeLayout rlTransformToFav = view.findViewById(R.id.rl_transform_into_favourites);
 
             searchAR.setText("Da " + preferredJourney.getStation1().getNameShort() + " a " + preferredJourney.getStation2().getNameShort());
             searchRA.setText("Da " + preferredJourney.getStation2().getNameShort() + " a " + preferredJourney.getStation1().getNameShort());
+            if (!isFavourite) apply(rlTransformToFav, VISIBLE);
+            else apply(rlTransformToFav, GONE);
 
             rlSearchAR.setOnClickListener(v -> {
                 analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_AR_FROM_POPUP);
@@ -589,16 +595,25 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
                 dialog.dismiss();
             });
 
-            rlRemoveFromFavourites.setOnClickListener(v -> {
+            rlRemoveFromList.setOnClickListener(v -> {
                 analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_REMOVE_FROM_POPUP);
-                presenter.removeFavourite(preferredJourney.getStation1(), preferredJourney.getStation2());
+                if (isFavourite) {
+                    presenter.removeFavourite(preferredJourney.getStation1(), preferredJourney.getStation2());
+                } else {
+                    presenter.removeRecent(preferredJourney.getStation1(), preferredJourney.getStation2());
+                }
                 updateFavouritesList();
                 btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(0);
                 dialog.dismiss();
             });
 
-        } else {
-
+            rlTransformToFav.setOnClickListener(v -> {
+                analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_TRANSFORM_TO_FAVS);
+                presenter.addNewFavourite(preferredJourney.getStation1(), preferredJourney.getStation2());
+                updateFavouritesList();
+                btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(0);
+                dialog.dismiss();
+            });
         }
         return false;
     }

@@ -43,6 +43,7 @@ public class CONST_ANALYTICS {
     public static final String ACTION_AR_FROM_POPUP                  = "Search AR from popup";
     public static final String ACTION_RA_FROM_POPUP                  = "Search RA from popup";
     public static final String ACTION_REMOVE_FROM_POPUP              = "Remove journey from popup";
+    public static final String ACTION_TRANSFORM_TO_FAVS              = "Remove journey from popup";
     public static final String ACTION_NO_SWIPE_BUT_CLICK             = "No swipe but click";
     public static final String ACTION_NO_SWIPE_BUT_LONG_CLICK        = "No swipe but long click";
     public static final String ACTION_ON_UPDATE_CLICK                = "Action on update click";
@@ -63,6 +64,7 @@ public class CONST_ANALYTICS {
     public static final String ACTION_SET_FAVOURITE_FROM_SEARCH    = "Set favourite from search";
     public static final String ACTION_REMOVE_FAVOURITE_FROM_SEARCH = "Remove favourite from search";
     public static final String ACTION_SEARCH_JOURNEY_FROM_SEARCH   = "Search journey from search";
+    public static final String ACTION_SEARCH_TRAIN_FROM_SEARCH     = "Search train from search";
 
     // RESULTS
     public static final String ACTION_SWAP_STATIONS_FROM_RESULTS    = "Swap stations from results";
