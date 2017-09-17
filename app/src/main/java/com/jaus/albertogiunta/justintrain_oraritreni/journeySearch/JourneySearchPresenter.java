@@ -13,12 +13,17 @@ import com.jaus.albertogiunta.justintrain_oraritreni.networking.PostProcessingEn
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.DatabaseHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.PreferredStationsPreferences;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.RecentStationsPreferences;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
 import java.util.Locale;
 
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import trikita.log.Log;
 
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_STATIONS;
@@ -32,6 +37,7 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
     private JourneySearchActivity view;
     private PreferredStation      departureStation;
     private PreferredStation      arrivalStation;
+    private String                trainNumber;
     private DateTime              dateTime;
 
     Gson gson = new GsonBuilder()
@@ -41,7 +47,8 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
 
     JourneySearchPresenter(JourneySearchActivity view) {
         this.view = view;
-        dateTime = DateTime.now().minusMinutes(10);
+        this.dateTime = DateTime.now().minusMinutes(10);
+        this.trainNumber = "";
     }
 
     @Override
@@ -77,14 +84,7 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
     public Bundle getState(Bundle bundle) {
         if (bundle == null) bundle = new Bundle();
         bundle.putString(I_STATIONS, gson.toJson(new PreferredJourney(departureStation, arrivalStation)));
-        if (departureStation != null) {
-//            Log.d("Current bundled departure stations is: ", this.departureStation);
-        }
-        if (arrivalStation != null) {
-//            Log.d("Current bundled departure stations is: ", this.arrivalStation);
-        }
         bundle.putLong(I_TIME, dateTime.getMillis());
-//        Log.d("Current bundled DateTime is: ", dateTime);
         return bundle;
     }
 
@@ -147,6 +147,16 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
     }
 
     @Override
+    public void onTrainSearchButtonClick(String trainNumber) {
+        if (trainNumber.length() == 0) {
+            view.showSnackbar("Numero del treno mancante!", ENUM_SNACKBAR_ACTIONS.SELECT_TRAIN_NUMBER, Snackbar.LENGTH_SHORT);
+            return;
+        }
+        this.trainNumber = trainNumber;
+        view.onValidTrainSearchParameters();
+    }
+
+    @Override
     public void onFavouriteButtonClick() {
         if (isDataValid()) {
             if (isThisJourneyPreferred(departureStation, arrivalStation, view.getViewContext())) {
@@ -178,11 +188,21 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
     }
 
     @Override
-    public void onSearchButtonClick(String departureStationName, String arrivalStationName) {
+    public void onJourneySearchButtonClick(String departureStationName, String arrivalStationName) {
         if (isDataValid()) {
-            view.onValidSearchParameters();
+            view.onValidJourneySearchParameters();
             Log.d("Searching for: " + departureStation.toString(), arrivalStation.toString());
+            Single.create((SingleOnSubscribe<Boolean>) e -> e.onSuccess(saveRecentJourney()))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe();
         }
+    }
+
+
+    private Boolean saveRecentJourney() {
+        RecentStationsPreferences.setRecentJourney(view.getViewContext(), new PreferredJourney(departureStation, arrivalStation));
+        return true;
     }
 
     @Override
@@ -193,6 +213,11 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
     @Override
     public PreferredStation getArrivalStation() {
         return arrivalStation;
+    }
+
+    @Override
+    public String getTrainNumber() {
+        return trainNumber;
     }
 
     private void setDateTime() {

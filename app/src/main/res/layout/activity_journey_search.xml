@@ -36,7 +36,7 @@
             android:id="@+id/ll_stations"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_weight="1.6"
             android:background="@color/bg_dark"
             android:orientation="horizontal"
             android:weightSum="2"
@@ -116,7 +116,7 @@
             <ImageButton
                     android:id="@+id/btn_swap_station_names"
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_weight="1.5"
                     android:background="@android:color/transparent"
@@ -193,7 +193,7 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.5"
+            android:layout_weight="1.2"
             android:orientation="horizontal"
             android:weightSum="2"
             >
@@ -221,7 +221,7 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@id/tv_time"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/margin_default_plus"
+                    android:layout_marginBottom="@dimen/margin_default_minus"
                     android:text="@string/hint_time"
                     android:textAllCaps="true"
                     android:textColor="@color/txt_grey"
@@ -236,7 +236,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginEnd="@dimen/margin_very_big"
                     android:layout_marginStart="@dimen/margin_very_big"
-                    android:layout_marginTop="@dimen/margin_default_plus"
+                    android:layout_marginTop="@dimen/margin_default_minus"
                     android:background="@drawable/border_filled_5"
                     android:elevation="@dimen/elevation_default"
                     android:orientation="horizontal"
@@ -304,7 +304,7 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@id/tv_date"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/margin_default_plus"
+                    android:layout_marginBottom="@dimen/margin_default_minus"
                     android:text="@string/hint_date"
                     android:textAllCaps="true"
                     android:textColor="@color/txt_grey"
@@ -319,7 +319,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginEnd="@dimen/item_height_very_small"
                     android:layout_marginStart="@dimen/item_height_very_small"
-                    android:layout_marginTop="@dimen/margin_default_plus"
+                    android:layout_marginTop="@dimen/margin_default_minus"
                     android:background="@drawable/border_filled_5"
                     android:elevation="@dimen/elevation_default"
                     android:orientation="horizontal"
@@ -368,10 +368,12 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            android:layout_weight=".4"
-            android:layout_gravity="bottom"
+            android:layout_weight=".6"
+            android:layout_gravity="center"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:layout_marginTop="@dimen/margin_smaller"
+            android:layout_marginBottom="@dimen/margin_smaller"
             >
 
         <ImageButton
@@ -387,16 +389,101 @@
                 />
 
         <Button
-                android:id="@+id/btn_search"
+                android:id="@+id/btn_search_journey"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginEnd="@dimen/margin_default"
                 android:layout_marginStart="@dimen/margin_default"
                 android:background="@drawable/border_filled_5"
                 android:elevation="@dimen/elevation_default"
-                android:text="@string/search"
+                android:text="@string/search_journey"
                 android:textColor="@color/txt_white"
                 android:textSize="@dimen/text_size_default_plus"
+                />
+    </LinearLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".2"
+            >
+
+        <TextView
+                android:id="@+id/tv_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OPPURE"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                fontPath="@string/font_path_bold"
+                android:textColor="@color/txt_grey"
+                android:layout_centerInParent="true"
+                />
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/bg_grey"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/tv_header"
+                />
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/bg_grey"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@id/tv_header"
+                />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight=".4"
+            android:layout_gravity="center"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:layout_marginTop="@dimen/margin_smaller"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            >
+
+        <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/et_train_number"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="N°"
+                android:layout_marginStart="@dimen/margin_default"
+                android:backgroundTint="@color/bg_dark"
+                android:inputType="numberDecimal|number|textNoSuggestions|"
+                />
+
+        <Button
+                android:id="@+id/btn_search_train"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_marginStart="@dimen/margin_default"
+                android:background="@drawable/border_filled_5"
+                android:elevation="@dimen/elevation_default"
+                android:text="@string/search_train"
+                android:textColor="@color/txt_white"
+                android:textSize="@dimen/text_size_default_plus"
+                android:backgroundTint="@color/btn_dark_cyan"
                 />
     </LinearLayout>
 </LinearLayout>

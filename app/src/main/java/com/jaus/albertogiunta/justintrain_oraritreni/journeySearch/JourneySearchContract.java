@@ -10,6 +10,8 @@ interface JourneySearchContract {
 
     interface Presenter extends BasePresenter {
 
+        void onTrainSearchButtonClick(String trainNumber);
+
         /**
          * It triggers an action when the user clicks on the "star" icon button.
          * The action will most likely be to toggle the icon and save/remove the current
@@ -31,7 +33,7 @@ interface JourneySearchContract {
          * @param departureStationName name for the departure station
          * @param arrivalStationName name for the arrival station
          */
-        void onSearchButtonClick(String departureStationName, String arrivalStationName);
+        void onJourneySearchButtonClick(String departureStationName, String arrivalStationName);
 
         void onDepartureStationNameChanged(String name);
 
@@ -94,6 +96,8 @@ interface JourneySearchContract {
         PreferredStation getDepartureStation();
 
         PreferredStation getArrivalStation();
+
+        String getTrainNumber();
     }
 
     interface View extends BaseView {
@@ -125,7 +129,9 @@ interface JourneySearchContract {
         /**
          * Called when everything goes right after the click on the search button.
          */
-        void onValidSearchParameters();
+        void onValidJourneySearchParameters();
+
+        void onValidTrainSearchParameters();
 
         /**
          * Called when something bad happens after the click on the search button.
