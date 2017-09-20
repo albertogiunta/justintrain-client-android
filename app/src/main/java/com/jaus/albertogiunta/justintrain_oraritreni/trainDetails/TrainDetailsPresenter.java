@@ -39,6 +39,7 @@ import trikita.log.Log;
 
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_SOLUTION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_STATIONS;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_TRAIN;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS.NONE;
 
 class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
@@ -50,6 +51,7 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
     private List<Integer>             busesIndexList;
     private Journey.Solution          solution;
     private PreferredJourney          preferredJourney;
+    private boolean isOnlyTrain = false;
 
     TrainDetailsPresenter(TrainDetailsContract.View view) {
         this.view = view;
@@ -69,8 +71,15 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
 
         if (bundle != null) {
             // Restore value of members from saved state
+            if (bundle.getString(I_TRAIN) != null) {
+                trainIdList.clear();
+                trainIdList.add(bundle.getString(I_TRAIN));
+                isOnlyTrain = true;
+                return;
+            }
             List<String> shareableTrainList = new LinkedList<>();
             if (bundle.getString(I_SOLUTION) != null) {
+                isOnlyTrain = false;
                 solution = gson.fromJson(bundle.getString(I_SOLUTION), Journey.Solution.class);
                 if (solution.hasChanges()) {
                     Arrays.copyOf(trainList.toArray(), solution.getChangesList().size());
@@ -83,6 +92,7 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
                 if (view != null) view.setShareButton(shareableTrainList);
             }
             if (bundle.getString(I_STATIONS) != null) {
+                isOnlyTrain = false;
                 preferredJourney = gson.fromJson(bundle.getString(I_STATIONS), PreferredJourney.class);
                 updatePreferredJourneyFromFavouritesIfAvailable();
             }
@@ -132,12 +142,16 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
                     Log.d(throwable.getMessage());
                     if (view != null) {
                         if (throwable.getMessage().equals("HTTP 404 ")) {
-                            if (solution.hasChanges()) {
+                            if (solution != null && solution.hasChanges()) {
                                 FirebaseCrash.report(new Exception("TRAIN DETAIL ERROR solution is " + solution.toString()));
                                 view.showSnackbar("Uno o più treni non sono ancora disponibili", NONE, Snackbar.LENGTH_LONG);
                                 onComplete();
                             } else {
-                                view.showErrorMessage("Le informazioni su questo treno purtroppo non sono ancora disponibili", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
+                                if (isOnlyTrain) {
+                                    view.showErrorMessage("Le informazioni su questo treno purtroppo non sono ancora disponibili oppure potresti aver sbagliato ad inserire il numero del treno", "Torna indietro", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
+                                } else {
+                                    view.showErrorMessage("Le informazioni su questo treno purtroppo non sono ancora disponibili", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
+                                }
                             }
                         } else {
                             Log.e("onServerError: ", throwable.toString());
@@ -304,6 +318,7 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
         }
         s += "Partenza prevista alle " + solution.getDepartureTimeWithDelayReadable() + " da " + solution.getDepartureStationName() + "\n";
         s += "Arrivo previsto alle " + solution.getArrivalTimeWithDelayReadable() + " a " + solution.getArrivalStationName() + "\n";
+//        s += "Vagone: -\n";
 
         s += "\n - via JustInTrain - Orario Treni Trenitalia.\n";
         return s;
@@ -339,12 +354,18 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
                 });
     }
 
+    @Override
+    public boolean isOnlyTrainSearch() {
+        return isOnlyTrain;
+    }
+
     private void insertBuses() {
         // solution is only 1 train
         if (busesIndexList.size() == 1 && busesIndexList.get(0) == -1) {
             trainList.add(new Train(solution));
         } else {
             for (Integer busIndex : busesIndexList) {
+                //todo solution.getChangesList().get potrebbe essere null
                 trainList.add(busIndex, new Train(solution.getChangesList().get(busIndex)));
             }
         }

@@ -194,6 +194,7 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
         departureStation = arrivalStation;
         arrivalStation = temp;
         searchFromSearch(true);
+        // todo le stazioni potrebbero essere null
         view.setStationNames(departureStation.getNameLong(), arrivalStation.getNameLong());
     }
 
@@ -281,6 +282,7 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
             }
         }, () -> {
             journeySolutions.get(elementIndex).refreshData();
+            // todo view potrebbe essere null
             view.updateSolution(recyclerViewIndex);
         });
     }

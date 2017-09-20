@@ -318,7 +318,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements
     public void updateSolutionsList() {
         rvJourneySolutions.getRecycledViewPool().clear();
         try {
-            journeyResultsAdapter.notifyDataSetChanged(); //TODO possibile bug http://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in
+            journeyResultsAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             FirebaseCrash.report(new Exception("CATCHED Inconsistency detected. Invalid view holder adapter positionViewHolder"));
         }

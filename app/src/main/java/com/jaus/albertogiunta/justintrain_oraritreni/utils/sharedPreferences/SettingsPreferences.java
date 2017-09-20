@@ -13,7 +13,9 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INCLUDE_CHANGES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_LIGHTNING;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_VIBRATION;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_RECENT;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_FIRST_START;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_RECENT_HINT;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_SAVED_VERSION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_VERSION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_VERSION;
@@ -23,6 +25,31 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferen
 
 public class SettingsPreferences {
 
+    // recent
+    public static boolean isRecentEnabled(Context context) {
+        return SharedPreferencesHelper.getSharedPreferenceBoolean(context, SP_SETT_RECENT, true);
+    }
+
+    public static void enableRecent(Context context) {
+        enableGenericSetting(context, SP_SETT_RECENT);
+    }
+
+    public static void disableRecent(Context context) {
+        disableGenericSetting(context, SP_SETT_RECENT);
+    }
+
+    // recent hint
+    public static boolean isRecentHintEnabled(Context context) {
+        return SharedPreferencesHelper.getSharedPreferenceBoolean(context, SP_SP_RECENT_HINT, true);
+    }
+
+    public static void enableRecentHint(Context context) {
+        enableGenericSetting(context, SP_SP_RECENT_HINT);
+    }
+
+    public static void disableRecentHint(Context context) {
+        disableGenericSetting(context, SP_SP_RECENT_HINT);
+    }
 
     // vibration
     public static boolean isVibrationEnabled(Context context) {
@@ -191,6 +218,12 @@ public class SettingsPreferences {
         disableCompactNotification(context);
     }
 
+    private static void setNewSettingsNotPreviouslyIncludedBefore48(Context context) {
+        // 48 - 1.1.5
+        enableRecentHint(context);
+        enableRecent(context);
+    }
+
     public static void setDefaultSharedPreferencesOnFirstStart(Context context) {
         // preferences
         SharedPreferencesHelper.setSharedPreferenceBoolean(context, SP_SP_FIRST_START, false);
@@ -203,6 +236,7 @@ public class SettingsPreferences {
         setNewSettingsNotPreviouslyIncludedBefore13(context);
         setNewSettingsNotPreviouslyIncludedBefore30(context);
         setNewSettingsNotPreviouslyIncludedBefore47(context);
+        setNewSettingsNotPreviouslyIncludedBefore48(context);
     }
 
     // inclusion of settings - update together with onFirstStart
@@ -218,6 +252,9 @@ public class SettingsPreferences {
         }
         if (getPreviouslySavedVersionCode(context) < 47) {
             setNewSettingsNotPreviouslyIncludedBefore47(context);
+        }
+        if (getPreviouslySavedVersionCode(context) < 48) {
+            setNewSettingsNotPreviouslyIncludedBefore48(context);
         }
     }
 

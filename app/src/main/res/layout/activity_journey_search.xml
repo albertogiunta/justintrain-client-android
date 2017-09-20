@@ -406,7 +406,7 @@
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".2"
+            android:layout_weight=".3"
             >
 
         <TextView
@@ -442,9 +442,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_toEndOf="@id/tv_header"
                 />
-
     </RelativeLayout>
-
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -469,12 +467,13 @@
                 android:layout_marginStart="@dimen/margin_default"
                 android:backgroundTint="@color/bg_dark"
                 android:inputType="numberDecimal|number|textNoSuggestions|"
+                android:textSize="@dimen/text_size_default_minus"
                 />
 
         <Button
                 android:id="@+id/btn_search_train"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="@dimen/margin_default"
                 android:layout_marginStart="@dimen/margin_default"
@@ -482,7 +481,7 @@
                 android:elevation="@dimen/elevation_default"
                 android:text="@string/search_train"
                 android:textColor="@color/txt_white"
-                android:textSize="@dimen/text_size_default_plus"
+                android:textSize="@dimen/text_size_default_minus"
                 android:backgroundTint="@color/btn_dark_cyan"
                 />
     </LinearLayout>

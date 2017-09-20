@@ -79,7 +79,7 @@ public class TrainNotification {
         int refreshIc = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.drawable.ic_refresh : R.drawable.ic_refresh2;
         int closeIc = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.drawable.ic_close : R.drawable.ic_close2;
 
-        initChannels(context);
+        initChannels(context, shouldPriorityBeHigh);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setDefaults(Notification.DEFAULT_SOUND)
@@ -126,10 +126,15 @@ public class TrainNotification {
         nm.notify(TRAIN_NOTIFICATION_TAG, 0, notification);
     }
 
-    public static void initChannels(Context context) {
+    public static void initChannels(Context context, boolean shouldPriorityBeHigh) {
         if (Build.VERSION.SDK_INT < 26) return;
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationChannel channel             = new NotificationChannel(CHANNEL_ID, "Train Notification", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel channel;
+        if (shouldPriorityBeHigh) {
+            channel = new NotificationChannel(CHANNEL_ID, "Train Notification", NotificationManager.IMPORTANCE_HIGH);
+        } else {
+            channel = new NotificationChannel(CHANNEL_ID, "Train Notification", NotificationManager.IMPORTANCE_DEFAULT);
+        }
         channel.setDescription("Queste notifiche servono a fornire informazioni sul treno che stai seguendo.");
         notificationManager.createNotificationChannel(channel);
     }

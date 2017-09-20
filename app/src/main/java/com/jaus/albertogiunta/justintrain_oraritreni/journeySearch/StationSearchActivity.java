@@ -75,7 +75,7 @@ public class StationSearchActivity extends AppCompatActivity implements Searched
                     stationNames.addAll(DatabaseHelper.getElementByNameFancy(newText.trim()));
                 }
                 try {
-                    adapter.notifyDataSetChanged(); //TODO possibile bug http://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in
+                    adapter.notifyDataSetChanged();
                 } catch (Exception e) {
                     FirebaseCrash.report(new Exception("CATCHED Inconsistency detected. Invalid view holder adapter positionViewHolder"));
                 }

@@ -314,7 +314,7 @@ public class JourneySearchActivity extends AppCompatActivity implements JourneyS
     @Override
     public void onValidTrainSearchParameters() {
         Intent myIntent = new Intent(JourneySearchActivity.this, TrainDetailsActivity.class);
-        myIntent.putExtras(presenter.getState(getIntent().getExtras()));
+        myIntent.putExtras(presenter.getTrainSearchState(null));
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(I_FROM_RESULTS, false)) {
             setResult(RESULT_OK, myIntent);
             finish();

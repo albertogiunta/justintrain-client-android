@@ -11,6 +11,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_HOME_H
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.PreferredStationsPreferences;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.RecentStationsPreferences;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.SettingsPreferences;
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
@@ -112,21 +113,23 @@ class FavouritesPresenter implements FavouritesContract.Presenter {
         if (newPreferredJourneys != null) {
             this.preferredJourneys.addAll(newPreferredJourneys);
             if (!this.preferredJourneys.isEmpty())
-                recyclerViewList.add(new FavouriteHeaderItem(ENUM_HOME_HEADER.FAVOURITES, false));
+                recyclerViewList.add(new FavouriteHeaderItem(view.getViewContext(), ENUM_HOME_HEADER.FAVOURITES, false));
             for (PreferredJourney j : this.preferredJourneys) {
                 recyclerViewList.add(new FavouriteJourneysItem(j, true));
                 recyclerViewList.add(new FavouriteSolutionsItem(view.getViewContext(), j));
             }
         }
 
-        if (newRecentJourneys != null) {
+        if (newRecentJourneys != null && SettingsPreferences.isRecentEnabled(view.getViewContext())) {
             this.recentJourneys.addAll(newRecentJourneys);
             if (!this.recentJourneys.isEmpty())
-                recyclerViewList.add(new FavouriteHeaderItem(ENUM_HOME_HEADER.RECENT, false));
+                recyclerViewList.add(new FavouriteHeaderItem(view.getViewContext(), ENUM_HOME_HEADER.RECENT, false));
             for (PreferredJourney j : this.recentJourneys) {
                 recyclerViewList.add(new FavouriteJourneysItem(j, false));
             }
-            recyclerViewList.add(new FavouriteHeaderItem(ENUM_HOME_HEADER.RECENT, true));
+            if (SettingsPreferences.isRecentHintEnabled(view.getViewContext())) {
+                recyclerViewList.add(new FavouriteHeaderItem(view.getViewContext(), ENUM_HOME_HEADER.RECENT, true));
+            }
         }
     }
 }

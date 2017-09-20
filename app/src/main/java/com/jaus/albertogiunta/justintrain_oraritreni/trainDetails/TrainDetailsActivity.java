@@ -19,6 +19,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatDrawableManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -62,6 +63,7 @@ import butterknife.ButterKnife;
 import trikita.log.Log;
 
 import static butterknife.ButterKnife.apply;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.GONE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.VISIBLE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_REFRESH_SOLUTION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_REMOVE_FAVOURITE;
@@ -108,6 +110,8 @@ public class TrainDetailsActivity extends AppCompatActivity implements
 
     @BindView(R.id.rl_banner_placeholder)
     RelativeLayout      rlBannerPlaceholder;
+    @BindView(R.id.cv_tip_placeholder)
+    CardView            cvTipPlaceholder;
     @BindView(R.id.adView)
     NativeExpressAdView adView;
 
@@ -166,6 +170,12 @@ public class TrainDetailsActivity extends AppCompatActivity implements
         };
 
         presenter.updateRequested();
+
+        if (presenter.isOnlyTrainSearch()) {
+            apply(cvTipPlaceholder, VISIBLE);
+        } else {
+            apply(cvTipPlaceholder, GONE);
+        }
     }
 
     @Override
@@ -177,8 +187,12 @@ public class TrainDetailsActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.fav_train_menu, menu);
-        this.menuItem = menu.findItem(R.id.action_fav_train);
-        setFavouriteButtonStatus(presenter.isSolutionPreferred());
+        if (!this.presenter.isOnlyTrainSearch()) {
+            this.menuItem = menu.findItem(R.id.action_fav_train);
+            setFavouriteButtonStatus(presenter.isSolutionPreferred());
+        } else {
+            menu.findItem(R.id.action_fav_train).setVisible(false);
+        }
         return true;
     }
 
@@ -315,7 +329,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements
     public void updateTrainDetails() {
         rvTrainDetails.getRecycledViewPool().clear();
         try {
-            adapter.notifyDataSetChanged(); //TODO possibile bug http://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in
+            adapter.notifyDataSetChanged();
         } catch (Exception e) {
             FirebaseCrash.report(new Exception("CATCHED Inconsistency detected. Invalid view holder adapter positionViewHolder"));
         }

@@ -20,4 +20,15 @@
             android:textColor="@color/txt_grey"
             />
 
+    <ImageView
+            android:id="@+id/iv_close_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/tv_header"
+            android:layout_marginStart="@dimen/margin_default"
+            android:src="@drawable/ic_add_circle"
+            android:rotation="45"
+            android:tint="@color/bg_grey"
+            />
+
 </RelativeLayout>

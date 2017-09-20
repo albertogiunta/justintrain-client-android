@@ -43,9 +43,9 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 
 class TrainDetailsAdapter extends RecyclerView.Adapter {
 
-    private Context context;
-    private List<Object> trainList;
-    private Journey.Solution solution;
+    private Context                        context;
+    private List<Object>                   trainList;
+    private Journey.Solution               solution;
     private TrainDetailsContract.Presenter presenter;
 
     TrainDetailsAdapter(Context context, TrainDetailsContract.Presenter presenter) {
@@ -56,28 +56,30 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
         if (solution == null) {
             FirebaseCrash.report(new Exception("SOLUTION WAS NULL in Traindetilasadapter"));
         }
-        if (solution.hasChanges()) {
-            for (Journey.Solution.Change c : solution.getChangesList()) {
-                Log.d(c.getDepartureStationName(), c.getArrivalStationName());
-                try {
-                    Station station1 = DatabaseHelper.getStation4DatabaseObject(c.getDepartureStationName());
-                    Station station2 = DatabaseHelper.getStation4DatabaseObject(c.getArrivalStationName());
-                    if (station1 != null && station2 != null) {
-                        c.setDepartureStationId(new PreferredStation(station1).getStationLongId());
-                        c.setArrivalStationId(new PreferredStation(station2).getStationLongId());
-                    } else {
-                        throw new Resources.NotFoundException();
+        if (!presenter.isOnlyTrainSearch()) {
+            if (solution.hasChanges()) {
+                for (Journey.Solution.Change c : solution.getChangesList()) {
+                    Log.d(c.getDepartureStationName(), c.getArrivalStationName());
+                    try {
+                        Station station1 = DatabaseHelper.getStation4DatabaseObject(c.getDepartureStationName());
+                        Station station2 = DatabaseHelper.getStation4DatabaseObject(c.getArrivalStationName());
+                        if (station1 != null && station2 != null) {
+                            c.setDepartureStationId(new PreferredStation(station1).getStationLongId());
+                            c.setArrivalStationId(new PreferredStation(station2).getStationLongId());
+                        } else {
+                            throw new Resources.NotFoundException();
+                        }
+                    } catch (Resources.NotFoundException e) {
+                        FirebaseCrash.report(new Exception("DEPARTURE or ARRIVAL not found" + c.getDepartureStationName() + "//" + c.getArrivalStationName() + "\n SOLUTION IS: " + solution.toString()));
                     }
-                } catch (Resources.NotFoundException e) {
-                    FirebaseCrash.report(new Exception("DEPARTURE or ARRIVAL not found" + c.getDepartureStationName() + "//" + c.getArrivalStationName() + "\n SOLUTION IS: " + solution.toString()));
                 }
-            }
-        } else {
-            try {
-                solution.setDepartureStationId(new PreferredStation(DatabaseHelper.getStation4DatabaseObject(solution.getDepartureStationName())).getStationLongId());
-                solution.setArrivalStationId(new PreferredStation(DatabaseHelper.getStation4DatabaseObject(solution.getArrivalStationName())).getStationLongId());
-            } catch (Exception e) {
-                FirebaseCrash.report(new Exception("DEPARTURE or ARRIVAL not found" + "\n SOLUTION IS: " + solution.toString()));
+            } else {
+                try {
+                    solution.setDepartureStationId(new PreferredStation(DatabaseHelper.getStation4DatabaseObject(solution.getDepartureStationName())).getStationLongId());
+                    solution.setArrivalStationId(new PreferredStation(DatabaseHelper.getStation4DatabaseObject(solution.getArrivalStationName())).getStationLongId());
+                } catch (Exception e) {
+                    FirebaseCrash.report(new Exception("DEPARTURE or ARRIVAL not found" + "\n SOLUTION IS: " + solution.toString()));
+                }
             }
         }
     }
@@ -129,8 +131,8 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
     }
 
     private class VIEW_TYPES {
-        static final int Train = 1;
-        static final int Stop = 2;
+        static final int Train  = 1;
+        static final int Stop   = 2;
         static final int Footer = 3;
     }
 
@@ -142,31 +144,31 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
     class TrainHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_train_number_category)
-        TextView tvTrainNumberCategory;
+        TextView     tvTrainNumberCategory;
         @BindView(R.id.tv_train_status)
-        TextView tvTrainStatus;
+        TextView     tvTrainStatus;
         @BindView(R.id.tv_with_exception)
-        TextView tvStatusException;
+        TextView     tvStatusException;
         @BindView(R.id.tv_departure_station_name)
-        TextView tvDepartureStationName;
+        TextView     tvDepartureStationName;
         @BindView(R.id.tv_arrival_station_name)
-        TextView tvArrivalStationName;
+        TextView     tvArrivalStationName;
         @BindView(R.id.ll_last_seen)
         LinearLayout llLastSeen;
         @BindView(R.id.tv_last_seen_station_time)
-        TextView tvLastSeenStationTime;
+        TextView     tvLastSeenStationTime;
         @BindView(R.id.ll_time_difference)
         LinearLayout llTimeDifference;
         @BindView(R.id.tv_time_difference)
-        TextView tvTimeDifference;
+        TextView     tvTimeDifference;
         @BindView(R.id.tv_progress)
-        TextView tvProgress;
+        TextView     tvProgress;
         @BindView(R.id.tv_why_delay)
-        TextView tvWhyDelay;
+        TextView     tvWhyDelay;
         @BindView(R.id.btn_pin)
-        ImageView btnPin;
+        ImageView    btnPin;
         @BindView(R.id.tv_cancelled_stops_info)
-        TextView tvCancelledStopsInfo;
+        TextView     tvCancelledStopsInfo;
 
 
         TrainHolder(View itemView) {
@@ -225,7 +227,8 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
                     apply(tvTrainStatus, VISIBLE);
                     apply(tvStatusException, VISIBLE);
                     apply(llLastSeen, VISIBLE);
-                    apply(btnPin, VISIBLE);
+                    if (!presenter.isOnlyTrainSearch()) apply(btnPin, VISIBLE);
+                    else apply(btnPin, GONE);
                     apply(llTimeDifference, VISIBLE);
                     apply(tvTimeDifference, VISIBLE);
 
@@ -258,7 +261,8 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
                 // non ancora partito
                 apply(tvTrainStatus, VISIBLE);
                 apply(tvStatusException, VISIBLE);
-                apply(btnPin, VISIBLE);
+                if (!presenter.isOnlyTrainSearch()) apply(btnPin, VISIBLE);
+                else apply(btnPin, GONE);
                 apply(llLastSeen, GONE);
                 apply(tvTimeDifference, INVISIBLE);
                 apply(tvProgress, INVISIBLE);
@@ -323,9 +327,9 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.ll_station)
         LinearLayout llStation;
         @BindView(R.id.tv_planned_departure_time)
-        TextView tvPlannedDepartureTime;
+        TextView     tvPlannedDepartureTime;
         @BindView(R.id.tv_departure_time)
-        TextView tvActualOrPlannedWithTimeDifference;
+        TextView     tvActualOrPlannedWithTimeDifference;
         @BindView(R.id.ll_node_first)
         LinearLayout llNodeFirst;
         @BindView(R.id.ll_node_in_between)
@@ -333,13 +337,13 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.ll_node_last)
         LinearLayout llNodeLast;
         @BindView(R.id.tv_station_name)
-        TextView tvStationName;
+        TextView     tvStationName;
         @BindView(R.id.ic_platform)
-        ImageView icPlatform;
+        ImageView    icPlatform;
         @BindView(R.id.tv_platform)
-        TextView tvPlatform;
+        TextView     tvPlatform;
         @BindView(R.id.tv_station_exception)
-        TextView tvStationException;
+        TextView     tvStationException;
 
         @BindView(R.id.iv_node_first)
         ImageView ivNodeFirst;
@@ -424,7 +428,11 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
                     break;
             }
 
-            parseMarkingsAsChangeDepartureOrArrival(stop.getStationId());
+            if (presenter.isOnlyTrainSearch()) {
+                disableAllMarkings();
+            } else {
+                parseMarkingsAsChangeDepartureOrArrival(stop.getStationId());
+            }
 
             switch (stop.getCurrentStopStatusCode()) {
                 case 2:
@@ -463,6 +471,11 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
             }
 
             tvPlannedDepartureTime.setPaintFlags(tvPlannedDepartureTime.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+        }
+
+        private void disableAllMarkings() {
+            apply(tvMarkAsChangeDeparture, GONE);
+            apply(tvMarkAsChangeArrival, GONE);
         }
 
         private void parseMarkingsAsChangeDepartureOrArrival(String id) {
@@ -532,7 +545,7 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
 
     class FooterHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.btn_search_after)
-        ImageButton btn;
+        ImageButton    btn;
         @BindView(R.id.rl_search_after_loading_spinner)
         RelativeLayout relativeLayout;
 

@@ -29,12 +29,14 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_LIGHTNING;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_LIVE_NOTIFICATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_PREEMPTIVE;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_RECENT_SEARCHES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_VIBRATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_CHANGES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_INSTANT_DELAY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_LIGHTNING;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_LIVE_NOTIFICATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_PREEMPTIVE;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_RECENT_SEARCHES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_VIBRATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_GET_PREEMPTIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INCLUDE_CHANGES;
@@ -43,6 +45,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_COMPACT;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_LIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_VIBRATION;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_RECENT;
 
 public class SettingsActivity extends AppCompatActivity implements IabHelper.QueryInventoryFinishedListener {
 
@@ -92,6 +95,9 @@ public class SettingsActivity extends AppCompatActivity implements IabHelper.Que
     private void buildView() {
         View aboutPage = new AboutPageBuilder(this)
                 .addItem(new ItemBuilder(this, linearLayout).addItemGroupHeader("Preferiti").build())
+                // RECENT SEARCHES
+                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Ricerche recenti", "Visualizza le tue ultime tratte ricercate", SettingsPreferences.isRecentEnabled(this), true, false, isPro, SP_SETT_RECENT, SETTINGS_ENABLE_RECENT_SEARCHES, SETTINGS_DISABLE_RECENT_SEARCHES)
+                        .build())
                 // FAV TRAIN VIBRATION
                 .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Ritardo ISTANTANEO (PRO)", "Quando accedi alla schermata iniziale", ProPreferences.isInstantDelayEnabled(this), true, true, isPro, SP_SETT_INSTANT_DELAY, SETTINGS_ENABLE_INSTANT_DELAY, SETTINGS_DISABLE_INSTANT_DELAY)
                         .build())

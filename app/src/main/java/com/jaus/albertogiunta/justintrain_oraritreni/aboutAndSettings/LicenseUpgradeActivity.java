@@ -178,7 +178,7 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
                     FirebaseCrash.report(new Exception("USER TRIED TO BUY AND INVENTORY WAS NULL!"));
                 }
 
-                // TODO DEBUGGGGGG
+                // TODO DEBUG
                 boolean debugPurchase = false;
                 if (!BuildConfig.DEBUG) debugPurchase = false;
                 if (debugPurchase && CustomIABHelper.isOrderOk(result, inv)) {
@@ -192,7 +192,7 @@ public class LicenseUpgradeActivity extends AppCompatActivity implements IabHelp
                         ProPreferences.disableInstantDelay(LicenseUpgradeActivity.this);
                     }
                 }
-                // TODO END DEBUGGGGGG
+                // TODO END DEBUG
             });
         }
     }

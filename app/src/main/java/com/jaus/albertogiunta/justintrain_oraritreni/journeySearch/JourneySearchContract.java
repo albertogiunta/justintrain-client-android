@@ -1,5 +1,7 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.journeySearch;
 
+import android.os.Bundle;
+
 import com.jaus.albertogiunta.justintrain_oraritreni.BasePresenter;
 import com.jaus.albertogiunta.justintrain_oraritreni.BaseView;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
@@ -34,6 +36,8 @@ interface JourneySearchContract {
          * @param arrivalStationName name for the arrival station
          */
         void onJourneySearchButtonClick(String departureStationName, String arrivalStationName);
+
+        Bundle getTrainSearchState(Bundle bundle);
 
         void onDepartureStationNameChanged(String name);
 

@@ -55,6 +55,7 @@
                     android:visibility="visible"
                     />
 
+
             <android.support.v7.widget.CardView
                     android:id="@+id/cv_banner_placeholder"
                     android:layout_width="match_parent"
@@ -101,6 +102,31 @@
                         />
             </android.support.v7.widget.CardView>
 
+            <android.support.v7.widget.CardView
+                    android:id="@+id/cv_tip_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="0dp"
+                    android:backgroundTint="@color/bg_dark"
+                    android:layout_below="@id/cv_banner_placeholder"
+                    android:visibility="visible"
+                    >
+
+                <TextView
+                        android:id="@+id/tv_nb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NB Cercando il treno in questo modo avrai meno funzionalità a disposizione. Forse ti conviene cercarlo tramite una tratta abituale?"
+                        android:textStyle="bold"
+                        fontPath="@string/font_path_bold"
+                        android:textColor="@color/txt_grey_lighter"
+                        android:textSize="12sp"
+                        android:textAlignment="center"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/margin_small"
+                        />
+            </android.support.v7.widget.CardView>
+
             <RelativeLayout
                     android:id="@+id/rl_error"
                     android:layout_width="match_parent"
@@ -136,7 +162,7 @@
                     android:id="@+id/rv_train_details"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/cv_banner_placeholder"
+                    android:layout_below="@id/cv_tip_placeholder"
                     android:background="@drawable/bg_gradient_1"
                     android:clickable="true"
                     android:visibility="gone"

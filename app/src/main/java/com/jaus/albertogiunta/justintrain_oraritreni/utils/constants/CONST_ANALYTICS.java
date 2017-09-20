@@ -96,11 +96,13 @@ public class CONST_ANALYTICS {
 
 
     // SETTINGS
-    public static final String SETTINGS_ENABLE_INSTANT_DELAY         = "Settings enable instant delay";
-    public static final String SETTINGS_DISABLE_INSTANT_DELAY        = "Settings disable instant delay";
-    public static final String SETTINGS_ENABLE_VIBRATION             = "Settings enable vibration";
-    public static final String SETTINGS_DISABLE_VIBRATION            = "Settings disable vibration";
-    public static final String SETTINGS_ENABLE_LIVE_NOTIFICATION     = "Settings enable live notification";
+    public static final String SETTINGS_ENABLE_RECENT_SEARCHES   = "Settings enable recent searches";
+    public static final String SETTINGS_DISABLE_RECENT_SEARCHES  = "Settings disable recent searches";
+    public static final String SETTINGS_ENABLE_INSTANT_DELAY     = "Settings enable instant delay";
+    public static final String SETTINGS_DISABLE_INSTANT_DELAY    = "Settings disable instant delay";
+    public static final String SETTINGS_ENABLE_VIBRATION         = "Settings enable vibration";
+    public static final String SETTINGS_DISABLE_VIBRATION        = "Settings disable vibration";
+    public static final String SETTINGS_ENABLE_LIVE_NOTIFICATION = "Settings enable live notification";
     public static final String SETTINGS_DISABLE_LIVE_NOTIFICATION    = "Settings disable live notification";
     public static final String SETTINGS_ENABLE_COMPACT_NOTIFICATION  = "Settings enable compact notification";
     public static final String SETTINGS_DISABLE_COMPACT_NOTIFICATION = "Settings disable compact notification";

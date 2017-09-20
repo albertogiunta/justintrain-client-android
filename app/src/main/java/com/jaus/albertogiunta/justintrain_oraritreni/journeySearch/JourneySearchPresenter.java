@@ -28,6 +28,7 @@ import trikita.log.Log;
 
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_STATIONS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_TIME;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_TRAIN;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.DatabaseHelper.getStation4DatabaseObject;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.DatabaseHelper.isStationNameValid;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.DatabaseHelper.isThisJourneyPreferred;
@@ -85,6 +86,13 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
         if (bundle == null) bundle = new Bundle();
         bundle.putString(I_STATIONS, gson.toJson(new PreferredJourney(departureStation, arrivalStation)));
         bundle.putLong(I_TIME, dateTime.getMillis());
+        return bundle;
+    }
+
+    @Override
+    public Bundle getTrainSearchState(Bundle bundle) {
+        if (bundle == null) bundle = new Bundle();
+        bundle.putString(I_TRAIN, trainNumber);
         return bundle;
     }
 
