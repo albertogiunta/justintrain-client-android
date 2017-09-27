@@ -75,13 +75,15 @@
 
     <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '   -->
     <string name="changelog">
-        <b><u>PRO</u></b>\n
-        • <b>Nuova funzionalità</b>: arrivano le notifiche COMPATTE!
+        • NUOVO: <b>Aggiunte le ricerche recenti!</b>
+        \nNon ti interessano? Nessun problema, puoi disattivarle dalla schermata delle impostazioni!
         \n\n
-        <b><u>Inoltre:</u></b>\n
-        • Miglioramenti generali alle notifiche
+        • NUOVO: <b>Aggiunta la ricerca per numero del treno!</b>
+        \nPer una consultazione rapida di un treno, puoi accedervi dalla schermata di ricerca.
         \n\n
-        • Bug e UI fix generali
+        • Aggiunto supporto sperimentale ad <b>Android 8 Oreo</b>
+        \n\n
+        • Bug fix generali
     </string>
     <string name="play_store_native_url">market://details?id=</string>
     <string name="play_store_web_url">https://play.google.com/store/apps/details?id=</string>

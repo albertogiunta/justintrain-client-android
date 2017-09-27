@@ -110,20 +110,18 @@ class FavouritesPresenter implements FavouritesContract.Presenter {
         List<PreferredJourney> newPreferredJourneys = PreferredStationsPreferences.getAllPreferredJourneys(view.getViewContext());
         List<PreferredJourney> newRecentJourneys    = RecentStationsPreferences.getAllRecentJourneys(view.getViewContext());
 
-        if (newPreferredJourneys != null) {
+        if (newPreferredJourneys != null && !newPreferredJourneys.isEmpty()) {
             this.preferredJourneys.addAll(newPreferredJourneys);
-            if (!this.preferredJourneys.isEmpty())
-                recyclerViewList.add(new FavouriteHeaderItem(view.getViewContext(), ENUM_HOME_HEADER.FAVOURITES, false));
+            recyclerViewList.add(new FavouriteHeaderItem(view.getViewContext(), ENUM_HOME_HEADER.FAVOURITES, false));
             for (PreferredJourney j : this.preferredJourneys) {
                 recyclerViewList.add(new FavouriteJourneysItem(j, true));
                 recyclerViewList.add(new FavouriteSolutionsItem(view.getViewContext(), j));
             }
         }
 
-        if (newRecentJourneys != null && SettingsPreferences.isRecentEnabled(view.getViewContext())) {
+        if (newRecentJourneys != null && !newRecentJourneys.isEmpty() && SettingsPreferences.isRecentEnabled(view.getViewContext())) {
             this.recentJourneys.addAll(newRecentJourneys);
-            if (!this.recentJourneys.isEmpty())
-                recyclerViewList.add(new FavouriteHeaderItem(view.getViewContext(), ENUM_HOME_HEADER.RECENT, false));
+            recyclerViewList.add(new FavouriteHeaderItem(view.getViewContext(), ENUM_HOME_HEADER.RECENT, false));
             for (PreferredJourney j : this.recentJourneys) {
                 recyclerViewList.add(new FavouriteJourneysItem(j, false));
             }
