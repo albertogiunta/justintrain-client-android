@@ -3,6 +3,7 @@ package com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences;
 import android.content.Context;
 
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INSTANT_DELAY;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_AUTO_REMOVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_COMPACT;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_LIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_IS_PRO;
@@ -16,6 +17,7 @@ public class ProPreferences {
         ProPreferences.enableLiveNotification(context);
         ProPreferences.enableInstantDelay(context);
         ProPreferences.enableCompactNotification(context);
+        ProPreferences.enableAutoRemoveNotification(context);
     }
 
     public static void disableAllPro(Context context) {
@@ -23,6 +25,7 @@ public class ProPreferences {
         ProPreferences.disableLiveNotification(context);
         ProPreferences.disableInstantDelay(context);
         ProPreferences.disableCompactNotification(context);
+        ProPreferences.disableAutoRemoveNotification(context);
     }
 
     // instant delay
@@ -75,6 +78,19 @@ public class ProPreferences {
 
     public static void disableCompactNotification(Context context) {
         disableGenericSetting(context, SP_SETT_NOTIF_COMPACT);
+    }
+
+    // auto removing notification
+    public static boolean isAutoRemoveNotificationEnabled(Context context) {
+        return SharedPreferencesHelper.getSharedPreferenceBoolean(context, SP_SETT_NOTIF_AUTO_REMOVE, true);
+    }
+
+    public static void enableAutoRemoveNotification(Context context) {
+        enableGenericSetting(context, SP_SETT_NOTIF_AUTO_REMOVE);
+    }
+
+    public static void disableAutoRemoveNotification(Context context) {
+        disableGenericSetting(context, SP_SETT_NOTIF_AUTO_REMOVE);
     }
 
 }

@@ -24,14 +24,18 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_AUTOREMOVE_NOTIFICATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_CHANGES;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_COMPACT_NOTIFICATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_INSTANT_DELAY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_LIGHTNING;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_LIVE_NOTIFICATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_PREEMPTIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_RECENT_SEARCHES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_DISABLE_VIBRATION;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_AUTOREMOVE_NOTIFICATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_CHANGES;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_COMPACT_NOTIFICATION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_INSTANT_DELAY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_LIGHTNING;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SETTINGS_ENABLE_LIVE_NOTIFICATION;
@@ -42,6 +46,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INCLUDE_CHANGES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INSTANT_DELAY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_LIGHTNING;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_AUTO_REMOVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_COMPACT;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_LIVE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_VIBRATION;
@@ -109,7 +114,10 @@ public class SettingsActivity extends AppCompatActivity implements IabHelper.Que
                 .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Notifiche LIVE (PRO)", "Sempre aggiornate all'ultimo secondo (con app in background)", ProPreferences.isLiveNotificationEnabled(this), true, true, isPro, SP_SETT_NOTIF_LIVE, SETTINGS_ENABLE_LIVE_NOTIFICATION, SETTINGS_DISABLE_LIVE_NOTIFICATION)
                         .build())
                 // LIVE NOTIFICATION
-                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Notifiche COMPATTE (PRO)", "Per vedere tutte le informazioni che ti servono in maniera sempre più veloce", ProPreferences.isCompactNotificationEnabled(this), true, true, isPro, SP_SETT_NOTIF_COMPACT, SETTINGS_ENABLE_LIVE_NOTIFICATION, SETTINGS_DISABLE_LIVE_NOTIFICATION)
+                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Notifiche COMPATTE (PRO)", "Per vedere tutte le informazioni che ti servono in maniera sempre più veloce", ProPreferences.isCompactNotificationEnabled(this), true, true, isPro, SP_SETT_NOTIF_COMPACT, SETTINGS_ENABLE_COMPACT_NOTIFICATION, SETTINGS_DISABLE_COMPACT_NOTIFICATION)
+                        .build())
+                // AUTO REMOVE NOTIFICATION
+                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Notifiche SMART (PRO)", "La notifica saprà quando sei arrivato a destinazione e se ne andrà da sola, senza che tu debba far nulla", ProPreferences.isCompactNotificationEnabled(this), true, true, isPro, SP_SETT_NOTIF_AUTO_REMOVE, SETTINGS_ENABLE_AUTOREMOVE_NOTIFICATION, SETTINGS_DISABLE_AUTOREMOVE_NOTIFICATION)
                         .build())
                 .addItem(new ItemBuilder(this, linearLayout).addItemGroupHeader("Risultati").build())
                 // SMART AUTOSCROLL (LIGHTNING)

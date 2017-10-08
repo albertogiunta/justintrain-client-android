@@ -133,16 +133,17 @@ public class NotificationService extends IntentService {
 
     private static void getData(String journeyDepartureStationId, String journeyArrivalStationId, String trainId, Context context, boolean justUpdate, boolean shouldPriorityBeHigh) {
         Log.d("getData:", journeyDepartureStationId, journeyArrivalStationId, trainId, justUpdate, shouldPriorityBeHigh);
-        Intent notificationErrorIntent = new Intent(NOTIFICATION_ERROR_EVENT);
-
-        boolean isCompactNotificationEnabled = ProPreferences.isPro(context) && ProPreferences.isCompactNotificationEnabled(context);
+        Intent  notificationErrorIntent           = new Intent(NOTIFICATION_ERROR_EVENT);
+        boolean isPro                             = ProPreferences.isPro(context);
+        boolean isCompactNotificationEnabled      = isPro && ProPreferences.isCompactNotificationEnabled(context);
+        boolean isAutoRemovingNotificationEnabled = isPro && ProPreferences.isAutoRemoveNotificationEnabled(context);
 
         APINetworkingFactory.createRetrofitService(JourneyService.class)
                 .getDelay(journeyDepartureStationId, journeyArrivalStationId, trainId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(trainHeader -> {
                     if (justUpdate) {
-                        Log.d("onNext: just updating");
+                        Log.d("onNext: just updating for a specific train from train details screen");
                         TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
                         return;
                     }
@@ -168,16 +169,24 @@ public class NotificationService extends IntentService {
                                         return;
                                     } else {
                                         Log.d("onNext: displaying the last train of the solution (which has arrived)");
-                                        TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
+                                        if (isAutoRemovingNotificationEnabled) {
+                                            cancelNotification(context);
+                                        } else {
+                                            TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
+                                        }
                                     }
                                 }
                             }
                         } else {
                             Log.d("onNext: displaying a single train solution which has arrived");
-                            TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
+                            if (isAutoRemovingNotificationEnabled) {
+                                cancelNotification(context);
+                            } else {
+                                TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
+                            }
                         }
                     } else {
-                        Log.d("onNext: displaying a train of a solution which hasnt arrived yet");
+                        Log.d("onNext: displaying a train of a solution which hasn't arrived yet");
                         TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
                     }
                 }, throwable -> {
@@ -186,6 +195,12 @@ public class NotificationService extends IntentService {
                     notificationErrorIntent.putExtra(NOTIFICATION_ERROR_MESSAGE, NOTIFICATION_ERROR_MESSAGE_TRAIN_NOT_FOUND);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(notificationErrorIntent);
                 });
+    }
+
+    private static void cancelNotification(Context context) {
+        Intent i = new Intent(context, NotificationService.class);
+        i.setAction(ACTION_STOP_NOTIFICATION);
+        context.startService(i);
     }
 
     @Override

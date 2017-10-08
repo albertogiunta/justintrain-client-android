@@ -19,6 +19,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_SAVED_VERSION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_VERSION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_VERSION;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences.disableAutoRemoveNotification;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences.disableCompactNotification;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences.disableInstantDelay;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences.disableLiveNotification;
@@ -224,6 +225,11 @@ public class SettingsPreferences {
         enableRecent(context);
     }
 
+    private static void setNewSettingsNotPreviouslyIncludedBefore51(Context context) {
+        // 51 - 1.2.0
+        disableAutoRemoveNotification(context);
+    }
+
     public static void setDefaultSharedPreferencesOnFirstStart(Context context) {
         // preferences
         SharedPreferencesHelper.setSharedPreferenceBoolean(context, SP_SP_FIRST_START, false);
@@ -237,6 +243,7 @@ public class SettingsPreferences {
         setNewSettingsNotPreviouslyIncludedBefore30(context);
         setNewSettingsNotPreviouslyIncludedBefore47(context);
         setNewSettingsNotPreviouslyIncludedBefore48(context);
+        setNewSettingsNotPreviouslyIncludedBefore51(context);
     }
 
     // inclusion of settings - update together with onFirstStart
@@ -254,6 +261,9 @@ public class SettingsPreferences {
             setNewSettingsNotPreviouslyIncludedBefore47(context);
         }
         if (getPreviouslySavedVersionCode(context) < 48) {
+            setNewSettingsNotPreviouslyIncludedBefore48(context);
+        }
+        if (getPreviouslySavedVersionCode(context) < 51) {
             setNewSettingsNotPreviouslyIncludedBefore48(context);
         }
     }

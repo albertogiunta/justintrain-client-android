@@ -41,12 +41,14 @@ public class TrainNotification {
      * The unique identifier for this type of notification.
      */
     private static final String TRAIN_NOTIFICATION_TAG = "trainNotification";
+    private static final int    NOTIFICATION_ID        = 0;
     private static final String CHANNEL_ID             = "trainNotification";
 
     /**
      * Shows the notification, or updates a previously shown notification of
      * this type, with the given parameters.
      */
+
     static void notify(final Context context, TrainHeader trainHeader, boolean hasVibration, boolean shouldPriorityBeHigh, boolean isCompatNotificationEnabled) {
 
         Gson gson = new GsonBuilder()
@@ -58,8 +60,8 @@ public class TrainNotification {
         // This image is used as the notification's large icon (thumbnail).
 //        final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.example_picture);
 
-        final String title = buildTitle(trainHeader);
-        final String text = buildBody(trainHeader, isCompatNotificationEnabled);
+        final String title     = buildTitle(trainHeader);
+        final String text      = buildBody(trainHeader, isCompatNotificationEnabled);
         final String smallText = buildSmallText(trainHeader);
 
         Intent iUpdate = new Intent(context, NotificationService.class);
@@ -77,7 +79,7 @@ public class TrainNotification {
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         int refreshIc = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.drawable.ic_refresh : R.drawable.ic_refresh2;
-        int closeIc = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.drawable.ic_close : R.drawable.ic_close2;
+        int closeIc   = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.drawable.ic_close : R.drawable.ic_close2;
 
         initChannels(context, shouldPriorityBeHigh);
 
@@ -123,7 +125,7 @@ public class TrainNotification {
     private static void notify(final Context context, final Notification notification) {
         final NotificationManager nm = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(TRAIN_NOTIFICATION_TAG, 0, notification);
+        nm.notify(TRAIN_NOTIFICATION_TAG, NOTIFICATION_ID, notification);
     }
 
     public static void initChannels(Context context, boolean shouldPriorityBeHigh) {
@@ -153,7 +155,7 @@ public class TrainNotification {
         }
     }
 
-    public static String buildTitle(TrainHeader data) {
+    private static String buildTitle(TrainHeader data) {
         return new Builder()
                 .withString(data.getTrainCategory())
                 .withSpace()
@@ -164,7 +166,7 @@ public class TrainNotification {
     }
 
     private static String buildBody(TrainHeader data, boolean isCompatNotificationEnabled) {
-        String delayPlusProgress = "";
+        String delayPlusProgress;
         if (isCompatNotificationEnabled) {
             if (data.isDeparted()) {
                 delayPlusProgress = new Builder()
@@ -215,8 +217,8 @@ public class TrainNotification {
     }
 
     private static String buildTimeDifferenceStringNormal(int timeDifference) {
-        String time = Integer.toString(Math.abs(timeDifference)) + "'";
-        String delay = "Ritardo: ";
+        String time   = Integer.toString(Math.abs(timeDifference)) + "'";
+        String delay  = "Ritardo: ";
         String ontime = "Anticipo: ";
         if (timeDifference > 0) {
             time = delay + time;
@@ -231,7 +233,7 @@ public class TrainNotification {
     private static String buildTimeDifferenceStringPro(int timeDifference) {
         String time = Integer.toString(Math.abs(timeDifference)) + "'";
         if (timeDifference > 0) {
-            time = "+"+ time;
+            time = "+" + time;
         } else if (timeDifference < 0) {
             time = "-" + time;
         }

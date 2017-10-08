@@ -101,16 +101,18 @@ public class CONST_ANALYTICS {
     public static final String SETTINGS_ENABLE_INSTANT_DELAY     = "Settings enable instant delay";
     public static final String SETTINGS_DISABLE_INSTANT_DELAY    = "Settings disable instant delay";
     public static final String SETTINGS_ENABLE_VIBRATION         = "Settings enable vibration";
-    public static final String SETTINGS_DISABLE_VIBRATION        = "Settings disable vibration";
-    public static final String SETTINGS_ENABLE_LIVE_NOTIFICATION = "Settings enable live notification";
-    public static final String SETTINGS_DISABLE_LIVE_NOTIFICATION    = "Settings disable live notification";
-    public static final String SETTINGS_ENABLE_COMPACT_NOTIFICATION  = "Settings enable compact notification";
-    public static final String SETTINGS_DISABLE_COMPACT_NOTIFICATION = "Settings disable compact notification";
-    public static final String SETTINGS_ENABLE_PREEMPTIVE            = "Settings enable preemptive";
-    public static final String SETTINGS_DISABLE_PREEMPTIVE           = "Settings disable preemptive";
-    public static final String SETTINGS_ENABLE_LIGHTNING             = "Settings enable lightning";
-    public static final String SETTINGS_DISABLE_LIGHTNING            = "Settings disable lightning";
-    public static final String SETTINGS_ENABLE_CHANGES               = "Settings enable changes";
+    public static final String SETTINGS_DISABLE_VIBRATION               = "Settings disable vibration";
+    public static final String SETTINGS_ENABLE_LIVE_NOTIFICATION        = "Settings enable live notification";
+    public static final String SETTINGS_DISABLE_LIVE_NOTIFICATION       = "Settings disable live notification";
+    public static final String SETTINGS_ENABLE_COMPACT_NOTIFICATION     = "Settings enable compact notification";
+    public static final String SETTINGS_DISABLE_COMPACT_NOTIFICATION    = "Settings disable compact notification";
+    public static final String SETTINGS_ENABLE_AUTOREMOVE_NOTIFICATION  = "Settings enable autoremove notification";
+    public static final String SETTINGS_DISABLE_AUTOREMOVE_NOTIFICATION = "Settings disable autoremove notification";
+    public static final String SETTINGS_ENABLE_PREEMPTIVE               = "Settings enable preemptive";
+    public static final String SETTINGS_DISABLE_PREEMPTIVE              = "Settings disable preemptive";
+    public static final String SETTINGS_ENABLE_LIGHTNING                = "Settings enable lightning";
+    public static final String SETTINGS_DISABLE_LIGHTNING               = "Settings disable lightning";
+    public static final String SETTINGS_ENABLE_CHANGES                  = "Settings enable changes";
     public static final String SETTINGS_DISABLE_CHANGES              = "Settings disable changes";
 
 }

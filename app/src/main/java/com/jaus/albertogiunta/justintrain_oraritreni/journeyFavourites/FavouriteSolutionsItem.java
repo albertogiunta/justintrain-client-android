@@ -177,8 +177,7 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
 
                     Button      delayView   = solutionsViewsList.get(j).findViewById(R.id.tv_time_difference);
                     ImageButton warningView = solutionsViewsList.get(j).findViewById(R.id.iv_warning);
-//                    apply(warningView, GONE);
-//                    apply(delayView, GONE);
+
                     if (!solution.hasChanges()) {
                         APINetworkingFactory
                                 .createRetrofitService(JourneyService.class)
