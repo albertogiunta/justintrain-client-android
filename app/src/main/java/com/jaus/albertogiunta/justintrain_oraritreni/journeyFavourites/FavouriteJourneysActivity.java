@@ -1,5 +1,6 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.journeyFavourites;
 
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
@@ -16,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -28,7 +28,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,6 +55,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.networking.PostProcessingEn
 import com.jaus.albertogiunta.justintrain_oraritreni.notification.ClickActionHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService;
 import com.jaus.albertogiunta.justintrain_oraritreni.tutorial.IntroActivity;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils;
@@ -88,6 +88,9 @@ import butterknife.OnClick;
 import trikita.log.Log;
 
 import static butterknife.ButterKnife.apply;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads.BOTTOM_MARGIN_ACTUAL;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads.BOTTOM_MARGIN_WITH_ADS;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads.ignoreBeingProAndShowAds;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.GONE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.VISIBLE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_AR_FROM_POPUP;
@@ -102,6 +105,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_TRANSFORM_TO_FAVS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.IAP_SEARCH;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_FAVOURITE_JOURNEYS;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_JOURNEY_RESULTS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_DISCOUNT_MESSAGE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_IS_DISCOUNT_SET;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_FIREBASE.FIREBASE_IS_MAINTENANCE_SET;
@@ -140,6 +144,12 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     @BindView(R.id.tv_message)
     TextView tvMessage;
 
+    @BindView(R.id.rl_banner_placeholder)
+    RelativeLayout rlBannerPlaceholder;
+    @BindView(R.id.adView2)
+    AdView         adView2;
+
+
     @BindView((R.id.fab_search_journey))
     FloatingActionButton btnSearch;
 
@@ -153,7 +163,6 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     boolean isFirstStart            = false;
     boolean isFirstStartAfterUpdate = false;
     Integer previousVersionCode     = 40;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -193,8 +202,8 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         rvFavouriteJourneys.addOnScrollListener(new HideShowScrollListener() {
             @Override
             public void onHide() {
-                btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(200).setDuration(100);
-                btnIAP.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(200).setDuration(100);
+                btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(450).setDuration(100);
+                btnIAP.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(450).setDuration(100);
             }
 
             @Override
@@ -218,6 +227,10 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             FavouriteJourneysActivity.this.startActivity(i);
         });
 
+        if (ignoreBeingProAndShowAds) {
+            loadAds();
+        }
+
         AsyncTask task = new LoadCursorTask(this).execute();
     }
 
@@ -238,8 +251,10 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
                 if (isFirstStartAfterUpdate && previousVersionCode < 47)
                     ProPreferences.enableCompactNotification(getViewContext());
                 apply(btnIAP, GONE);
-                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
-                lp.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                Ads.removeAds(rlBannerPlaceholder, adView2);
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) btnSearch.getLayoutParams();
+                lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+                lp.addRule(RelativeLayout.ALIGN_PARENT_END, 0);
                 btnSearch.setLayoutParams(lp);
                 apply(this.rlMessage, GONE);
                 shouldDisplayDiscountMessage = false;
@@ -247,10 +262,12 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             } else {
                 ProPreferences.disableAllPro(getViewContext());
                 apply(btnIAP, VISIBLE);
-                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) btnSearch.getLayoutParams();
-                lp.gravity = Gravity.BOTTOM | Gravity.END;
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) btnSearch.getLayoutParams();
+                lp.addRule(RelativeLayout.ALIGN_PARENT_END);
                 btnSearch.setLayoutParams(lp);
                 shouldDisplayDiscountMessage = true;
+                loadAds();
+
             }
         }
         setVisibilityOfProBedge();
@@ -616,6 +633,11 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             });
         }
         return false;
+    }
+
+    private void loadAds() {
+        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView2, analyticsHelper, SCREEN_JOURNEY_RESULTS);
+        BOTTOM_MARGIN_ACTUAL = BOTTOM_MARGIN_WITH_ADS;
     }
 
     abstract private class BaseTask<T> extends AsyncTask<T, Void, List<Station>> {

@@ -26,11 +26,11 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways"
                 android:theme="@style/AppThemeNoActionbar"
                 app:title="Soluzioni"
                 app:titleTextColor="@color/txt_white"
                 />
+        <!--app:layout_scrollFlags="scroll|enterAlways"-->
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
@@ -172,58 +172,6 @@
 
                 </RelativeLayout>
 
-                <!--<RelativeLayout-->
-                <!--android:id="@+id/rl_banner_placeholder"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/item_banner"-->
-                <!--android:layout_marginTop="@dimen/margin_small"-->
-                <!--android:layout_below="@id/rl_header_2_top"-->
-                <!--android:visibility="gone"-->
-                <!--&gt;-->
-
-                <!--<ProgressBar-->
-                <!--android:layout_width="24dp"-->
-                <!--android:layout_height="24dp"-->
-                <!--android:layout_alignParentStart="true"-->
-                <!--android:layout_marginStart="24dp"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:indeterminateTint="@color/bg_grey_lighter"-->
-                <!--/>-->
-
-                <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Carico Banner..."-->
-                <!--android:textSize="@dimen/text_size_default"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--android:textColor="@color/txt_grey"-->
-                <!--/>-->
-
-                <!--</RelativeLayout>-->
-
-                <!--<com.google.android.gms.ads.AdView-->
-                <!--xmlns:ads="http://schemas.android.com/apk/res-auto"-->
-                <!--android:id="@+id/adView"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="@dimen/margin_small"-->
-                <!--android:layout_below="@id/rl_header_2_top"-->
-                <!--ads:adSize="SMART_BANNER"-->
-                <!--ads:adUnitId="ca-app-pub-3940256099942544/6300978111"-->
-                <!--android:visibility="gone"-->
-                <!--/>-->
-
-                <!--<com.google.android.gms.ads.NativeExpressAdView-->
-                <!--android:id="@+id/adView"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="@dimen/margin_small"-->
-                <!--android:layout_below="@id/rl_header_2_top"-->
-                <!--ads:adUnitId="@string/journey_id_real"-->
-                <!--ads:adSize=" FULL_WIDTHx80"-->
-                <!--android:visibility="gone"-->
-                <!--/>-->
-
             </RelativeLayout>
 
             <ProgressBar
@@ -280,67 +228,71 @@
                     />
         </RelativeLayout>
 
-    </RelativeLayout>
 
-    <RelativeLayout
-            android:id="@+id/rl_banner_placeholder"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_gravity="bottom"
-            android:visibility="visible"
-            android:background="@color/bg_dark"
-            >
+        <RelativeLayout
+                android:id="@+id/rl_banner_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_gravity="bottom"
+                android:background="@color/bg_dark"
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"
+                >
 
-        <ProgressBar
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="24dp"
-                android:layout_centerVertical="true"
-                android:indeterminateTint="@color/bg_grey_lighter"
-                />
+            <ProgressBar
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_centerVertical="true"
+                    android:indeterminateTint="@color/bg_grey_lighter"
+                    />
 
-        <TextView
-                android:layout_width="wrap_content"
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Carico Banner..."
+                    android:textSize="@dimen/text_size_default"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/txt_grey"
+                    />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Carico Banner..."
-                android:textSize="@dimen/text_size_default"
-                android:layout_centerInParent="true"
-                android:textColor="@color/txt_grey"
-                />
+                android:layout_alignParentBottom="true"
+                >
 
+            <com.google.android.gms.ads.AdView
+                    android:id="@+id/adView2"
+                    xmlns:ads="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    ads:adUnitId="@string/journey_id_test"
+                    android:layout_alignParentBottom="true"
+                    ads:adSize="SMART_BANNER"
+                    android:visibility="gone"
+                    />
+
+            <ImageButton
+                    android:id="@+id/btn_refresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/btn_height_default"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:layout_marginBottom="16dp"
+                    android:layout_above="@id/adView2"
+                    android:background="@drawable/border_filled_5"
+                    android:clickable="true"
+                    android:elevation="@dimen/elevation_default"
+                    app:srcCompat="@drawable/ic_refresh"
+                    android:contentDescription="Aggiorna soluzioni"
+                    />
+        </RelativeLayout>
     </RelativeLayout>
-
-    <com.google.android.gms.ads.AdView
-            xmlns:ads="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/adView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            ads:adUnitId="ca-app-pub-8963908741443055/7810300087"
-            android:layout_below="@id/rl_header_2_top"
-            ads:adSize="SMART_BANNER"
-            android:visibility="gone"
-            />
-
-    <ImageButton
-            android:id="@+id/btn_refresh"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/btn_height_default"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="@dimen/margin_default"
-            android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_default"
-            android:layout_marginBottom="60dp"
-            android:background="@drawable/border_filled_5"
-            android:clickable="true"
-            android:elevation="@dimen/elevation_default"
-            app:srcCompat="@drawable/ic_refresh"
-            android:contentDescription="Aggiorna soluzioni"
-            />
-
 </android.support.design.widget.CoordinatorLayout>
-        <!--ads:adUnitId="ca-app-pub-8963908741443055/7810300087"-->
-
-        <!--ads:adUnitId="ca-app-pub-3940256099942544/6300978111"-->

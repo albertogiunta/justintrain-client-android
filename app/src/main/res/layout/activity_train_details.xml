@@ -36,6 +36,7 @@
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="0dp"
             android:layout_marginBottom="0dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
@@ -55,60 +56,12 @@
                     android:visibility="visible"
                     />
 
-
-            <android.support.v7.widget.CardView
-                    android:id="@+id/cv_banner_placeholder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="0dp"
-                    android:backgroundTint="@color/bg_dark"
-                    >
-
-                <RelativeLayout
-                        android:id="@+id/rl_banner_placeholder"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/item_banner"
-                        android:layout_marginTop="@dimen/margin_small"
-                        >
-
-                    <ProgressBar
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginStart="24dp"
-                            android:layout_centerVertical="true"
-                            android:indeterminateTint="@color/bg_grey_lighter"
-                            />
-
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Carico Banner..."
-                            android:textSize="@dimen/text_size_default"
-                            android:layout_centerInParent="true"
-                            android:textColor="@color/txt_grey"
-                            />
-
-                </RelativeLayout>
-
-                <com.google.android.gms.ads.NativeExpressAdView
-                        android:id="@+id/adView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        ads:adUnitId="@string/details_id_real"
-                        ads:adSize=" FULL_WIDTHx80"
-                        android:visibility="gone"
-                        />
-            </android.support.v7.widget.CardView>
-
             <android.support.v7.widget.CardView
                     android:id="@+id/cv_tip_placeholder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="0dp"
                     android:backgroundTint="@color/bg_dark"
-                    android:layout_below="@id/cv_banner_placeholder"
                     android:visibility="visible"
                     >
 
@@ -171,58 +124,108 @@
 
         </RelativeLayout>
 
-        <ImageButton
-                android:id="@+id/btn_refresh"
+        <RelativeLayout
+                android:id="@+id/rl_banner_placeholder"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/btn_height_default"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_gravity="bottom"
+                android:background="@color/bg_dark"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="@dimen/margin_default"
-                android:layout_marginTop="@dimen/margin_default"
-                android:layout_marginStart="@dimen/margin_default"
-                android:layout_marginEnd="85dp"
-                android:background="@drawable/border_filled_5"
-                android:clickable="true"
-                android:elevation="@dimen/elevation_default"
-                app:srcCompat="@drawable/ic_refresh"
-                android:contentDescription="Aggiorna soluzioni"
-                />
+                android:visibility="gone"
+                >
 
-        <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/btn_share_single"
-                android:layout_width="wrap_content"
+            <ProgressBar
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_centerVertical="true"
+                    android:indeterminateTint="@color/bg_grey_lighter"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Carico Banner..."
+                    android:textSize="@dimen/text_size_default"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/txt_grey"
+                    />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="@dimen/margin_default"
-                android:layout_marginEnd="@dimen/margin_default"
-                android:layout_marginBottom="@dimen/margin_smallish"
-                app:fab_elevationCompat="@dimen/elevation_default"
-                fab:fab_colorNormal="@color/btn_cyan"
-                fab:fab_colorPressed="#9fd4ef"
-                fab:fab_colorRipple="#b7cfda"
-                fab:fab_shadowColor="#000"
-                android:visibility="gone"
-                />
+                >
 
-        <com.github.clans.fab.FloatingActionMenu
-                android:id="@+id/btn_share_multiple"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="@dimen/margin_default"
-                android:layout_marginEnd="@dimen/margin_default"
-                android:layout_marginBottom="@dimen/margin_smallish"
-                app:fab_elevationCompat="4dp"
-                fab:menu_labels_ellipsize="end"
-                fab:menu_labels_singleLine="true"
-                fab:fab_size="mini"
-                fab:menu_colorNormal="@color/btn_cyan"
-                fab:menu_colorPressed="#9fd4ef"
-                fab:menu_colorRipple="#b7cfda"
-                fab:fab_shadowColor="#000"
-                android:visibility="gone"
-                />
+            <com.google.android.gms.ads.AdView
+                    android:id="@+id/adView2"
+                    xmlns:ads="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    ads:adUnitId="@string/journey_id_test"
+                    android:layout_alignParentBottom="true"
+                    ads:adSize="SMART_BANNER"
+                    android:visibility="gone"
+                    />
+
+            <ImageButton
+                    android:id="@+id/btn_refresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/btn_height_default"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginEnd="85dp"
+                    android:layout_marginBottom="@dimen/margin_default"
+                    android:layout_above="@id/adView2"
+                    android:background="@drawable/border_filled_5"
+                    android:clickable="true"
+                    android:elevation="@dimen/elevation_default"
+                    app:srcCompat="@drawable/ic_refresh"
+                    android:contentDescription="Aggiorna soluzioni"
+                    />
+
+            <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/btn_share_single"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:layout_marginBottom="@dimen/margin_smallish"
+                    android:layout_above="@id/adView2"
+                    app:fab_elevationCompat="@dimen/elevation_default"
+                    fab:fab_colorNormal="@color/btn_cyan"
+                    fab:fab_colorPressed="#9fd4ef"
+                    fab:fab_colorRipple="#b7cfda"
+                    fab:fab_shadowColor="#000"
+                    android:visibility="gone"
+                    />
+
+            <com.github.clans.fab.FloatingActionMenu
+                    android:id="@+id/btn_share_multiple"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/adView2"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:layout_marginBottom="@dimen/margin_smallish"
+                    app:fab_elevationCompat="4dp"
+                    fab:menu_labels_ellipsize="end"
+                    fab:menu_labels_singleLine="true"
+                    fab:fab_size="mini"
+                    fab:menu_colorNormal="@color/btn_cyan"
+                    fab:menu_colorPressed="#9fd4ef"
+                    fab:menu_colorRipple="#b7cfda"
+                    fab:fab_shadowColor="#000"
+                    android:visibility="gone"
+                    />
+        </RelativeLayout>
 
     </RelativeLayout>
 

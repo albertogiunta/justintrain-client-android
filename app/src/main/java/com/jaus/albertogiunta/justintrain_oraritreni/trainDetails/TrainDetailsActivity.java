@@ -1,6 +1,6 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.trainDetails;
 
-import com.google.android.gms.ads.NativeExpressAdView;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.crash.FirebaseCrash;
 
 import android.content.BroadcastReceiver;
@@ -63,6 +63,10 @@ import butterknife.ButterKnife;
 import trikita.log.Log;
 
 import static butterknife.ButterKnife.apply;
+import static com.jaus.albertogiunta.justintrain_oraritreni.R.id.adView2;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads.BOTTOM_MARGIN_ACTUAL;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads.BOTTOM_MARGIN_WITH_ADS;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads.ignoreBeingProAndShowAds;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.GONE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.VISIBLE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_REFRESH_SOLUTION;
@@ -73,6 +77,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_CONNECTIVITY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_NOT_FOUND_SOLUTION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_SERVER;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_JOURNEY_RESULTS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_SOLUTION_DETAILS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS.NONE;
 
@@ -109,11 +114,11 @@ public class TrainDetailsActivity extends AppCompatActivity implements
     Button         btnErrorMessage;
 
     @BindView(R.id.rl_banner_placeholder)
-    RelativeLayout      rlBannerPlaceholder;
+    RelativeLayout rlBannerPlaceholder;
     @BindView(R.id.cv_tip_placeholder)
-    CardView            cvTipPlaceholder;
-    @BindView(R.id.adView)
-    NativeExpressAdView adView;
+    CardView       cvTipPlaceholder;
+    @BindView(adView2)
+    AdView         adView;
 
     TrainDetailsAdapter adapter;
     private long refreshBtnLastClickTime = SystemClock.elapsedRealtime();
@@ -144,7 +149,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements
         rvTrainDetails.addOnScrollListener(new HideShowScrollListener() {
             @Override
             public void onHide() {
-                btnRefresh.animate().setInterpolator(new LinearInterpolator()).translationY(200).setDuration(100);
+                btnRefresh.animate().setInterpolator(new LinearInterpolator()).translationY(450).setDuration(100);
             }
 
             @Override
@@ -175,6 +180,12 @@ public class TrainDetailsActivity extends AppCompatActivity implements
             apply(cvTipPlaceholder, VISIBLE);
         } else {
             apply(cvTipPlaceholder, GONE);
+        }
+
+        if (ignoreBeingProAndShowAds) {
+            loadAds();
+        } else {
+            Ads.removeAds(rlBannerPlaceholder, adView);
         }
     }
 
@@ -402,5 +413,10 @@ public class TrainDetailsActivity extends AppCompatActivity implements
             }
             Ads.removeAds(rlBannerPlaceholder, adView);
         }
+    }
+
+    private void loadAds() {
+        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView, analyticsHelper, SCREEN_JOURNEY_RESULTS);
+        BOTTOM_MARGIN_ACTUAL = BOTTOM_MARGIN_WITH_ADS;
     }
 }

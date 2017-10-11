@@ -76,38 +76,91 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+                android:id="@+id/rl_banner_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_gravity="bottom"
+                android:background="@color/bg_dark"
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"
+                >
+
+            <ProgressBar
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_centerVertical="true"
+                    android:indeterminateTint="@color/bg_grey_lighter"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Carico Banner..."
+                    android:textSize="@dimen/text_size_default"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/txt_grey"
+                    />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                >
+
+            <com.google.android.gms.ads.AdView
+                    android:id="@+id/adView2"
+                    xmlns:ads="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    ads:adUnitId="@string/journey_id_test"
+                    android:layout_alignParentBottom="true"
+                    ads:adSize="SMART_BANNER"
+                    android:visibility="gone"
+                    />
+
+            <Button
+                    android:id="@+id/btn_iap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|start"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:layout_marginBottom="18dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_above="@id/adView2"
+                    android:layout_alignParentStart="true"
+                    android:textAllCaps="false"
+                    android:text="Ottieni le nuove feature esclusive!\nEntra a far parte del Fan Club"
+                    android:paddingStart="@dimen/margin_default_minus"
+                    android:paddingEnd="@dimen/margin_default_minus"
+                    android:paddingTop="@dimen/margin_small"
+                    android:paddingBottom="@dimen/margin_small"
+                    android:background="@drawable/bg_button_selector_green"
+                    android:lines="2"
+                    android:maxLines="4"
+                    />
+
+            <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_search_journey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/adView2"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:layout_marginBottom="32dp"
+                    app:fabSize="normal"
+                    app:srcCompat="@drawable/ic_search"
+                    android:visibility="visible"
+                    />
+        </RelativeLayout>
+
     </RelativeLayout>
-
-    <Button
-            android:id="@+id/btn_iap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
-            android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_default"
-            android:layout_marginBottom="18dp"
-            android:layout_centerHorizontal="true"
-            android:textAllCaps="false"
-            android:text="Ottieni le nuove feature esclusive!\nEntra a far parte del Fan Club"
-            android:paddingStart="@dimen/margin_default_minus"
-            android:paddingEnd="@dimen/margin_default_minus"
-            android:paddingTop="@dimen/margin_small"
-            android:paddingBottom="@dimen/margin_small"
-            android:background="@drawable/bg_button_selector_green"
-            android:lines="2"
-            android:maxLines="4"
-            />
-
-    <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_search_journey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/margin_default"
-            android:layout_marginBottom="16dp"
-            app:fabSize="normal"
-            app:srcCompat="@drawable/ic_search"
-            android:visibility="visible"
-            />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -8,10 +8,13 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.NativeExpressAdView;
 
 import android.content.Context;
+import android.support.design.widget.CoordinatorLayout;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.BuildConfig;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
 
 import trikita.log.Log;
@@ -23,6 +26,12 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.AD_FAILED_TO_LOAD;
 
 public class Ads {
+
+    public static int BOTTOM_MARGIN_WITH_ADS    = 60;
+    public static int BOTTOM_MARGIN_WITHOUT_ADS = 16;
+    public static int BOTTOM_MARGIN_ACTUAL      = 16;
+
+    public static boolean ignoreBeingProAndShowAds = BuildConfig.DEBUG && false;
 
     public static void initializeAds(Context context, NativeExpressAdView adView) {
         MobileAds.initialize(context, "ca-app-pub-8963908741443055~4285788324");
@@ -72,7 +81,7 @@ public class Ads {
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static void initializeAds(Context context, AdView adView) {
         MobileAds.initialize(context, "ca-app-pub-8963908741443055~4285788324");
@@ -114,6 +123,7 @@ public class Ads {
         }
 
         if (bannerPlaceholder != null) apply(bannerPlaceholder, GONE);
+        BOTTOM_MARGIN_ACTUAL = BOTTOM_MARGIN_WITHOUT_ADS;
         apply(adView, GONE);
         adView.setEnabled(false);
 
@@ -128,5 +138,21 @@ public class Ads {
                 parent.invalidate();
             }
         }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static CoordinatorLayout.LayoutParams createParamsForBottomView(Context context) {
+        int defaultMargin = ViewsUtils.convertDPtoPX(context, 16);
+        int bottomMargin  = ViewsUtils.convertDPtoPX(context, BOTTOM_MARGIN_ACTUAL);
+
+        CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, ViewsUtils.convertDPtoPX(context, 50));
+        params.topMargin = defaultMargin;
+        params.leftMargin = defaultMargin;
+        params.rightMargin = defaultMargin;
+        params.bottomMargin = bottomMargin;
+        params.gravity = Gravity.BOTTOM;
+
+        return params;
     }
 }
