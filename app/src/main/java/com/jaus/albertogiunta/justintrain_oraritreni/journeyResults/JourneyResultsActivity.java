@@ -1,6 +1,6 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.journeyResults;
 
-import com.google.android.gms.ads.NativeExpressAdView;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -19,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +31,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jaus.albertogiunta.justintrain_oraritreni.BuildConfig;
 import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.journeySearch.JourneySearchActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.DateTimeAdapter;
@@ -38,6 +41,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.WrapContentLinearLayoutManager;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_ERROR_BTN_STATUS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
@@ -80,6 +84,11 @@ public class JourneyResultsActivity extends AppCompatActivity implements
     BroadcastReceiver                messageReceiver;
     CustomIABHelper                  iabHelper;
 
+    int     refreshBottomMarginWithAds    = 60;
+    int     refreshBottomMarginWithoutAds = 16;
+    int     refreshBottomMarginActual     = 16;
+    boolean ignoreBeingProAndShowAds      = BuildConfig.DEBUG && true;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -96,9 +105,13 @@ public class JourneyResultsActivity extends AppCompatActivity implements
     ImageButton btnHeaderToggleFavorite;
 
     @BindView(R.id.rl_banner_placeholder)
-    RelativeLayout      rlBannerPlaceholder;
-    @BindView(R.id.adView)
-    NativeExpressAdView adView;
+    RelativeLayout rlBannerPlaceholder;
+    //    @BindView(R.id.adView)
+//    NativeExpressAdView adView;
+//    @BindView(R.id.adView)
+//    AdView         adView;
+    @BindView(R.id.adView2)
+    AdView         adView2;
 
     @BindView(R.id.loading_spinner)
     ProgressBar progressBar;
@@ -133,8 +146,6 @@ public class JourneyResultsActivity extends AppCompatActivity implements
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView, analyticsHelper, SCREEN_JOURNEY_RESULTS);
-
         btnHeaderSwapStationNames.setOnClickListener(v -> {
             AnimationUtils.animOnPress(v, AnimationUtils.ANIM_TYPE.MEDIUM);
             analyticsHelper.logScreenEvent(SCREEN_JOURNEY_RESULTS, ACTION_SWAP_STATIONS_FROM_RESULTS);
@@ -151,7 +162,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements
         rvJourneySolutions.addOnScrollListener(new HideShowScrollListener() {
             @Override
             public void onHide() {
-                btnRefresh.animate().setInterpolator(new LinearInterpolator()).translationY(200).setDuration(100);
+                btnRefresh.animate().setInterpolator(new LinearInterpolator()).translationY(400).setDuration(100);
             }
 
             @Override
@@ -177,6 +188,10 @@ public class JourneyResultsActivity extends AppCompatActivity implements
                 showSnackbar(intent.getExtras().getString(NotificationService.NOTIFICATION_ERROR_MESSAGE), NONE, Snackbar.LENGTH_SHORT);
             }
         };
+
+        if (ignoreBeingProAndShowAds) {
+            loadAds();
+        }
     }
 
     @Override
@@ -222,7 +237,6 @@ public class JourneyResultsActivity extends AppCompatActivity implements
         super.onResume();
         iabHelper.isUserPro(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter(NotificationService.NOTIFICATION_ERROR_EVENT));
-//        presenter.setState(getIntent().getExtras());
     }
 
     @Override
@@ -367,8 +381,32 @@ public class JourneyResultsActivity extends AppCompatActivity implements
 
     @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-        if (CustomIABHelper.isOrderOk(result, inv)) {
-            Ads.removeAds(rlBannerPlaceholder, adView);
+        boolean ignoreBeingProAndShowAds = true;
+        if (ignoreBeingProAndShowAds) {
+            loadAds();
+        } else {
+            if (CustomIABHelper.isOrderOk(result, inv)) {
+                Ads.removeAds(rlBannerPlaceholder, adView2);
+                refreshBottomMarginActual = refreshBottomMarginWithoutAds;
+            } else {
+                loadAds();
+            }
         }
+
+        int defaultMargin = ViewsUtils.convertDPtoPX(getViewContext(), 16);
+        int bottomMargin  = ViewsUtils.convertDPtoPX(getViewContext(), refreshBottomMarginActual);
+
+        CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, ViewsUtils.convertDPtoPX(getViewContext(), 50));
+        params.topMargin = defaultMargin;
+        params.leftMargin = defaultMargin;
+        params.rightMargin = defaultMargin;
+        params.bottomMargin = bottomMargin;
+        params.gravity = Gravity.BOTTOM;
+        btnRefresh.setLayoutParams(params);
+    }
+
+    private void loadAds() {
+        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView2, analyticsHelper, SCREEN_JOURNEY_RESULTS);
+        refreshBottomMarginActual = refreshBottomMarginWithAds;
     }
 }
