@@ -625,6 +625,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
             });
 
             rlTransformToFav.setOnClickListener(v -> {
+                presenter.removeRecent(preferredJourney.getStation1(), preferredJourney.getStation2());
                 analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_TRANSFORM_TO_FAVS);
                 presenter.addNewFavourite(preferredJourney.getStation1(), preferredJourney.getStation2());
                 updateFavouritesList();
