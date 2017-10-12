@@ -173,22 +173,6 @@
                     android:visibility="gone"
                     />
 
-            <ImageButton
-                    android:id="@+id/btn_refresh"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/btn_height_default"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginStart="@dimen/margin_default"
-                    android:layout_marginEnd="85dp"
-                    android:layout_marginBottom="@dimen/margin_default"
-                    android:layout_above="@id/adView2"
-                    android:background="@drawable/border_filled_5"
-                    android:clickable="true"
-                    android:elevation="@dimen/elevation_default"
-                    app:srcCompat="@drawable/ic_refresh"
-                    android:contentDescription="Aggiorna soluzioni"
-                    />
-
             <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/btn_share_single"
                     android:layout_width="wrap_content"
@@ -224,6 +208,23 @@
                     fab:menu_colorRipple="#b7cfda"
                     fab:fab_shadowColor="#000"
                     android:visibility="gone"
+                    />
+
+            <ImageButton
+                    android:id="@+id/btn_refresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/btn_height_default"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginEnd="90dp"
+                    android:layout_marginBottom="@dimen/margin_default"
+                    android:layout_above="@id/adView2"
+                    android:background="@drawable/border_filled_5"
+                    android:clickable="true"
+                    android:elevation="@dimen/elevation_default"
+                    app:srcCompat="@drawable/ic_refresh"
+                    android:contentDescription="Aggiorna soluzioni"
+                    android:layout_alignBottom="@id/btn_share_single"
                     />
         </RelativeLayout>
 

@@ -303,7 +303,6 @@ public class TrainDetailsActivity extends AppCompatActivity implements
             apply(btnShareMultiple, VISIBLE);
             btnShareMultiple.removeAllMenuButtons();
             btnShareMultiple.setClosedOnTouchOutside(true);
-//            btnShareMultiple.setImageDrawable(AppCompatDrawableManager.get().getDrawable(TrainDetailsActivity.this, R.drawable.ic _share));
             for (String s : trainCatAndId) {
                 FloatingActionButton menuItem = new FloatingActionButton(TrainDetailsActivity.this);
                 menuItem.setLabelText(s);

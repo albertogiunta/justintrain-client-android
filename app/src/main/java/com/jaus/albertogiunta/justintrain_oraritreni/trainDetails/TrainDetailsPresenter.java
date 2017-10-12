@@ -130,10 +130,11 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
             return;
         }
 
+        List<Train> newTrainList = new LinkedList<>();
 
         Observable.concatDelayError(Observable.fromIterable(searchTrainDetails(trainIdList))).subscribe(
                 train -> {
-                    trainList.add(train);
+                    newTrainList.add(train);
                 }, throwable -> {
                     if (throwable == null) {
                         view.showErrorMessage("Si è verificato un errore", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
@@ -172,6 +173,8 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
                         }
                     }
                 }, () -> {
+                    trainList.clear();
+                    trainList.addAll(newTrainList);
                     onComplete();
                 }
         );
@@ -316,9 +319,19 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
                 s += "In orario" + "\n";
             }
         }
+
         s += "Partenza prevista alle " + solution.getDepartureTimeWithDelayReadable() + " da " + solution.getDepartureStationName() + "\n";
         s += "Arrivo previsto alle " + solution.getArrivalTimeWithDelayReadable() + " a " + solution.getArrivalStationName() + "\n";
-//        s += "Vagone: -\n";
+
+        if (trainList != null && !trainList.isEmpty() && trainList.get(0) != null && trainList.get(0).getStops() != null) {
+            for (Train.Stop stop : trainList.get(0).getStops()) {
+                if (stop != null && stop.getStationId() != null && solution.getArrivalStationId() != null &&
+                        stop.getStationId().equals(solution.getArrivalStationId()) && stop.getDeparturePlatform() != null) {
+                    s += "Arrivo previsto al binario " + stop.getDeparturePlatform() + "\n";
+                    break;
+                }
+            }
+        }
 
         s += "\n - via JustInTrain - Orario Treni Trenitalia.\n";
         return s;
@@ -339,7 +352,17 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
         s += "Partenza prevista alle " + change.getDepartureTimeWithDelayReadable() + " da " + change.getDepartureStationName() + "\n";
         s += "Arrivo previsto alle " + change.getArrivalTimeWithDelayReadable() + " da " + change.getArrivalStationName() + "\n";
 
-        s += "\n Messaggio generato dall'app per pendolari -> JustInTrain Orari Trenitalia.\n";
+        if (trainList != null && !trainList.isEmpty() && index < trainList.size() && trainList.get(index) != null && trainList.get(index).getStops() != null) {
+            for (Train.Stop stop : trainList.get(index).getStops()) {
+                if (stop != null && stop.getStationId() != null && solution.getArrivalStationId() != null &&
+                        stop.getStationId().equals(solution.getArrivalStationId()) && stop.getDeparturePlatform() != null) {
+                    s += "Arrivo previsto al binario " + stop.getDeparturePlatform() + "\n";
+                    break;
+                }
+            }
+        }
+
+        s += "\n - via JustInTrain - Orario Treni Trenitalia.\n";
         return s;
     }
 
