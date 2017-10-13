@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -62,35 +63,35 @@ public class JourneySearchActivity extends AppCompatActivity implements JourneyS
     Toolbar toolbar;
 
     @BindView(R.id.rl_departure)
-    RelativeLayout rlDeparture;
+    RelativeLayout       rlDeparture;
     @BindView(R.id.tv_departure)
-    TextView tvDeparture;
+    TextView             tvDeparture;
     @BindView(R.id.rl_arrival)
-    RelativeLayout rlArrival;
+    RelativeLayout       rlArrival;
     @BindView(R.id.tv_arrival)
-    TextView tvArrival;
+    TextView             tvArrival;
     @BindView(R.id.btn_swap_station_names)
-    ImageButton btnSwapStationNames;
+    ImageButton          btnSwapStationNames;
     @BindView(R.id.tv_minus_one_hour)
-    TextView tvMinusOneHour;
+    TextView             tvMinusOneHour;
     @BindView(R.id.tv_plus_one_hour)
-    TextView tvPlusOneHour;
+    TextView             tvPlusOneHour;
     @BindView(R.id.tv_time)
-    TextView tvTime;
+    TextView             tvTime;
     @BindView(R.id.tv_minus_one_day)
-    TextView tvMinusOneDay;
+    TextView             tvMinusOneDay;
     @BindView(R.id.tv_plus_one_day)
-    TextView tvPlusOneDay;
+    TextView             tvPlusOneDay;
     @BindView(R.id.tv_date)
-    TextView tvDate;
+    TextView             tvDate;
     @BindView(R.id.btn_add_new_favourite)
-    ImageButton btnHeaderToggleFavorite;
+    FloatingActionButton btnHeaderToggleFavorite;
     @BindView(R.id.btn_search_journey)
-    Button      btnSearchJourney;
+    Button               btnSearchJourney;
     @BindView(R.id.btn_search_train)
-    Button      btnSearchTrain;
+    Button               btnSearchTrain;
     @BindView(R.id.et_train_number)
-    AppCompatEditText etTrainNumber;
+    AppCompatEditText    etTrainNumber;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

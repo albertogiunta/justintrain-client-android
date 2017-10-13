@@ -8,7 +8,7 @@
         tools:locale="it"
         android:baselineAligned="false"
         android:orientation="vertical"
-        android:weightSum="4"
+        android:weightSum="6"
         android:background="@drawable/bg_gradient_1"
         android:clipChildren="false"
         android:clipToPadding="false"
@@ -36,11 +36,12 @@
             android:id="@+id/ll_stations"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.6"
+            android:layout_weight="2"
             android:background="@color/bg_dark"
             android:orientation="horizontal"
-            android:weightSum="2"
+            android:weightSum="0"
             android:elevation="2dp"
+            android:baselineAligned="false"
             >
 
         <RelativeLayout
@@ -63,7 +64,7 @@
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/txt_white"
-                    android:textSize="@dimen/text_size_default_plus"
+                    android:textSize="@dimen/text_size_default"
                     android:textStyle="bold"
                     fontPath="@string/font_path_bold"
                     />
@@ -80,6 +81,7 @@
                     android:textColor="@color/txt_grey_lighter"
                     android:textStyle="bold"
                     fontPath="@string/font_path_bold"
+                    android:textSize="@dimen/text_size_smaller"
                     />
         </RelativeLayout>
 
@@ -88,21 +90,21 @@
                 android:layout_height="match_parent"
                 android:baselineAligned="false"
                 android:orientation="vertical"
-                android:weightSum="11.5"
+                android:weightSum="7"
                 >
 
             <View
                     android:layout_width="@dimen/divider"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
-                    android:layout_weight=".5"
+                    android:layout_weight=".2"
                     />
 
             <View
                     android:layout_width="@dimen/divider"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
-                    android:layout_weight="4"
+                    android:layout_weight="2.6"
                     android:background="@color/bg_grey"
                     />
 
@@ -110,7 +112,7 @@
                     android:layout_width="@dimen/divider"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
-                    android:layout_weight=".5"
+                    android:layout_weight=".2"
                     />
 
             <ImageButton
@@ -118,25 +120,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_weight="1.5"
+                    android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:clickable="true"
                     android:tint="@color/btn_cyan"
                     app:srcCompat="@drawable/ic_swap_horiz"
+                    android:contentDescription="Scambia stazioni"
                     />
 
             <View
                     android:layout_width="@dimen/divider"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
-                    android:layout_weight=".5"
+                    android:layout_weight=".2"
                     />
 
             <View
                     android:layout_width="@dimen/divider"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
-                    android:layout_weight="4"
+                    android:layout_weight="1"
                     android:background="@color/bg_grey"
                     />
 
@@ -144,12 +147,11 @@
                     android:layout_width="@dimen/divider"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
-                    android:layout_weight=".5"
+                    android:layout_weight="2.8"
                     />
 
 
         </LinearLayout>
-
 
         <RelativeLayout
                 android:id="@+id/rl_arrival"
@@ -171,7 +173,7 @@
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/txt_white"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_size_default"
                     android:textStyle="bold"
                     fontPath="@string/font_path_bold"
                     />
@@ -186,16 +188,31 @@
                     android:text="@string/hint_arrival"
                     android:textAppearance="@style/TextAppearance.AppCompat.Button"
                     android:textColor="@color/txt_grey_lighter"
+                    android:textSize="@dimen/text_size_smaller"
                     />
         </RelativeLayout>
     </LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_add_new_favourite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabSize="mini"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="-20dp"
+            android:backgroundTint="@color/btn_cyan"
+            android:tint="@color/btn_dark_cyan"
+            app:srcCompat="@drawable/ic_star_border"
+            />
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.2"
+            android:layout_weight="1.5"
             android:orientation="horizontal"
             android:weightSum="2"
+            android:layout_marginTop="-20dp"
+            android:baselineAligned="false"
             >
 
         <RelativeLayout
@@ -212,7 +229,7 @@
                     android:layout_centerInParent="true"
                     tools:text="06:00"
                     android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                    android:textSize="@dimen/text_size_default_plus"
+                    android:textSize="@dimen/text_size_default"
                     />
 
             <TextView
@@ -227,6 +244,7 @@
                     android:textColor="@color/txt_grey"
                     android:textStyle="bold"
                     fontPath="@string/font_path_bold"
+                    android:textSize="@dimen/text_size_smaller"
                     />
 
             <LinearLayout
@@ -237,17 +255,18 @@
                     android:layout_marginEnd="@dimen/margin_very_big"
                     android:layout_marginStart="@dimen/margin_very_big"
                     android:layout_marginTop="@dimen/margin_default_minus"
+                    android:layout_marginBottom="@dimen/margin_smallish"
                     android:background="@drawable/border_filled_5"
                     android:elevation="@dimen/elevation_default"
                     android:orientation="horizontal"
-                    android:weightSum="4"
+                    android:weightSum="2"
                     >
 
                 <TextView
                         android:id="@+id/tv_minus_one_hour"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
                         android:gravity="center"
@@ -268,7 +287,7 @@
                         android:id="@+id/tv_plus_one_hour"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
                         android:gravity="center"
@@ -295,21 +314,22 @@
                     tools:text="1 Ottobre"
                     android:textAllCaps="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                    android:textSize="@dimen/text_size_default_plus"
+                    android:textSize="@dimen/text_size_default"
                     />
 
             <TextView
                     android:id="@+id/lbl_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/tv_date"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/margin_default_minus"
+                    android:layout_marginBottom="12dp"
                     android:text="@string/hint_date"
                     android:textAllCaps="true"
                     android:textColor="@color/txt_grey"
                     android:textStyle="bold"
                     fontPath="@string/font_path_bold"
+                    android:layout_above="@+id/tv_date"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="@dimen/text_size_smaller"
                     />
 
             <LinearLayout
@@ -320,17 +340,18 @@
                     android:layout_marginEnd="@dimen/item_height_very_small"
                     android:layout_marginStart="@dimen/item_height_very_small"
                     android:layout_marginTop="@dimen/margin_default_minus"
+                    android:layout_marginBottom="@dimen/margin_smallish"
                     android:background="@drawable/border_filled_5"
                     android:elevation="@dimen/elevation_default"
                     android:orientation="horizontal"
-                    android:weightSum="4"
+                    android:weightSum="0"
                     >
 
                 <TextView
                         android:id="@+id/tv_minus_one_day"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
                         android:gravity="center"
@@ -351,7 +372,7 @@
                         android:id="@+id/tv_plus_one_day"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
                         android:gravity="center"
@@ -368,25 +389,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            android:layout_weight=".6"
+            android:layout_weight="1"
             android:layout_gravity="center"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:layout_marginTop="@dimen/margin_smaller"
             android:layout_marginBottom="@dimen/margin_smaller"
             >
-
-        <ImageButton
-                android:id="@+id/btn_add_new_favourite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/margin_default"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:tint="@color/btn_dark_cyan"
-                app:srcCompat="@drawable/ic_star_border"
-                />
 
         <Button
                 android:id="@+id/btn_search_journey"
@@ -397,16 +406,17 @@
                 android:layout_marginStart="@dimen/margin_default"
                 android:background="@drawable/border_filled_5"
                 android:elevation="@dimen/elevation_default"
-                android:text="@string/search_journey"
                 android:textColor="@color/txt_white"
-                android:textSize="@dimen/text_size_default_plus"
+                android:textSize="@dimen/text_size_default"
+                android:text="@string/search_journey"
+                android:textAllCaps="true"
                 />
     </LinearLayout>
 
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".3"
+            android:layout_weight=".5"
             >
 
         <TextView
@@ -448,12 +458,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            android:layout_weight=".4"
+            android:layout_weight="1"
             android:layout_gravity="center"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:layout_marginTop="@dimen/margin_smaller"
-            android:layout_marginBottom="@dimen/margin_default"
             android:focusable="true"
             android:focusableInTouchMode="true"
             >
@@ -473,16 +482,16 @@
         <Button
                 android:id="@+id/btn_search_train"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="@dimen/margin_default"
                 android:layout_marginStart="@dimen/margin_default"
                 android:background="@drawable/border_filled_5"
                 android:elevation="@dimen/elevation_default"
-                android:text="@string/search_train"
                 android:textColor="@color/txt_white"
-                android:textSize="@dimen/text_size_default_minus"
-                android:backgroundTint="@color/btn_dark_cyan"
+                android:textSize="@dimen/text_size_default"
+                android:text="@string/search_train"
+                android:textAllCaps="true"
                 />
     </LinearLayout>
 </LinearLayout>
