@@ -39,7 +39,7 @@
             android:layout_weight="2"
             android:background="@color/bg_dark"
             android:orientation="horizontal"
-            android:weightSum="0"
+            android:weightSum="2"
             android:elevation="2dp"
             android:baselineAligned="false"
             >
@@ -344,7 +344,7 @@
                     android:background="@drawable/border_filled_5"
                     android:elevation="@dimen/elevation_default"
                     android:orientation="horizontal"
-                    android:weightSum="0"
+                    android:weightSum="2"
                     >
 
                 <TextView
