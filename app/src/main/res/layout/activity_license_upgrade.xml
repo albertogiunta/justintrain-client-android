@@ -418,6 +418,72 @@
                         android:layout_weight="2"
                         >
                     <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/ic_smart_notif"
+                            android:contentDescription="Compact Notification"
+                            />
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="3"
+                        >
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/txt_white"
+                            fontPath="@string/font_path_bold"
+                            android:text="Notifiche SMART"
+                            />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            fontPath="@string/font_path_bold"
+                            android:text="per il pendolare pigrissimo"
+                            android:textAllCaps="true"
+                            android:textSize="@dimen/text_size_even_smaller"
+                            android:background="@drawable/border_filled_3"
+                            android:backgroundTint="@color/bg_white"
+                            android:layout_marginTop="@dimen/margin_smaller"
+                            android:layout_marginBottom="@dimen/margin_small"
+                            android:paddingStart="4dp"
+                            android:paddingEnd="4dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/txt_white"
+                            fontPath="@string/font_path_standard"
+                            android:textSize="@dimen/text_size_smaller"
+                            android:text="Perchè è intelligente? Perchè quando si accorge di non essere più utile si rimuove da sola, e perchè comunque è importante anche sapere quando è ora di farsi da parte."
+                            />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/margin_default"
+                    android:weightSum="5"
+                    >
+                <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/margin_default"
+                        android:orientation="vertical"
+                        android:layout_weight="2"
+                        >
+                    <ImageView
                             android:layout_width="60dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center_horizontal"

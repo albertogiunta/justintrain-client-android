@@ -144,6 +144,42 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_smart_notif"
+                    android:contentDescription="Compact Notifications"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_bold"
+                    android:text="Notifiche SMART"
+                    android:textAlignment="center"
+                    android:layout_marginTop="@dimen/margin_small"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_standard"
+                    android:textSize="@dimen/text_size_smaller"
+                    android:text="Ogni volta che la notifica si aggiorna, controlla se il tuo treno è arrivato alla tua destinazione. Se sì, allora si rimuoverà da sola dalle notifiche.\n\nQuesta funzionalità, combinata con le notifiche LIVE ti permette potenzialmente di non dover mai interagire fisicamente con la notifica. Farà sempre tutto da sola! Non è fichissimo?!"
+                    android:layout_marginTop="@dimen/margin_small"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_default"
+                >
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:background="@drawable/ic_no_ads"
                     android:contentDescription="No Ads"
                     />
