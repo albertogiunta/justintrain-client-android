@@ -224,7 +224,7 @@
                     android:elevation="@dimen/elevation_default"
                     app:srcCompat="@drawable/ic_refresh"
                     android:contentDescription="Aggiorna soluzioni"
-                    android:layout_alignBottom="@id/btn_share_single"
+                    android:layout_alignBottom="@id/btn_share_multiple"
                     />
         </RelativeLayout>
 

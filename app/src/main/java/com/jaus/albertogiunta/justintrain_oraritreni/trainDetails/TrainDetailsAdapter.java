@@ -181,11 +181,17 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
             tvDepartureStationName.setText(train.getTrainDepartureStationName());
             tvArrivalStationName.setText(train.getTrainArrivalStationName());
 
-            this.btnPin.setOnClickListener(v -> {
-                AnimationUtils.animOnPress(v, AnimationUtils.ANIM_TYPE.LIGHT);
-                AnalyticsHelper.getInstance(context).logScreenEvent(SCREEN_SOLUTION_DETAILS, ACTION_SET_NOTIFICATION_FROM_SOLUTION);
-                presenter.onNotificationRequested(getAdapterPosition());
-            });
+            if (presenter.isOnlyTrainSearch()) {
+                apply(btnPin, GONE);
+            } else {
+                apply(btnPin, VISIBLE);
+
+                this.btnPin.setOnClickListener(v -> {
+                    AnimationUtils.animOnPress(v, AnimationUtils.ANIM_TYPE.LIGHT);
+                    AnalyticsHelper.getInstance(context).logScreenEvent(SCREEN_SOLUTION_DETAILS, ACTION_SET_NOTIFICATION_FROM_SOLUTION);
+                    presenter.onNotificationRequested(getAdapterPosition());
+                });
+            }
 
             apply(tvWhyDelay, GONE);
 
@@ -227,8 +233,11 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
                     apply(tvTrainStatus, VISIBLE);
                     apply(tvStatusException, VISIBLE);
                     apply(llLastSeen, VISIBLE);
-                    if (!presenter.isOnlyTrainSearch()) apply(btnPin, VISIBLE);
-                    else apply(btnPin, GONE);
+                    if (presenter.isOnlyTrainSearch()) {
+                        apply(btnPin, GONE);
+                    } else {
+                        apply(btnPin, VISIBLE);
+                    }
                     apply(llTimeDifference, VISIBLE);
                     apply(tvTimeDifference, VISIBLE);
 
@@ -261,8 +270,11 @@ class TrainDetailsAdapter extends RecyclerView.Adapter {
                 // non ancora partito
                 apply(tvTrainStatus, VISIBLE);
                 apply(tvStatusException, VISIBLE);
-                if (!presenter.isOnlyTrainSearch()) apply(btnPin, VISIBLE);
-                else apply(btnPin, GONE);
+                if (presenter.isOnlyTrainSearch()) {
+                    apply(btnPin, GONE);
+                } else {
+                    apply(btnPin, VISIBLE);
+                }
                 apply(llLastSeen, GONE);
                 apply(tvTimeDifference, INVISIBLE);
                 apply(tvProgress, INVISIBLE);

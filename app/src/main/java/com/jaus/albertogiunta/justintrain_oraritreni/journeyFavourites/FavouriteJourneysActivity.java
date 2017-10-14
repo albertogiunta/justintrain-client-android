@@ -290,7 +290,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     private void setVisibilityOfProBedge() {
         if (ProPreferences.isPro(getViewContext()) && menu != null) {
             MenuItem item = menu.findItem(R.id.label_pro);
-            item.setVisible(true);
+            if (item != null) item.setVisible(true);
         }
     }
 

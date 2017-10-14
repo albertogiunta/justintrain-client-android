@@ -209,6 +209,11 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
     public void onNotificationRequested(int recyclerViewIndex) {
         int elementIndex = extractIndex(recyclerViewIndex);
 
+        if (elementIndex >= journeySolutions.size()) {
+            view.showSnackbar("Sembra si sia verificato un problema", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_SHORT);
+            return;
+        }
+
         journeySolutions.get(elementIndex).setDepartureStationId(departureStation.getStationLongId());
         journeySolutions.get(elementIndex).setArrivalStationId(arrivalStation.getStationLongId());
 
@@ -332,10 +337,10 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
                 if (NetworkingHelper.isNetworkAvailable(view.getViewContext())) {
                     view.showErrorMessage("Si è verificato un problema", "Segnala il problema", ENUM_ERROR_BTN_STATUS.SEND_REPORT);
                 } else {
-                    view.showErrorMessage("Assicurati di essere connesso a Internet", "Attiva connessione", ENUM_ERROR_BTN_STATUS.CONN_SETTINGS);
+                    view.showErrorMessage("Assicurati che il telefono sia connesso a Internet", "Attiva connessione", ENUM_ERROR_BTN_STATUS.CONN_SETTINGS);
                 }
             } else if (exception.toString().equals("java.net.SocketTimeoutException: timeout")) {
-                view.showErrorMessage("Assicurati di essere connesso a Internet", "Attiva connessione", ENUM_ERROR_BTN_STATUS.CONN_SETTINGS);
+                view.showErrorMessage("Assicurati che il telefono sia connesso a Internet", "Attiva connessione", ENUM_ERROR_BTN_STATUS.CONN_SETTINGS);
             }
         }
     }
