@@ -41,9 +41,10 @@
     <string name="search_train">Cerca Treno</string>
 
     <string name="app_id">ca-app-pub-8963908741443055~4285788324</string>
-    <string name="journey_id_real">ca-app-pub-8963908741443055/9768933920</string>
-    <string name="details_id_real">ca-app-pub-8963908741443055/8152599923</string>
-    <string name="journey_id_test">ca-app-pub-3940256099942544/2793859312</string>
+    <string name="favourites_id_real">ca-app-pub-8963908741443055/7810300087</string>
+    <string name="journey_id_real">ca-app-pub-8963908741443055/2712532405</string>
+    <string name="details_id_real">ca-app-pub-8963908741443055/9936895237</string>
+    <!--<string name="journey_id_test">ca-app-pub-3940256099942544/2793859312</string>-->
     <!--<string name="details_id_test">ca-app-pub-3940256099942544/2793859312</string>-->
 
     <string name="static_shortcut_disabled_message">Non ancora disponibile</string>
@@ -75,15 +76,17 @@
 
     <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '   -->
     <string name="changelog">
-        • NUOVO: <b>Aggiunte le ricerche recenti!</b>
-        \nNon ti interessano? Nessun problema, puoi disattivarle dalla schermata delle impostazioni!
+        • NUOVO (PRO): <b>Notifiche SMART</b>: ora si rimuovono da sole quando arrivi a destizione
         \n\n
-        • NUOVO: <b>Aggiunta la ricerca per numero del treno!</b>
-        \nPer una consultazione rapida di un treno, puoi accedervi dalla schermata di ricerca.
+        • NUOVO: Quando condividi il treno ora verrà <b>condiviso anche il binario</b> a cui il treno arriverà
         \n\n
-        • Aggiunto supporto sperimentale ad <b>Android 8 Oreo</b>
+        • Migliorie grafiche alla schermata di ricerca
         \n\n
-        • Bug fix generali
+        • Aggiornata la lista delle stazioni
+        \n\n
+        • Cambiata la disposizione della <b>pubblicità</b> e aggiunto un banner alla schermata iniziale: spero nella vostra comprensione, sto sperimentando un po\' perché vorrei riuscire a pagare la quota mensile del server tramite i pochi euro raccolti dalle pubblicità, e sto cercando il modo migliore per farlo che non sia d\'intralcio per nessuno
+        \n\n
+        • Bug fix e UI fix generali
     </string>
     <string name="play_store_native_url">market://details?id=</string>
     <string name="play_store_web_url">https://play.google.com/store/apps/details?id=</string>

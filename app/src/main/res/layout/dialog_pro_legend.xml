@@ -164,7 +164,7 @@
                     android:textColor="@color/txt_white"
                     fontPath="@string/font_path_standard"
                     android:textSize="@dimen/text_size_smaller"
-                    android:text="Ogni volta che la notifica si aggiorna, controlla se il tuo treno è arrivato alla tua destinazione. Se sì, allora si rimuoverà da sola dalle notifiche.\n\nQuesta funzionalità, combinata con le notifiche LIVE ti permette potenzialmente di non dover mai interagire fisicamente con la notifica. Farà sempre tutto da sola! Non è fichissimo?!"
+                    android:text="Ogni volta che la notifica si aggiorna, essa controllerà se il tuo treno è arrivato alla tua destinazione. Se sì, allora si rimuoverà da sola dalle notifiche.\n\nQuesta funzionalità, combinata con le notifiche LIVE ti permette potenzialmente di non dover mai interagire fisicamente con la notifica. Farà sempre tutto da sola! Non è fichissimo?!"
                     android:layout_marginTop="@dimen/margin_small"
                     />
         </LinearLayout>
