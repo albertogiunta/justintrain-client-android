@@ -41,7 +41,7 @@ interface FavouritesContract {
         /**
          * Hides the message view
          */
-        void hideMessage();
+        void hideIAPButton();
     }
 
     interface Presenter extends BasePresenter {

@@ -54,6 +54,10 @@ public class RecentStationsPreferences {
 
 //    ------------------------------------------------------------------------------------------------------------------------
 
+    public static void removeRecentJourney(Context context, PreferredJourney preferredJourney) {
+        removeRecentJourney(context, preferredJourney.getStation1().getStationShortId(), preferredJourney.getStation2().getStationShortId());
+    }
+
     public static void removeRecentJourney(Context context, PreferredStation departureStation, PreferredStation arrivalStation) {
         removeRecentJourney(context, departureStation.getStationShortId(), arrivalStation.getStationShortId());
     }

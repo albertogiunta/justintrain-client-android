@@ -175,8 +175,7 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
                 view.showSnackbar("Tratta rimossa dai Preferiti", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_SHORT);
             } else {
                 if (PreferredStationsPreferences.isPossibleToSaveMorePreferredJourneys(view.getViewContext())) {
-                    PreferredStationsPreferences.setPreferredJourney(view.getViewContext(),
-                            new PreferredJourney(departureStation, arrivalStation));
+                    PreferredStationsPreferences.setPreferredJourney(view.getViewContext(), new PreferredJourney(departureStation, arrivalStation));
                     setFavouriteButtonStatus();
                     view.showSnackbar("Tratta aggiunta ai Preferiti", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_SHORT);
                 } else {
@@ -209,7 +208,10 @@ class JourneySearchPresenter implements JourneySearchContract.Presenter {
 
 
     private Boolean saveRecentJourney() {
-        RecentStationsPreferences.setRecentJourney(view.getViewContext(), new PreferredJourney(departureStation, arrivalStation));
+        PreferredJourney pj = new PreferredJourney(departureStation, arrivalStation);
+        if (!PreferredStationsPreferences.isJourneyAlreadyPreferred(view.getViewContext(), pj)) {
+            RecentStationsPreferences.setRecentJourney(view.getViewContext(), pj);
+        }
         return true;
     }
 

@@ -69,10 +69,8 @@ class FavouritesPresenter implements FavouritesContract.Presenter {
     @Override
     public void addNewFavourite(PreferredStation departureStation, PreferredStation arrivalStation) {
         if (PreferredStationsPreferences.isPossibleToSaveMorePreferredJourneys(view.getViewContext())) {
-
             if (!PreferredStationsPreferences.isJourneyAlreadyPreferred(view.getViewContext(), departureStation, arrivalStation)) {
-                PreferredStationsPreferences.setPreferredJourney(view.getViewContext(),
-                        new PreferredJourney(departureStation, arrivalStation));
+                PreferredStationsPreferences.setPreferredJourney(view.getViewContext(), new PreferredJourney(departureStation, arrivalStation));
                 view.showSnackbar("Tratta aggiunta ai Preferiti", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_SHORT);
             } else {
                 view.showSnackbar("La tratta è già tra i preferiti!", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);

@@ -34,8 +34,7 @@ public class StationsPreferences {
                 .create();
         SharedPreferencesHelper.setSharedPreferenceObject(context,
                 buildSavedJourneyId(type, journey.getStation1().getStationShortId(),
-                        journey.getStation2().getStationShortId()),
-                gson.toJson(journey));
+                        journey.getStation2().getStationShortId()), gson.toJson(journey));
     }
 
     public static List<PreferredJourney> getAllSavedJourneys(Context context, ENUM_HOME_HEADER type) {

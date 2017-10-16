@@ -355,11 +355,11 @@ public class JourneySearchActivity extends AppCompatActivity implements JourneyS
     public void setFavouriteButtonStatus(boolean isPreferred) {
         if (isPreferred) {
             analyticsHelper.logScreenEvent(SCREEN_SEARCH_JOURNEY, ACTION_SET_FAVOURITE_FROM_SEARCH);
-            this.btnHeaderToggleFavorite.setImageResource(R.drawable.ic_star_black);
+            this.btnHeaderToggleFavorite.setImageDrawable(ContextCompat.getDrawable(getViewContext(), R.drawable.ic_star_black));
             AnimationUtils.animOnPress(this.btnHeaderToggleFavorite, AnimationUtils.ANIM_TYPE.MEDIUM);
         } else {
             analyticsHelper.logScreenEvent(SCREEN_SEARCH_JOURNEY, ACTION_REMOVE_FAVOURITE_FROM_SEARCH);
-            this.btnHeaderToggleFavorite.setImageResource(R.drawable.ic_star_border);
+            this.btnHeaderToggleFavorite.setImageDrawable(ContextCompat.getDrawable(getViewContext(), R.drawable.ic_star_border));
         }
     }
 }

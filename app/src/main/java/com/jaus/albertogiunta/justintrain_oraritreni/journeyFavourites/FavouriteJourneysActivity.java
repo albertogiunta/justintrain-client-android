@@ -202,14 +202,14 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         rvFavouriteJourneys.addOnScrollListener(new HideShowScrollListener() {
             @Override
             public void onHide() {
-                btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(450).setDuration(100);
-                btnIAP.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(450).setDuration(100);
+                btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(450).setDuration(150);
+                btnIAP.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(450).setDuration(150);
             }
 
             @Override
             public void onShow() {
-                btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(100);
-                btnIAP.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(100);
+                btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(150);
+                btnIAP.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(0).setDuration(150);
             }
         });
 
@@ -246,19 +246,24 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
 
         } else {
             if (CustomIABHelper.isOrderOk(result, inv)) {
-                ProPreferences.enablePro(getViewContext());
-                if (isFirstStart) ProPreferences.enableAllPro(getViewContext());
-                if (isFirstStartAfterUpdate && previousVersionCode < 47)
-                    ProPreferences.enableCompactNotification(getViewContext());
-                apply(btnIAP, GONE);
-                Ads.removeAds(rlBannerPlaceholder, adView2);
-                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) btnSearch.getLayoutParams();
-                lp.addRule(RelativeLayout.CENTER_IN_PARENT);
-                lp.addRule(RelativeLayout.ALIGN_PARENT_END, 0);
-                btnSearch.setLayoutParams(lp);
-                apply(this.rlMessage, GONE);
-                shouldDisplayDiscountMessage = false;
-                invalidateOptionsMenu();
+                if (ignoreBeingProAndShowAds) {
+                    apply(btnIAP, VISIBLE);
+                    loadAds();
+                } else {
+                    ProPreferences.enablePro(getViewContext());
+                    if (isFirstStart) ProPreferences.enableAllPro(getViewContext());
+                    if (isFirstStartAfterUpdate && previousVersionCode < 47)
+                        ProPreferences.enableCompactNotification(getViewContext());
+                    apply(btnIAP, GONE);
+                    Ads.removeAds(rlBannerPlaceholder, adView2);
+                    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) btnSearch.getLayoutParams();
+                    lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                    lp.addRule(RelativeLayout.ALIGN_PARENT_END, 0);
+                    btnSearch.setLayoutParams(lp);
+                    hideIAPButton();
+                    shouldDisplayDiscountMessage = false;
+                    invalidateOptionsMenu();
+                }
             } else {
                 ProPreferences.disableAllPro(getViewContext());
                 apply(btnIAP, VISIBLE);
@@ -441,7 +446,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     }
 
     @Override
-    public void hideMessage() {
+    public void hideIAPButton() {
         apply(this.rlMessage, GONE);
     }
 

@@ -37,6 +37,7 @@ public class PreferredStationsPreferences {
 
     public static void setPreferredJourney(Context context, PreferredJourney journey) {
         setSavedJourney(context, FAVOURITES, journey);
+        RecentStationsPreferences.removeRecentJourney(context, journey);
     }
 
 //    ------------------------------------------------------------------------------------------------------------------------

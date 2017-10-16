@@ -200,8 +200,8 @@
             app:fabSize="mini"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="-20dp"
-            android:backgroundTint="@color/btn_cyan"
-            android:tint="@color/btn_dark_cyan"
+            app:backgroundTint="@color/btn_cyan"
+            app:tint="@color/btn_dark_cyan"
             app:srcCompat="@drawable/ic_star_border"
             />
 

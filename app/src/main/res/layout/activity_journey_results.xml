@@ -172,6 +172,48 @@
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                        android:id="@+id/rl_banner_placeholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/rl_header_2_top"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:background="@color/bg_dark"
+                        android:visibility="gone"
+                        >
+
+                    <ProgressBar
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="24dp"
+                            android:layout_centerVertical="true"
+                            android:indeterminateTint="@color/bg_grey_lighter"
+                            />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Carico Banner..."
+                            android:textSize="@dimen/text_size_default"
+                            android:layout_centerInParent="true"
+                            android:textColor="@color/txt_grey"
+                            />
+
+                </RelativeLayout>
+
+                <com.google.android.gms.ads.AdView
+                        android:id="@+id/adView2"
+                        xmlns:ads="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/rl_header_2_top"
+                        android:layout_marginTop="@dimen/margin_small"
+                        ads:adUnitId="@string/journey_id_real"
+                        ads:adSize="SMART_BANNER"
+                        android:visibility="gone"
+                        />
+
             </RelativeLayout>
 
             <ProgressBar
@@ -228,56 +270,11 @@
                     />
         </RelativeLayout>
 
-
-        <RelativeLayout
-                android:id="@+id/rl_banner_placeholder"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_gravity="bottom"
-                android:background="@color/bg_dark"
-                android:layout_alignParentBottom="true"
-                android:visibility="gone"
-                >
-
-            <ProgressBar
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="24dp"
-                    android:layout_centerVertical="true"
-                    android:indeterminateTint="@color/bg_grey_lighter"
-                    />
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Carico Banner..."
-                    android:textSize="@dimen/text_size_default"
-                    android:layout_centerInParent="true"
-                    android:textColor="@color/txt_grey"
-                    />
-
-        </RelativeLayout>
-
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 >
-
-            <com.google.android.gms.ads.AdView
-                    android:id="@+id/adView2"
-                    xmlns:ads="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    ads:adUnitId="@string/journey_id_real"
-                    android:layout_alignParentBottom="true"
-                    ads:adSize="SMART_BANNER"
-                    android:visibility="gone"
-                    />
-
             <ImageButton
                     android:id="@+id/btn_refresh"
                     android:layout_width="match_parent"
@@ -286,7 +283,6 @@
                     android:layout_marginStart="@dimen/margin_default"
                     android:layout_marginEnd="@dimen/margin_default"
                     android:layout_marginBottom="16dp"
-                    android:layout_above="@id/adView2"
                     android:background="@drawable/border_filled_5"
                     android:clickable="true"
                     android:elevation="@dimen/elevation_default"

@@ -77,7 +77,6 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_CONNECTIVITY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_NOT_FOUND_SOLUTION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_SERVER;
-import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_JOURNEY_RESULTS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_SOLUTION_DETAILS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS.NONE;
 
@@ -406,16 +405,22 @@ public class TrainDetailsActivity extends AppCompatActivity implements
 
     @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-        if (CustomIABHelper.isOrderOk(result, inv)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ((AppBarLayout) toolbar.getParent()).setElevation(10f);
+        if (ignoreBeingProAndShowAds) {
+            loadAds();
+        } else {
+            if (CustomIABHelper.isOrderOk(result, inv)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ((AppBarLayout) toolbar.getParent()).setElevation(10f);
+                }
+                Ads.removeAds(rlBannerPlaceholder, adView);
+            } else {
+                loadAds();
             }
-            Ads.removeAds(rlBannerPlaceholder, adView);
         }
     }
 
     private void loadAds() {
-        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView, analyticsHelper, SCREEN_JOURNEY_RESULTS);
+        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView, analyticsHelper, SCREEN_SOLUTION_DETAILS);
         BOTTOM_MARGIN_ACTUAL = BOTTOM_MARGIN_WITH_ADS;
     }
 }
