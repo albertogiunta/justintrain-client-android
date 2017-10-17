@@ -228,6 +228,7 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         });
 
         if (ignoreBeingProAndShowAds) {
+            apply(btnIAP, VISIBLE);
             loadAds();
         }
 
@@ -256,10 +257,6 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
                         ProPreferences.enableCompactNotification(getViewContext());
                     apply(btnIAP, GONE);
                     Ads.removeAds(rlBannerPlaceholder, adView2);
-                    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) btnSearch.getLayoutParams();
-                    lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                    lp.addRule(RelativeLayout.ALIGN_PARENT_END, 0);
-                    btnSearch.setLayoutParams(lp);
                     hideIAPButton();
                     shouldDisplayDiscountMessage = false;
                     invalidateOptionsMenu();

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -86,9 +86,9 @@
                     android:id="@+id/rl_footer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:visibility="visible"
                     android:layout_alignParentBottom="true"
+                    android:visibility="visible"
+                    tools:visibility="visible"
                     >
 
                 <RelativeLayout
@@ -96,7 +96,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:background="@color/bg_dark"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         >
 
                     <ProgressBar
@@ -131,6 +131,19 @@
 
             </RelativeLayout>
 
+            <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_search_journey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/rl_footer"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerHorizontal="false"
+                    app:useCompatPadding="true"
+                    app:fabSize="normal"
+                    app:srcCompat="@drawable/ic_search"
+                    android:visibility="visible"
+                    />
+
             <Button
                     android:id="@+id/btn_iap"
                     android:layout_width="wrap_content"
@@ -138,8 +151,7 @@
                     android:layout_above="@id/rl_footer"
                     android:layout_marginStart="@dimen/margin_default"
                     android:layout_marginEnd="@dimen/margin_default"
-                    android:layout_marginBottom="18dp"
-                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/margin_default_plus"
                     android:layout_alignParentStart="true"
                     android:textAllCaps="false"
                     android:text="Ottieni le nuove feature esclusive!\nEntra a far parte del Fan Club"
@@ -152,20 +164,8 @@
                     android:maxLines="4"
                     android:visibility="visible"
                     />
-
-            <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/fab_search_journey"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/rl_footer"
-                    android:layout_alignParentEnd="true"
-                    app:useCompatPadding="true"
-                    app:fabSize="normal"
-                    app:srcCompat="@drawable/ic_search"
-                    android:visibility="visible"
-                    />
         </RelativeLayout>
 
     </RelativeLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

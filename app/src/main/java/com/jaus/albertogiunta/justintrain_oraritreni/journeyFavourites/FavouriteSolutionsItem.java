@@ -156,7 +156,7 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                     AnimationUtils.animOnPress(v, AnimationUtils.ANIM_TYPE.MEDIUM);
                 });
 
-                AnimationUtils.onCompare(notificationIV);
+//                AnimationUtils.onCompare(notificationIV);
 
                 if (ProPreferences.isInstantDelayEnabled(context) &&
                         DateTime.now().toLocalTime().isBefore(solution.getDepartureTime().toLocalTime())) {

@@ -179,7 +179,7 @@
                         android:layout_below="@id/rl_header_2_top"
                         android:layout_marginTop="@dimen/margin_small"
                         android:background="@color/bg_dark"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         >
 
                     <ProgressBar

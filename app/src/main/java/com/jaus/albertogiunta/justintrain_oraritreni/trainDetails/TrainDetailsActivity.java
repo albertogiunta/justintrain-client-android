@@ -183,8 +183,6 @@ public class TrainDetailsActivity extends AppCompatActivity implements
 
         if (ignoreBeingProAndShowAds) {
             loadAds();
-        } else {
-            Ads.removeAds(rlBannerPlaceholder, adView);
         }
     }
 

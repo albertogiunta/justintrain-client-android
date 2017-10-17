@@ -127,5 +127,7 @@ class FavouritesPresenter implements FavouritesContract.Presenter {
                 recyclerViewList.add(new FavouriteHeaderItem(view.getViewContext(), ENUM_HOME_HEADER.RECENT, true));
             }
         }
+
+        if (!recyclerViewList.isEmpty()) recyclerViewList.add(new FooterItem());
     }
 }
