@@ -200,21 +200,26 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
 
     @Override
     public void onFavouriteButtonClick() {
-        if (isSolutionPreferred()) {
-            // remove from favourites
-            PreferredStationsPreferences.removePreferredSolution(view.getViewContext(), this.preferredJourney, this.solution);
-            view.setFavouriteButtonStatus(false);
-        } else {
-            // add to favourites
-            try {
-                PreferredStationsPreferences.setPreferredSolution(view.getViewContext(), this.preferredJourney, this.solution);
-                view.setFavouriteButtonStatus(true);
-            } catch (IndexOutOfBoundsException e) {
-                view.showSnackbar("Impossibile salvare più di 3 soluzioni preferite per questa stazione!", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);
-            } catch (NoSuchElementException e) {
-                view.showAddSolutionAndJourneyToFavouritesDialog();
+        try {
+            if (isSolutionPreferred()) {
+                // remove from favourites
+                PreferredStationsPreferences.removePreferredSolution(view.getViewContext(), this.preferredJourney, this.solution);
+                view.setFavouriteButtonStatus(false);
+            } else {
+                // add to favourites
+                try {
+                    PreferredStationsPreferences.setPreferredSolution(view.getViewContext(), this.preferredJourney, this.solution);
+                    view.setFavouriteButtonStatus(true);
+                } catch (IndexOutOfBoundsException e) {
+                    view.showSnackbar("Impossibile salvare più di 3 soluzioni preferite per questa stazione!", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);
+                } catch (NoSuchElementException e) {
+                    view.showAddSolutionAndJourneyToFavouritesDialog();
+                }
             }
+        } catch (NullPointerException e) {
+            view.showSnackbar("Si è verificato un problema, non riesco a impostare questa soluzione", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);
         }
+
         updatePreferredJourneyFromFavouritesIfAvailable();
     }
 
