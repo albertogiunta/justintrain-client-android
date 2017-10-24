@@ -92,7 +92,7 @@
                     android:textColor="@color/txt_white"
                     fontPath="@string/font_path_standard"
                     android:textSize="@dimen/text_size_smaller"
-                    android:text="Quando impostate e con l'app in background, le notifiche si aggiorneranno in automatico ogni volta che accendi lo schermo, anche a schermo bloccato. \n\nIn questo modo potrai controllare i ritardi anche mentre sei di corsa o hai le mani impegnate, non dovendo far altro che accendere lo schermo per richiedere l'aggiornamento.\n\nNB: per problemi di Android, per funzionare è necessario che l'app rimanga in background (e quindi che rimanga presente nella schermata del multitasking).\n\nNB 2: se la vibrazione ti infastidisce puoi toglierla dalla schermata delle impostazioni!"
+                    android:text="Quando impostate e con l\'app in background, le notifiche si aggiorneranno in automatico ogni volta che accendi lo schermo, anche a schermo bloccato. \n\nIn questo modo potrai controllare i ritardi anche mentre sei di corsa o hai le mani impegnate, non dovendo far altro che accendere lo schermo per richiedere l\'aggiornamento.\n\nNB: per problemi di Android, per funzionare è necessario che l\'app rimanga in background (e quindi che rimanga presente nella schermata del multitasking) e che non ci sia il Risparmio Energetico attivo per quest\'app.\n\nNB 2: se la vibrazione ti infastidisce puoi toglierla dalla schermata delle impostazioni!"
                     android:layout_marginTop="@dimen/margin_small"
                     />
         </LinearLayout>
