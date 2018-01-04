@@ -1,5 +1,6 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.journeyResults;
 
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,11 +34,17 @@ import com.jaus.albertogiunta.justintrain_oraritreni.journeySearch.JourneySearch
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.DateTimeAdapter;
 import com.jaus.albertogiunta.justintrain_oraritreni.networking.PostProcessingEnabler;
 import com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.WrapContentLinearLayoutManager;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_ERROR_BTN_STATUS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.CustomIABHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabResult;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.Inventory;
 
 import org.joda.time.DateTime;
 
@@ -48,6 +55,9 @@ import butterknife.ButterKnife;
 import butterknife.OnTouch;
 import trikita.log.Log;
 
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads.BOTTOM_MARGIN_ACTUAL;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads.BOTTOM_MARGIN_WITH_ADS;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads.ignoreBeingProAndShowAds;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_REFRESH_JOURNEY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_REMOVE_FAVOURITE_FROM_RESULTS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SET_FAVOURITE_FROM_RESULTS;
@@ -62,16 +72,16 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_TIME;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS.NONE;
 
-public class JourneyResultsActivity extends AppCompatActivity implements JourneyResultsContract.View {
+public class JourneyResultsActivity extends AppCompatActivity implements
+        JourneyResultsContract.View,
+        IabHelper.QueryInventoryFinishedListener {
 
     public static final String ACTION = "com.jaus.albertogiunta.justintrain_oraritreni.OPEN_DYNAMIC_SHORTCUT";
-
-    // The Native Express ad unit ID.
-//    private static final String AD_UNIT_ID = "ca-app-pub-8963908741443055/6579349527";
 
     JourneyResultsContract.Presenter presenter;
     AnalyticsHelper                  analyticsHelper;
     BroadcastReceiver                messageReceiver;
+    CustomIABHelper                  iabHelper;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -87,6 +97,11 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
     ImageButton btnHeaderSwapStationNames;
     @BindView(R.id.btn_toggle_favourite)
     ImageButton btnHeaderToggleFavorite;
+
+    @BindView(R.id.rl_banner_placeholder)
+    RelativeLayout rlBannerPlaceholder;
+    @BindView(R.id.adView2)
+    AdView         adView2;
 
     @BindView(R.id.loading_spinner)
     ProgressBar progressBar;
@@ -115,6 +130,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
         setContentView(R.layout.activity_journey_results);
         ButterKnife.bind(this);
         analyticsHelper = AnalyticsHelper.getInstance(getViewContext());
+        iabHelper = CustomIABHelper.getInstance(JourneyResultsActivity.this, this);
         presenter = new JourneyResultsPresenter(this);
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
@@ -128,7 +144,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
         btnHeaderToggleFavorite.setOnClickListener(v -> presenter.onFavouriteButtonClick());
 
         rvJourneySolutions.setHasFixedSize(true);
-        rvJourneySolutions.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        rvJourneySolutions.setLayoutManager(new WrapContentLinearLayoutManager(getViewContext(), LinearLayoutManager.VERTICAL, false));
 
         journeyResultsAdapter = new JourneyResultsAdapter(this, presenter);
         rvJourneySolutions.setAdapter(journeyResultsAdapter);
@@ -136,7 +152,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
         rvJourneySolutions.addOnScrollListener(new HideShowScrollListener() {
             @Override
             public void onHide() {
-                btnRefresh.animate().setInterpolator(new LinearInterpolator()).translationY(200).setDuration(100);
+                btnRefresh.animate().setInterpolator(new LinearInterpolator()).translationY(450).setDuration(100);
             }
 
             @Override
@@ -162,6 +178,10 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
                 showSnackbar(intent.getExtras().getString(NotificationService.NOTIFICATION_ERROR_MESSAGE), NONE, Snackbar.LENGTH_SHORT);
             }
         };
+
+        if (ignoreBeingProAndShowAds) {
+            loadAds();
+        }
     }
 
     @Override
@@ -205,8 +225,8 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
     @Override
     protected void onResume() {
         super.onResume();
+        iabHelper.isUserPro(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter(NotificationService.NOTIFICATION_ERROR_EVENT));
-//        presenter.setState(getIntent().getExtras());
     }
 
     @Override
@@ -264,9 +284,12 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
             Intent i;
             switch (intent) {
                 case CONN_SETTINGS:
-                    Log.d("intent a settings");
                     analyticsHelper.logScreenEvent(SCREEN_JOURNEY_RESULTS, ERROR_CONNECTIVITY);
                     i = new Intent(Settings.ACTION_SETTINGS);
+                    startActivity(i);
+                    break;
+                case GO_TO_SEARCH:
+                    i = new Intent(JourneyResultsActivity.this, JourneySearchActivity.class);
                     startActivity(i);
                     break;
                 case SEND_REPORT:
@@ -276,16 +299,13 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
                             " > " + presenter.getPreferredJourney().getStation2().getStationLongId() +
                             " @ " + presenter.getTimeOfSearch().toString("HH:mm")));
                     showSnackbar("Messaggio ricevuto! Grazie per l'aiuto!", NONE, Snackbar.LENGTH_LONG);
-                    Log.d("intent a report");
                     break;
                 case NO_SOLUTIONS:
                     analyticsHelper.logScreenEvent(SCREEN_JOURNEY_RESULTS, ERROR_NOT_FOUND_JOURNEY);
-                    Log.d("intent a ricerca");
                     finish();
                     break;
                 case SERVICE_UNAVAILABLE:
                     analyticsHelper.logScreenEvent(SCREEN_JOURNEY_RESULTS, ERROR_SERVICE_UNAVAILABLE);
-                    Log.d("service unavailable");
                     analyticsHelper.logScreenEvent(SCREEN_JOURNEY_RESULTS, ACTION_REFRESH_JOURNEY);
                     presenter.searchFromSearch(true);
                     break;
@@ -295,7 +315,6 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
 
     @Override
     public void scrollToFirstFeasibleSolution(int position) {
-        Log.d("scrolling to ", position);
         ((LinearLayoutManager) rvJourneySolutions.getLayoutManager()).scrollToPositionWithOffset(position, 14);
     }
 
@@ -303,7 +322,7 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
     public void updateSolutionsList() {
         rvJourneySolutions.getRecycledViewPool().clear();
         try {
-            journeyResultsAdapter.notifyDataSetChanged(); //TODO possibile bug http://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in
+            journeyResultsAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             FirebaseCrash.report(new Exception("CATCHED Inconsistency detected. Invalid view holder adapter positionViewHolder"));
         }
@@ -311,7 +330,6 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
 
     @Override
     public void updateSolution(int elementIndex) {
-        Log.d("updateSolution: ", elementIndex);
         journeyResultsAdapter.notifyItemChanged(elementIndex);
     }
 
@@ -349,5 +367,25 @@ public class JourneyResultsActivity extends AppCompatActivity implements Journey
             JourneyResultsActivity.this.startActivityForResult(intent, 1);
         }
         return false;
+    }
+
+    @Override
+    public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+        if (ignoreBeingProAndShowAds) {
+            loadAds();
+        } else {
+            if (CustomIABHelper.isOrderOk(result, inv)) {
+                Ads.removeAds(rlBannerPlaceholder, adView2);
+            } else {
+                loadAds();
+            }
+        }
+
+//        btnRefresh.setLayoutParams(createParamsForBottomView(getViewContext()));
+    }
+
+    private void loadAds() {
+        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView2, analyticsHelper, SCREEN_JOURNEY_RESULTS);
+        BOTTOM_MARGIN_ACTUAL = BOTTOM_MARGIN_WITH_ADS;
     }
 }

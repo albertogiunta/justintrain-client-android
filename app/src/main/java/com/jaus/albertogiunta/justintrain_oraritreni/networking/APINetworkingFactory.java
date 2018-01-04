@@ -8,11 +8,12 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.ServerConfigs
 
 import org.joda.time.DateTime;
 
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APINetworkingFactory {
@@ -25,10 +26,10 @@ public class APINetworkingFactory {
      */
     public static <T> T createRetrofitService(final Class<T> clazz) {
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
+                .addInterceptor(loggingInterceptor)
                 .addInterceptor(chain -> {
                     Request original = chain.request();
 
@@ -51,7 +52,7 @@ public class APINetworkingFactory {
                 .baseUrl(ServerConfigsHelper.getAPIEndpoint())
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .build();
 
         return restAdapter.create(clazz);

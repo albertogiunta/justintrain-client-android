@@ -3,22 +3,25 @@ apply plugin: 'com.android.application'
 apply from: "$project.rootDir/tools/script-findbugs.gradle"
 
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
 
     defaultConfig {
         applicationId "com.jaus.albertogiunta.justintrain_oraritreni"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 25
         multiDexEnabled true
-        versionCode 26
-        versionName "0.9.4"
+        versionCode 57
+        versionName "1.2.2"
         vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation":
+                                     "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -64,25 +67,21 @@ android {
         exclude 'META-INF/LICENSE' // will not include LICENSE file
         exclude 'META-INF/LICENSE.txt' // will not include LICENSE file
         exclude 'META-INF/NOTICE.txt' // will not include LICENSE file
-    }
-
-    retrolambda {
-        javaVersion JavaVersion.VERSION_1_7
+        exclude 'META-INF/rxjava.properties'
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'co.trikita:log:1.1.5'
 
 //    compile 'com.facebook.stetho:stetho:1.4.2'
-    compile 'com.google.firebase:firebase-core:10.2.0' // used for analytics
-    compile 'com.google.firebase:firebase-messaging:10.2.0' // used for notifications
-//    compile 'com.google.firebase:firebase-ads:10.0.1'
-    compile 'com.google.firebase:firebase-crash:10.2.0'
-    compile 'com.google.firebase:firebase-config:10.2.0'
-    compile 'io.reactivex:rxjava:1.2.4'
-    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'co.trikita:log:1.1.5'
+    compile 'com.google.firebase:firebase-core:11.4.2'
+    compile 'com.google.firebase:firebase-messaging:11.4.2'
+    compile 'com.google.firebase:firebase-ads:11.4.2'
+    compile 'com.google.firebase:firebase-crash:11.4.2'
+    compile 'com.google.firebase:firebase-config:11.4.2'
+    compile 'com.android.billingclient:billing:dp-1'
     compile 'com.jakewharton:butterknife:8.4.0'
     compile 'net.danlew:android.joda:2.9.5.1'
     compile 'com.google.code.gson:gson:2.8.0'
@@ -93,15 +92,20 @@ dependencies {
     compile 'me.grantland:autofittextview:0.2.1'
     compile 'com.google.android:flexbox:0.2.5'
     compile 'com.github.clans:fab:1.6.4'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:cardview-v7:26.1.0'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.annimon:stream:1.1.4'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
-    apt 'com.google.auto.value:auto-value:1.2-rc1'
+    compile 'android.arch.persistence.room:runtime:1.0.0-alpha8'
+    compile 'android.arch.persistence.room:rxjava2:1.0.0-alpha8'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0-alpha8'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    annotationProcessor 'com.google.auto.value:auto-value:1.2-rc1'
     provided 'com.google.auto.value:auto-value:1.2-rc1'
 }

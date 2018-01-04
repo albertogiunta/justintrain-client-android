@@ -4,25 +4,35 @@
         xmlns:tools="http://schemas.android.com/tools"
         tools:locale="it"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/item_load_more_height"
+        android:layout_height="120dp"
+        tools:background="#FFD1F7FF"
         >
 
-    <ImageButton
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#a2e3f1"
+            android:layout_margin="@dimen/margin_small"
+            >
+
+
+        <ImageButton
             android:id="@+id/btn_search_after"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             app:srcCompat="@drawable/ic_chevron_down"
             android:visibility="visible"
             />
+    </RelativeLayout>
+
 
     <RelativeLayout
             android:id="@+id/rl_search_after_loading_spinner"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:visibility="gone"
             >
         <ProgressBar
@@ -47,5 +57,4 @@
                 android:textColor="@color/txt_grey"
                 />
     </RelativeLayout>
-
 </RelativeLayout>

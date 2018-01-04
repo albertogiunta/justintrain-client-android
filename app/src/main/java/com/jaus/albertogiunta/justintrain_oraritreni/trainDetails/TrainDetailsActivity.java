@@ -1,23 +1,28 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.trainDetails;
 
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.crash.FirebaseCrash;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatDrawableManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,12 +40,17 @@ import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.News;
 import com.jaus.albertogiunta.justintrain_oraritreni.journeyFavourites.FavouriteJourneysActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.WrapContentLinearLayoutManager;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_ERROR_BTN_STATUS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.CustomIABHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabHelper;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.IabResult;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.IAB.Inventory;
 
 import org.joda.time.DateTime;
 
@@ -53,6 +63,11 @@ import butterknife.ButterKnife;
 import trikita.log.Log;
 
 import static butterknife.ButterKnife.apply;
+import static com.jaus.albertogiunta.justintrain_oraritreni.R.id.adView2;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads.BOTTOM_MARGIN_ACTUAL;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads.BOTTOM_MARGIN_WITH_ADS;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads.ignoreBeingProAndShowAds;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.GONE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.VISIBLE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_REFRESH_SOLUTION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_REMOVE_FAVOURITE;
@@ -65,13 +80,19 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.SCREEN_SOLUTION_DETAILS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS.NONE;
 
-public class TrainDetailsActivity extends AppCompatActivity implements TrainDetailsContract.View {
+public class TrainDetailsActivity extends AppCompatActivity implements
+        TrainDetailsContract.View,
+        IabHelper.QueryInventoryFinishedListener {
 
     TrainDetailsContract.Presenter presenter;
     AnalyticsHelper                analyticsHelper;
     BroadcastReceiver              messageReceiver;
+    CustomIABHelper                iabHelper;
 
     MenuItem menuItem;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @BindView(R.id.loading_spinner)
     ProgressBar          progressBar;
@@ -91,8 +112,12 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
     @BindView(R.id.btn_error_button)
     Button         btnErrorMessage;
 
-//    @BindView(R.id.adView)
-//    AdView adView;
+    @BindView(R.id.rl_banner_placeholder)
+    RelativeLayout rlBannerPlaceholder;
+    @BindView(R.id.cv_tip_placeholder)
+    CardView       cvTipPlaceholder;
+    @BindView(adView2)
+    AdView         adView;
 
     TrainDetailsAdapter adapter;
     private long refreshBtnLastClickTime = SystemClock.elapsedRealtime();
@@ -104,9 +129,13 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
         setContentView(R.layout.activity_train_details);
         ButterKnife.bind(this);
         analyticsHelper = AnalyticsHelper.getInstance(getViewContext());
-//        Ads.initializeAds(getViewContext(), adView);
+        iabHelper = CustomIABHelper.getInstance(TrainDetailsActivity.this, this);
+        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView, analyticsHelper, SCREEN_SOLUTION_DETAILS);
+
         presenter = new TrainDetailsPresenter(this);
         presenter.setState(getIntent().getExtras());
+
+        setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -115,12 +144,11 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
         adapter = new TrainDetailsAdapter(getApplicationContext(), presenter);
         rvTrainDetails.setAdapter(adapter);
         rvTrainDetails.setHasFixedSize(true);
-//        rvTrainDetails.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rvTrainDetails.setLayoutManager(new WrapContentLinearLayoutManager(getViewContext(), LinearLayoutManager.VERTICAL, false));
         rvTrainDetails.addOnScrollListener(new HideShowScrollListener() {
             @Override
             public void onHide() {
-                btnRefresh.animate().setInterpolator(new LinearInterpolator()).translationY(200).setDuration(100);
+                btnRefresh.animate().setInterpolator(new LinearInterpolator()).translationY(450).setDuration(100);
             }
 
             @Override
@@ -146,6 +174,16 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
         };
 
         presenter.updateRequested();
+
+        if (presenter.isOnlyTrainSearch()) {
+            apply(cvTipPlaceholder, VISIBLE);
+        } else {
+            apply(cvTipPlaceholder, GONE);
+        }
+
+        if (ignoreBeingProAndShowAds) {
+            loadAds();
+        }
     }
 
     @Override
@@ -157,8 +195,12 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.fav_train_menu, menu);
-        this.menuItem = menu.findItem(R.id.action_fav_train);
-        setFavouriteButtonStatus(presenter.isSolutionPreferred());
+        if (!this.presenter.isOnlyTrainSearch()) {
+            this.menuItem = menu.findItem(R.id.action_fav_train);
+            setFavouriteButtonStatus(presenter.isSolutionPreferred());
+        } else {
+            menu.findItem(R.id.action_fav_train).setVisible(false);
+        }
         return true;
     }
 
@@ -189,6 +231,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
     protected void onResume() {
         super.onResume();
 //        adView.resume();
+        iabHelper.isUserPro(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter(NotificationService.NOTIFICATION_ERROR_EVENT));
         presenter.setState(getIntent().getExtras());
     }
@@ -215,6 +258,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
         if (isPreferred) {
             analyticsHelper.logScreenEvent(SCREEN_SOLUTION_DETAILS, ACTION_SET_FAVOURITE);
             this.menuItem.setIcon(R.drawable.ic_star_black);
+//            AnimationUtils.animOnPress(this.menuItem, AnimationUtils.ANIM_TYPE.MEDIUM);
         } else {
             analyticsHelper.logScreenEvent(SCREEN_SOLUTION_DETAILS, ACTION_REMOVE_FAVOURITE);
             this.menuItem.setIcon(R.drawable.ic_star_border);
@@ -256,7 +300,6 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
             apply(btnShareMultiple, VISIBLE);
             btnShareMultiple.removeAllMenuButtons();
             btnShareMultiple.setClosedOnTouchOutside(true);
-//            btnShareMultiple.setImageDrawable(AppCompatDrawableManager.get().getDrawable(TrainDetailsActivity.this, R.drawable.ic _share));
             for (String s : trainCatAndId) {
                 FloatingActionButton menuItem = new FloatingActionButton(TrainDetailsActivity.this);
                 menuItem.setLabelText(s);
@@ -293,7 +336,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
     public void updateTrainDetails() {
         rvTrainDetails.getRecycledViewPool().clear();
         try {
-            adapter.notifyDataSetChanged(); //TODO possibile bug http://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in
+            adapter.notifyDataSetChanged();
         } catch (Exception e) {
             FirebaseCrash.report(new Exception("CATCHED Inconsistency detected. Invalid view holder adapter positionViewHolder"));
         }
@@ -356,5 +399,26 @@ public class TrainDetailsActivity extends AppCompatActivity implements TrainDeta
                     break;
             }
         });
+    }
+
+    @Override
+    public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+        if (ignoreBeingProAndShowAds) {
+            loadAds();
+        } else {
+            if (CustomIABHelper.isOrderOk(result, inv)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ((AppBarLayout) toolbar.getParent()).setElevation(10f);
+                }
+                Ads.removeAds(rlBannerPlaceholder, adView);
+            } else {
+                loadAds();
+            }
+        }
+    }
+
+    private void loadAds() {
+        Ads.initializeAds(getViewContext(), rlBannerPlaceholder, adView, analyticsHelper, SCREEN_SOLUTION_DETAILS);
+        BOTTOM_MARGIN_ACTUAL = BOTTOM_MARGIN_WITH_ADS;
     }
 }

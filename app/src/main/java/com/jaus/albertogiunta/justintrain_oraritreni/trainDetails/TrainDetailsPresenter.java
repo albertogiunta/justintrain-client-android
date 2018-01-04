@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Journey;
-import com.jaus.albertogiunta.justintrain_oraritreni.data.News;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredJourney;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Train;
@@ -33,15 +32,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import retrofit2.adapter.rxjava.HttpException;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import retrofit2.HttpException;
 import trikita.log.Log;
 
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_SOLUTION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_STATIONS;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_INTENT.I_TRAIN;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS.NONE;
 
 class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
@@ -49,14 +47,17 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
     private TrainDetailsContract.View view;
     private List<Train>               trainList;
     private List<Object>              trainStopList;
-    List<String> trainIdList;
-    private Journey.Solution solution;
-    private PreferredJourney preferredJourney;
+    private List<String>              trainIdList;
+    private List<Integer>             busesIndexList;
+    private Journey.Solution          solution;
+    private PreferredJourney          preferredJourney;
+    private boolean isOnlyTrain = false;
 
     TrainDetailsPresenter(TrainDetailsContract.View view) {
         this.view = view;
         trainList = new ArrayList<>();
         trainStopList = new ArrayList<>();
+        busesIndexList = new ArrayList<>();
         trainIdList = new ArrayList<>();
     }
 
@@ -70,8 +71,15 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
 
         if (bundle != null) {
             // Restore value of members from saved state
+            if (bundle.getString(I_TRAIN) != null) {
+                trainIdList.clear();
+                trainIdList.add(bundle.getString(I_TRAIN));
+                isOnlyTrain = true;
+                return;
+            }
             List<String> shareableTrainList = new LinkedList<>();
             if (bundle.getString(I_SOLUTION) != null) {
+                isOnlyTrain = false;
                 solution = gson.fromJson(bundle.getString(I_SOLUTION), Journey.Solution.class);
                 if (solution.hasChanges()) {
                     Arrays.copyOf(trainList.toArray(), solution.getChangesList().size());
@@ -82,12 +90,11 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
                     shareableTrainList.add(solution.getTrainCategory() + " " + solution.getTrainId());
                 }
                 if (view != null) view.setShareButton(shareableTrainList);
-                Log.d("Current bundled solution is: ", solution.toString());
             }
             if (bundle.getString(I_STATIONS) != null) {
+                isOnlyTrain = false;
                 preferredJourney = gson.fromJson(bundle.getString(I_STATIONS), PreferredJourney.class);
                 updatePreferredJourneyFromFavouritesIfAvailable();
-                Log.d("Current bundled preferred journey is: ", preferredJourney.toString());
             }
         } else {
             Log.d("no bundle found");
@@ -118,84 +125,101 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
             trainIdList = getTrainIdList();
         }
 
-        Observable.concatDelayError(Observable.from(searchTrainDetails(trainIdList))).subscribe(new Subscriber<Train>() {
-            @Override
-            public void onCompleted() {
-                if (view == null) {
-                    return;
-                }
-                getFlatTrainList();
-                view.hideProgress();
-                view.updateTrainDetails();
-            }
+        if (trainIdList.size() == 0) {
+            onComplete();
+            return;
+        }
 
-            @Override
-            public void onError(Throwable exception) {
-                if (exception == null) {
-                    view.showErrorMessage("Si è verificato un errore", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
-                    return;
-                }
-                Log.d(exception.getMessage());
-                if (view != null) {
-                    if (exception.getMessage().equals("HTTP 404 ")) {
-                        if (solution.hasChanges()) {
-                            FirebaseCrash.report(new Exception("TRAIN DETAIL ERROR solution is " + solution.toString()));
-                            view.showSnackbar("Uno o più treni non sono ancora disponibili", NONE, Snackbar.LENGTH_LONG);
-                            onCompleted();
-                        } else {
-                            view.showErrorMessage("Le informazioni su questo treno purtroppo non sono ancora disponibili", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
-                        }
-                    } else {
-                        Log.e("onServerError: ", exception.toString());
-                        if (exception instanceof HttpException) {
-                            Log.d(((HttpException) exception).response().errorBody(), ((HttpException) exception).response().code());
-                            if (((HttpException) exception).response().code() == 500) {
-                                view.showErrorMessage("Il server sta avendo dei problemi", "Segnala il problema", ENUM_ERROR_BTN_STATUS.SEND_REPORT);
-                            }
-                        } else if (exception instanceof ConnectException) {
-                            if (NetworkingHelper.isNetworkAvailable(view.getViewContext())) {
-                                view.showErrorMessage("Il server sta avendo dei problemi", "Segnala il problema", ENUM_ERROR_BTN_STATUS.SEND_REPORT);
+        List<Train> newTrainList = new LinkedList<>();
+
+        Observable.concatDelayError(Observable.fromIterable(searchTrainDetails(trainIdList))).subscribe(
+                train -> {
+                    newTrainList.add(train);
+                }, throwable -> {
+                    if (throwable == null) {
+                        view.showErrorMessage("Si è verificato un errore", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
+                        return;
+                    }
+                    Log.d(throwable.getMessage());
+                    if (view != null) {
+                        if (throwable.getMessage().equals("HTTP 404 ")) {
+                            if (solution != null && solution.hasChanges()) {
+                                FirebaseCrash.report(new Exception("TRAIN DETAIL ERROR solution is " + solution.toString()));
+                                view.showSnackbar("Uno o più treni non sono ancora disponibili", NONE, Snackbar.LENGTH_LONG);
+                                onComplete();
                             } else {
+                                if (isOnlyTrain) {
+                                    view.showErrorMessage("Le informazioni su questo treno purtroppo non sono ancora disponibili oppure potresti aver sbagliato ad inserire il numero del treno", "Torna indietro", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
+                                } else {
+                                    view.showErrorMessage("Le informazioni su questo treno purtroppo non sono ancora disponibili", "Torna alle soluzioni", ENUM_ERROR_BTN_STATUS.NO_SOLUTIONS);
+                                }
+                            }
+                        } else {
+                            Log.e("onServerError: ", throwable.toString());
+                            if (throwable instanceof HttpException) {
+                                Log.d(((HttpException) throwable).response().errorBody(), ((HttpException) throwable).response().code());
+                                if (((HttpException) throwable).response().code() == 500) {
+                                    view.showErrorMessage("Il server sta avendo dei problemi", "Segnala il problema", ENUM_ERROR_BTN_STATUS.SEND_REPORT);
+                                }
+                            } else if (throwable instanceof ConnectException) {
+                                if (NetworkingHelper.isNetworkAvailable(view.getViewContext())) {
+                                    view.showErrorMessage("Il server sta avendo dei problemi", "Segnala il problema", ENUM_ERROR_BTN_STATUS.SEND_REPORT);
+                                } else {
+                                    view.showErrorMessage("Assicurati di essere connesso a Internet", "Attiva connessione", ENUM_ERROR_BTN_STATUS.CONN_SETTINGS);
+                                }
+                            } else if (throwable instanceof SocketTimeoutException) {
                                 view.showErrorMessage("Assicurati di essere connesso a Internet", "Attiva connessione", ENUM_ERROR_BTN_STATUS.CONN_SETTINGS);
                             }
-                        } else if (exception instanceof SocketTimeoutException) {
-                            view.showErrorMessage("Assicurati di essere connesso a Internet", "Attiva connessione", ENUM_ERROR_BTN_STATUS.CONN_SETTINGS);
                         }
                     }
+                }, () -> {
+                    trainList.clear();
+                    trainList.addAll(newTrainList);
+                    onComplete();
                 }
-            }
+        );
+    }
 
-            @Override
-            public void onNext(Train train) {
-                trainList.add(train);
-            }
-        });
+    private void onComplete() {
+        if (view == null) {
+            return;
+        }
+        insertBuses();
+        getFlatTrainList();
+        view.hideProgress();
+        view.updateTrainDetails();
     }
 
     @Override
     public void refreshRequested() {
         trainList.clear();
         trainStopList.clear();
+        view.updateTrainDetails();
         updateRequested();
     }
 
     @Override
     public void onFavouriteButtonClick() {
-        if (isSolutionPreferred()) {
-            // remove from favourites
-            PreferredStationsPreferences.removePreferredSolution(view.getViewContext(), this.preferredJourney, this.solution);
-            view.setFavouriteButtonStatus(false);
-        } else {
-            // add to favourites
-            try {
-                PreferredStationsPreferences.setPreferredSolution(view.getViewContext(), this.preferredJourney, this.solution);
-                view.setFavouriteButtonStatus(true);
-            } catch (IndexOutOfBoundsException e) {
-                view.showSnackbar("Impossibile salvare più di 3 soluzioni preferite per questa stazione!", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);
-            } catch (NoSuchElementException e) {
-                view.showAddSolutionAndJourneyToFavouritesDialog();
+        try {
+            if (isSolutionPreferred()) {
+                // remove from favourites
+                PreferredStationsPreferences.removePreferredSolution(view.getViewContext(), this.preferredJourney, this.solution);
+                view.setFavouriteButtonStatus(false);
+            } else {
+                // add to favourites
+                try {
+                    PreferredStationsPreferences.setPreferredSolution(view.getViewContext(), this.preferredJourney, this.solution);
+                    view.setFavouriteButtonStatus(true);
+                } catch (IndexOutOfBoundsException e) {
+                    view.showSnackbar("Impossibile salvare più di 3 soluzioni preferite per questa stazione!", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);
+                } catch (NoSuchElementException e) {
+                    view.showAddSolutionAndJourneyToFavouritesDialog();
+                }
             }
+        } catch (NullPointerException e) {
+            view.showSnackbar("Si è verificato un problema, non riesco a impostare questa soluzione", ENUM_SNACKBAR_ACTIONS.NONE, Snackbar.LENGTH_LONG);
         }
+
         updatePreferredJourneyFromFavouritesIfAvailable();
     }
 
@@ -220,8 +244,8 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
         Log.d("searchTrainDetails: searching train with id:", trainIdList);
         List<Observable<Train>> o = new LinkedList<>();
         for (String s : trainIdList) {
-            o.add(APINetworkingFactory.createRetrofitService(TrainService.class).getTrainDetails(s)
-                    .subscribeOn(Schedulers.io())
+            o.add(APINetworkingFactory.createRetrofitService(TrainService.class)
+                    .getTrainDetails(s)
                     .observeOn(AndroidSchedulers.mainThread()));
         }
         return o;
@@ -230,6 +254,7 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
     @Override
     public List<Object> getFlatTrainList() {
         trainStopList.clear();
+        view.updateTrainDetails();
         for (int i = 0; i < trainList.size(); i++) {
             Train            t  = new Train(trainList.get(i));
             List<Train.Stop> sl = t.getStops() != null ? t.getStops() : new LinkedList<>();
@@ -284,7 +309,7 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
                 departureStation,
                 arrivalStation,
                 solution,
-                getIndexOfTrainFromPosition(position));
+                getIndexOfTrainFromPosition(position), true, true);
     }
 
     @Override
@@ -299,8 +324,19 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
                 s += "In orario" + "\n";
             }
         }
+
         s += "Partenza prevista alle " + solution.getDepartureTimeWithDelayReadable() + " da " + solution.getDepartureStationName() + "\n";
         s += "Arrivo previsto alle " + solution.getArrivalTimeWithDelayReadable() + " a " + solution.getArrivalStationName() + "\n";
+
+        if (trainList != null && !trainList.isEmpty() && trainList.get(0) != null && trainList.get(0).getStops() != null) {
+            for (Train.Stop stop : trainList.get(0).getStops()) {
+                if (stop != null && stop.getStationId() != null && solution.getArrivalStationId() != null &&
+                        stop.getStationId().equals(solution.getArrivalStationId()) && stop.getDeparturePlatform() != null) {
+                    s += "Arrivo previsto al binario " + stop.getDeparturePlatform() + "\n";
+                    break;
+                }
+            }
+        }
 
         s += "\n - via JustInTrain - Orario Treni Trenitalia.\n";
         return s;
@@ -321,44 +357,65 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
         s += "Partenza prevista alle " + change.getDepartureTimeWithDelayReadable() + " da " + change.getDepartureStationName() + "\n";
         s += "Arrivo previsto alle " + change.getArrivalTimeWithDelayReadable() + " da " + change.getArrivalStationName() + "\n";
 
-        s += "\n Messaggio generato dall'app per pendolari -> JustInTrain Orari Trenitalia.\n";
+        if (trainList != null && !trainList.isEmpty() && index < trainList.size() && trainList.get(index) != null && trainList.get(index).getStops() != null) {
+            for (Train.Stop stop : trainList.get(index).getStops()) {
+                if (stop != null && stop.getStationId() != null && solution.getArrivalStationId() != null &&
+                        stop.getStationId().equals(solution.getArrivalStationId()) && stop.getDeparturePlatform() != null) {
+                    s += "Arrivo previsto al binario " + stop.getDeparturePlatform() + "\n";
+                    break;
+                }
+            }
+        }
+
+        s += "\n - via JustInTrain - Orario Treni Trenitalia.\n";
         return s;
     }
 
     @Override
     public void onNewsUpdateRequested(String trainId) {
         APINetworkingFactory.createRetrofitService(TrainService.class).getTrainNews(trainId)
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<News>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        FirebaseCrash.report(new Exception("ERROR ON NEWS UPDATE for train" + trainId));
-                    }
-
-                    @Override
-                    public void onNext(News news) {
-                        Log.d("onNext: ", news.toString());
-                        view.showNewsDialog(news);
-                    }
+                .subscribe(news -> {
+                    view.showNewsDialog(news);
+                }, throwable -> {
+                    FirebaseCrash.report(new Exception("ERROR ON NEWS UPDATE for train" + trainId));
                 });
+    }
+
+    @Override
+    public boolean isOnlyTrainSearch() {
+        return isOnlyTrain;
+    }
+
+    private void insertBuses() {
+        // solution is only 1 train
+        if (busesIndexList.size() == 1 && busesIndexList.get(0) == -1) {
+            trainList.add(new Train(solution));
+        } else {
+            if (solution != null && solution.getChangesList() != null) {
+                for (Integer busIndex : busesIndexList) {
+                    trainList.add(busIndex, new Train(solution.getChangesList().get(busIndex)));
+                }
+            }
+        }
     }
 
     private List<String> getTrainIdList() {
         List<String> trainIdList = new LinkedList<>();
         if (solution.hasChanges()) {
             for (Journey.Solution.Change c : solution.getChangesList()) {
-                if (!c.getTrainCategory().equalsIgnoreCase("BUS")) {
+                if (!c.getTrainCategory().equalsIgnoreCase("BUS") && !c.getTrainId().equalsIgnoreCase("Urb")) {
                     trainIdList.add(c.getTrainId());
+                } else {
+                    busesIndexList.add(solution.getChangesList().indexOf(c));
                 }
             }
         } else {
-            trainIdList.add(solution.getTrainId());
+            if (!solution.getTrainCategory().equalsIgnoreCase("BUS") && !solution.getTrainId().equalsIgnoreCase("Urb")) {
+                trainIdList.add(solution.getTrainId());
+            } else {
+                busesIndexList.add(-1);
+            }
         }
         return trainIdList;
     }

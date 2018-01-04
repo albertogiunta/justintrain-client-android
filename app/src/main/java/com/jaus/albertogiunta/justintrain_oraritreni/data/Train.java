@@ -1,7 +1,9 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.data;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Train {
@@ -28,6 +30,72 @@ public class Train {
     private Integer trainStatusCode;
     private Boolean isDeparted;
     private Boolean isArrivedToDestination;
+
+    public Train(Journey.Solution s) {
+        this.trainCategory = s.getTrainCategory();
+        this.trainId = s.getTrainId();
+//        this.trainDepartureStationId = s.getTrainDepartureStationId();
+        this.trainDepartureStationName = s.getDepartureStationName();
+        this.trainArrivalStationId = s.getArrivalStationId();
+        this.trainArrivalStationName = s.getArrivalStationName();
+        this.timeDifference = s.getTimeDifference();
+        this.progress = s.getProgress();
+        this.stops = new LinkedList<>();
+        this.trainStatusCode = -1;
+        this.timeDifference = 0;
+        this.isDeparted = false;
+        Stop departure = new Stop();
+        departure.stationName = s.getDepartureStationName().toUpperCase();
+        departure.plannedDepartureTime = DateTime.now().withTime(LocalTime.parse(s.getDepartureTimeReadable()));
+        departure.isVisited = false;
+        departure.currentStopTypeCode = 1;
+        departure.currentStopStatusCode = 0;
+        Stop arrival = new Stop();
+        arrival.stationName = s.getArrivalStationName().toUpperCase();
+        arrival.plannedDepartureTime = DateTime.now().withTime(LocalTime.parse(s.getArrivalTimeReadable()));
+        arrival.isVisited = false;
+        arrival.currentStopTypeCode = 3;
+        arrival.currentStopStatusCode = 0;
+        this.stops.add(departure);
+        this.stops.add(arrival);
+    }
+
+    // in case of buses
+    public Train(Journey.Solution.Change s) {
+        this.trainCategory = s.getTrainCategory();
+        this.trainId = s.getTrainId();
+//        this.trainDepartureStationId = s.getTrainDepartureStationId();
+        this.trainDepartureStationName = s.getDepartureStationName();
+        this.trainArrivalStationId = s.getArrivalStationId();
+        this.trainArrivalStationName = s.getArrivalStationName();
+        this.timeDifference = s.getTimeDifference();
+        this.progress = s.getProgress();
+        this.stops = new LinkedList<>();
+        this.trainStatusCode = -1;
+        this.timeDifference = 0;
+        this.isDeparted = false;
+        Stop departure = new Stop();
+        departure.stationName = s.getDepartureStationName().toUpperCase();
+        departure.plannedDepartureTime = DateTime.now().withTime(LocalTime.parse(s.getDepartureTimeReadable()));
+        departure.isVisited = false;
+        departure.currentStopTypeCode = 1;
+        departure.currentStopStatusCode = 0;
+        Stop arrival = new Stop();
+        arrival.stationName = s.getArrivalStationName() != null ? s.getArrivalStationName().toUpperCase() : "";
+        arrival.plannedDepartureTime = DateTime.now().withTime(LocalTime.parse(s.getArrivalTimeReadable()));
+        arrival.isVisited = false;
+        arrival.currentStopTypeCode = 3;
+        arrival.currentStopStatusCode = 0;
+        this.stops.add(departure);
+        this.stops.add(arrival);
+//        this.lastSeenStationName = s.getSeenStationName();
+//        this.lastSeenTimeReadable = s.getLastSeenTimeReadable();
+//        this.cancelledStopsInfo = s.getCancelledStopsInfo();
+//        this.firstClassOrientationCode = s.getFirstClassOrientationCode();
+//        this.trainStatusCode = s.getTrainStatusCode();
+//        this.isDeparted = s.isDeparted();
+//        this.isArrivedToDestination = s.isArrivedToDestination();
+    }
 
     public Train(Train t) {
         this.trainCategory = t.getTrainCategory();

@@ -1,36 +1,22 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        classpath 'me.tatarka:gradle-retrolambda:3.4.0'
-        classpath 'io.realm:realm-gradle-plugin:3.2.1'
-        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.google.gms:google-services:3.1.2'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
-        maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
-        }
+        maven { url 'https://maven.google.com' }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-tasks.whenTaskAdded { task ->
-    if (task.name == ':app:generateDebugSources') {
-        task.doLast {
-            ['say', '-vSamantha', 'Gradle build complete.'].execute()
-        }
-    }
-}
-

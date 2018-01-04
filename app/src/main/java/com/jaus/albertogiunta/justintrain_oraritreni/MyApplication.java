@@ -1,27 +1,25 @@
 package com.jaus.albertogiunta.justintrain_oraritreni;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import android.app.Application;
+
+import com.jaus.albertogiunta.justintrain_oraritreni.db.AppDatabase;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-
-import io.realm.Realm;
-import io.realm.internal.IOException;
-
 //import com.facebook.stetho.Stetho;
 
 public class MyApplication extends Application {
+
+    public static AppDatabase database;
 
     @Override
     public void onCreate() {
         super.onCreate();
         JodaTimeAndroid.init(this);
-        Realm.init(this);
 
         String fontPath = "fonts/rooneysans-medium.ttf";
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -29,6 +27,23 @@ public class MyApplication extends Application {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+
+//        this.deleteDatabase("justintrain.db");
+        if (database == null) {
+            database = AppDatabase.getAppDatabase(getBaseContext(), false);
+        }
+
+        try {
+            if (database.stationDao().getAll().size() == 0) {
+                this.deleteDatabase("justintrain.db");
+                database = AppDatabase.getAppDatabase(getBaseContext(), true);
+            }
+        } catch (Exception e) {
+            this.deleteDatabase("justintrain.db");
+            database = AppDatabase.getAppDatabase(getBaseContext(), true);
+        }
+
+        FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG);
 
         if (BuildConfig.DEBUG) {
 //            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -43,23 +58,5 @@ public class MyApplication extends Application {
 //            SPTestingHelper.setupSPv1(this);
 //            Stetho.initializeWithDefaults(this);
         }
-        copyBundledRealmFile(this.getResources().openRawResource(R.raw.station), Realm.DEFAULT_REALM_NAME);
-    }
-
-    private String copyBundledRealmFile(InputStream inputStream, String outFileName) {
-        try {
-            File             file         = new File(this.getFilesDir(), outFileName);
-            FileOutputStream outputStream = new FileOutputStream(file);
-            byte[]           buf          = new byte[1024];
-            int              bytesRead;
-            while ((bytesRead = inputStream.read(buf)) > 0) {
-                outputStream.write(buf, 0, bytesRead);
-            }
-            outputStream.close();
-            return file.getAbsolutePath();
-        } catch (IOException | java.io.IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

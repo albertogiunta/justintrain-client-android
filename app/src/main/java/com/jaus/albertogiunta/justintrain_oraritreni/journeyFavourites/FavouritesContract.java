@@ -24,8 +24,9 @@ interface FavouritesContract {
          * @param message to display
          * @param titleColor color f the title
          * @param isUpdateMessage
+         * @param isDiscountMessage
          */
-        void updateDashboard(String message, ViewsUtils.COLORS titleColor, boolean isUpdateMessage);
+        void updateDashboard(String message, ViewsUtils.COLORS titleColor, boolean isUpdateMessage, boolean isDiscountMessage);
 
         /**
          * Should be called after the preferred journey list has been updated
@@ -40,7 +41,7 @@ interface FavouritesContract {
         /**
          * Hides the message view
          */
-        void hideMessage();
+        void hideIAPButton();
     }
 
     interface Presenter extends BasePresenter {
@@ -53,6 +54,8 @@ interface FavouritesContract {
 
         List<AbstractFlexibleItem> getRecyclerViewList();
 
+        void addNewFavourite(PreferredStation departureStation, PreferredStation arrivalStation);
+
         /**
          * Removes the specified favourite journey
          *
@@ -60,5 +63,8 @@ interface FavouritesContract {
          * @param arrivalStation arrival station
          */
         void removeFavourite(PreferredStation departureStation, PreferredStation arrivalStation);
+
+        void removeRecent(PreferredStation departureStation, PreferredStation arrivalStation);
+
     }
 }

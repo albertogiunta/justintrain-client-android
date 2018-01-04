@@ -4,21 +4,34 @@
         xmlns:tools="http://schemas.android.com/tools"
         tools:locale="it"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/item_load_more_height"
+        android:layout_height="70dp"
+        tools:background="#FFF5E2D3"
         >
 
-    <ImageButton
-            android:id="@+id/search_before_btn"
+    <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            app:srcCompat="@drawable/ic_chevron_up"
-            android:visibility="visible"
-            android:contentDescription="Carica precedenti"
-            />
+            android:layout_height="wrap_content"
+            android:background="#f9ceac"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_default"
+            >
+
+        <ImageButton
+                android:id="@+id/search_before_btn"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                app:srcCompat="@drawable/ic_chevron_up"
+                android:visibility="visible"
+                android:contentDescription="Carica precedenti"
+                />
+
+    </RelativeLayout>
 
     <RelativeLayout
             android:id="@+id/rl_search_before_loading_spinner"

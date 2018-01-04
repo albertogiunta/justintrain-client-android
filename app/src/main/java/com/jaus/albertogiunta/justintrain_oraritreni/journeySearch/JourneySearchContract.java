@@ -1,5 +1,7 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.journeySearch;
 
+import android.os.Bundle;
+
 import com.jaus.albertogiunta.justintrain_oraritreni.BasePresenter;
 import com.jaus.albertogiunta.justintrain_oraritreni.BaseView;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
@@ -9,6 +11,8 @@ import org.joda.time.DateTime;
 interface JourneySearchContract {
 
     interface Presenter extends BasePresenter {
+
+        void onTrainSearchButtonClick(String trainNumber);
 
         /**
          * It triggers an action when the user clicks on the "star" icon button.
@@ -31,7 +35,9 @@ interface JourneySearchContract {
          * @param departureStationName name for the departure station
          * @param arrivalStationName name for the arrival station
          */
-        void onSearchButtonClick(String departureStationName, String arrivalStationName);
+        void onJourneySearchButtonClick(String departureStationName, String arrivalStationName);
+
+        Bundle getTrainSearchState(Bundle bundle);
 
         void onDepartureStationNameChanged(String name);
 
@@ -94,9 +100,13 @@ interface JourneySearchContract {
         PreferredStation getDepartureStation();
 
         PreferredStation getArrivalStation();
+
+        String getTrainNumber();
     }
 
     interface View extends BaseView {
+
+        void setStationNames(PreferredStation departureStationName, PreferredStation arrivalStationName);
 
         /**
          * Should be used when restoring the state of the activity or launching the search from
@@ -123,7 +133,9 @@ interface JourneySearchContract {
         /**
          * Called when everything goes right after the click on the search button.
          */
-        void onValidSearchParameters();
+        void onValidJourneySearchParameters();
+
+        void onValidTrainSearchParameters();
 
         /**
          * Called when something bad happens after the click on the search button.

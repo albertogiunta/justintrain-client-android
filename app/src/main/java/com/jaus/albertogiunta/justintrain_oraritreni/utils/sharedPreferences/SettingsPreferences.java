@@ -13,12 +13,44 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_INCLUDE_CHANGES;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_LIGHTNING;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_NOTIF_VIBRATION;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SETT_RECENT;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_FIRST_START;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_RECENT_HINT;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_SAVED_VERSION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_SP_VERSION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SP_VERSION;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences.disableAutoRemoveNotification;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences.disableCompactNotification;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences.disableInstantDelay;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.ProPreferences.disableLiveNotification;
 
 public class SettingsPreferences {
+
+    // recent
+    public static boolean isRecentEnabled(Context context) {
+        return SharedPreferencesHelper.getSharedPreferenceBoolean(context, SP_SETT_RECENT, true);
+    }
+
+    public static void enableRecent(Context context) {
+        enableGenericSetting(context, SP_SETT_RECENT);
+    }
+
+    public static void disableRecent(Context context) {
+        disableGenericSetting(context, SP_SETT_RECENT);
+    }
+
+    // recent hint
+    public static boolean isRecentHintEnabled(Context context) {
+        return SharedPreferencesHelper.getSharedPreferenceBoolean(context, SP_SP_RECENT_HINT, true);
+    }
+
+    public static void enableRecentHint(Context context) {
+        enableGenericSetting(context, SP_SP_RECENT_HINT);
+    }
+
+    public static void disableRecentHint(Context context) {
+        disableGenericSetting(context, SP_SP_RECENT_HINT);
+    }
 
     // vibration
     public static boolean isVibrationEnabled(Context context) {
@@ -157,31 +189,45 @@ public class SettingsPreferences {
         SharedPreferencesHelper.setSharedPreferenceBoolean(context, CONST, false);
     }
 
-    // inclusion of settings
-    public static void setNewSettingsNotPreviouslyIncludedBefore(Context context) {
-        if (getPreviouslySavedVersionCode(context) < 12) {
-            setNewSettingsNotPreviouslyIncludedBefore12(context);
-        }
-        if (getPreviouslySavedVersionCode(context) < 13) {
-            setNewSettingsNotPreviouslyIncludedBefore13(context);
-        }
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void setNewSettingsNotPreviouslyIncludedBefore6(Context context) {
+    private static void setNewSettingsNotPreviouslyIncludedBefore6(Context context) {
         // 6 - 0.7.4
         disableLightning(context);
     }
 
-    public static void setNewSettingsNotPreviouslyIncludedBefore12(Context context) {
+    private static void setNewSettingsNotPreviouslyIncludedBefore12(Context context) {
         // 12 - 0.8.2
         enableVibration(context);
         enablePreemptive(context);
     }
 
-    public static void setNewSettingsNotPreviouslyIncludedBefore13(Context context) {
+    private static void setNewSettingsNotPreviouslyIncludedBefore13(Context context) {
         // 13 - 0.8.4
         enableIncludeChanges(context);
         enableAllCategories(context);
+    }
+
+    private static void setNewSettingsNotPreviouslyIncludedBefore30(Context context) {
+        // 27 - 1.0.0
+        disableInstantDelay(context);
+        disableLiveNotification(context);
+    }
+
+    private static void setNewSettingsNotPreviouslyIncludedBefore47(Context context) {
+        // 43 - 1.0.0
+        disableCompactNotification(context);
+    }
+
+    private static void setNewSettingsNotPreviouslyIncludedBefore48(Context context) {
+        // 48 - 1.1.5
+        enableRecentHint(context);
+        enableRecent(context);
+    }
+
+    private static void setNewSettingsNotPreviouslyIncludedBefore51(Context context) {
+        // 51 - 1.2.0
+        disableAutoRemoveNotification(context);
     }
 
     public static void setDefaultSharedPreferencesOnFirstStart(Context context) {
@@ -194,9 +240,35 @@ public class SettingsPreferences {
         setNewSettingsNotPreviouslyIncludedBefore6(context);
         setNewSettingsNotPreviouslyIncludedBefore12(context);
         setNewSettingsNotPreviouslyIncludedBefore13(context);
+        setNewSettingsNotPreviouslyIncludedBefore30(context);
+        setNewSettingsNotPreviouslyIncludedBefore47(context);
+        setNewSettingsNotPreviouslyIncludedBefore48(context);
+        setNewSettingsNotPreviouslyIncludedBefore51(context);
     }
 
-    public static boolean areAllCategoriesEnabled(Context context) {
+    // inclusion of settings - update together with onFirstStart
+    public static void setNewSettingsNotPreviouslyIncludedBefore(Context context) {
+        if (getPreviouslySavedVersionCode(context) < 12) {
+            setNewSettingsNotPreviouslyIncludedBefore12(context);
+        }
+        if (getPreviouslySavedVersionCode(context) < 13) {
+            setNewSettingsNotPreviouslyIncludedBefore13(context);
+        }
+        if (getPreviouslySavedVersionCode(context) < 30) {
+            setNewSettingsNotPreviouslyIncludedBefore30(context);
+        }
+        if (getPreviouslySavedVersionCode(context) < 47) {
+            setNewSettingsNotPreviouslyIncludedBefore47(context);
+        }
+        if (getPreviouslySavedVersionCode(context) < 48) {
+            setNewSettingsNotPreviouslyIncludedBefore48(context);
+        }
+        if (getPreviouslySavedVersionCode(context) < 51) {
+            setNewSettingsNotPreviouslyIncludedBefore48(context);
+        }
+    }
+
+    private static boolean areAllCategoriesEnabled(Context context) {
         return getEnabledCategoriesAsStringArray(context).length == ENUM_CATEGORIES.values().length;
     }
 

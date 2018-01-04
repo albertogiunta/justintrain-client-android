@@ -28,25 +28,24 @@
 
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
-    <string name="title_favourite_journeys">Tratte Preferite</string>
+    <string name="title_favourite_journeys">JustInTrain</string>
     <string name="subtitle_favourite_journeys">Scorri a destra o sinistra per i dettagli</string>
-    <string name="btn_favourite_journeys">Cerca e aggiungi una tratta ai Preferiti!</string>
+    <string name="btn_favourite_journeys">Cerca e aggiungi la tua prima tratta ai Preferiti!</string>
+    <string name="title_no_favourites"><b>Cerca</b> ed <b>aggiungi</b> ai preferiti\nla tua prima tratta!\n\nÈ il modo migliore di sfruttare\ntutte le comodità di JustInTrain!</string>
     <string name="notification">Notifica</string>
     <string name="minus_hour">-1 h</string>
     <string name="plus_hour">+1 h</string>
     <string name="minus_day">-1 gg</string>
     <string name="plus_day">+1 gg</string>
-    <string name="search">Cerca</string>
+    <string name="search_journey">Cerca Tratta</string>
+    <string name="search_train">Cerca Treno</string>
 
     <string name="app_id">ca-app-pub-8963908741443055~4285788324</string>
-    <string name="banner_favourites_id">ca-app-pub-8963908741443055/5762521525</string>
-    <string name="banner_test_favourites_id">ca-app-pub-3940256099942544/6300978111</string>
-
-    <string name="banner_results_id">ca-app-pub-8963908741443055/2455801525</string>
-    <string name="banner_test_results_id">ca-app-pub-3940256099942544/6300978111</string>
-
-    <string name="banner_details_id">ca-app-pub-8963908741443055/3932534720</string>
-    <string name="banner_test_details_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="favourites_id_real">ca-app-pub-8963908741443055/7810300087</string>
+    <string name="journey_id_real">ca-app-pub-8963908741443055/2712532405</string>
+    <string name="details_id_real">ca-app-pub-8963908741443055/9936895237</string>
+    <!--<string name="journey_id_test">ca-app-pub-3940256099942544/2793859312</string>-->
+    <!--<string name="details_id_test">ca-app-pub-3940256099942544/2793859312</string>-->
 
     <string name="static_shortcut_disabled_message">Non ancora disponibile</string>
     <string name="static_shortcut_long_label">Cerca</string>
@@ -72,8 +71,22 @@
     <string name="about_twitter">Twitter</string>
     <string name="about_github">GitHub</string>
     <string name="about_website">Sito Web</string>
+
+    <string name="upgrade_pro_users_number">Altre %1$d persone sono già entrate nel Fan Club.\nUnisciti anche tu!</string>
+
     <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '   -->
-    <string name="changelog">• Fix al bug che non rendeva utilizzabile la schermata di Ricerca su alcuni dispositivi\n\n• Fix al ritardo che scompariva nella schermata dei Dettagli nelle soluzioni con più treni\n\n• NB gli aggiornamenti sono un po\' meno frequenti ora perché sto preparando una Major Release! Presto ci saranno delle belle novità :)
+    <string name="changelog">
+        • NUOVO (PRO): <b>Notifiche SMART</b>: ora si rimuovono da sole quando arrivi a destizione
+        \n\n
+        • NUOVO: Quando condividi il treno ora verrà <b>condiviso anche il binario</b> a cui il treno arriverà
+        \n\n
+        • Migliorie grafiche alla schermata di ricerca
+        \n\n
+        • Aggiornata la lista delle stazioni
+        \n\n
+        • Cambiata la disposizione della <b>pubblicità</b> e aggiunto un banner alla schermata iniziale: spero nella vostra comprensione, sto sperimentando un po\' perché vorrei riuscire a pagare la quota mensile del server tramite i pochi euro raccolti dalle pubblicità, e sto cercando il modo migliore per farlo che non sia d\'intralcio per nessuno
+        \n\n
+        • Bug fix e UI fix generali
     </string>
     <string name="play_store_native_url">market://details?id=</string>
     <string name="play_store_web_url">https://play.google.com/store/apps/details?id=</string>
@@ -82,6 +95,7 @@
     <string name="font_path_standard_italic">fonts/rooneysans-light-italic.ttf</string>
     <string name="font_path_numbers_standard">fonts/proximanovasoft-regular.ttf</string>
     <string name="font_path_numbers_bold">fonts/proximanovasoft-bold.ttf</string>
+    <string name="hint_home"><b>Lo sapevi?</b>\nPuoi cliccare su una tratta <i>Recente</i>\nper farla diventare <i>Preferita</i>!</string>
 </resources>
         <!--•
         <b></b>•\n\n

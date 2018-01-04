@@ -20,11 +20,13 @@ import me.grantland.widget.AutofitTextView;
 
 public class FavouriteJourneysItem extends AbstractFlexibleItem<FavouriteJourneysItem.SimpleViewHolder> {
 
-    PreferredJourney preferredJourney;
+    private PreferredJourney preferredJourney;
+    private boolean isPreferredInsteadOfRecent = false;
 
-    public FavouriteJourneysItem(PreferredJourney journey) {
+    public FavouriteJourneysItem(PreferredJourney journey, boolean isPreferred) {
         super();
         this.preferredJourney = journey;
+        this.isPreferredInsteadOfRecent = isPreferred;
         setDraggable(false);
         setSwipeable(true);
     }
@@ -36,7 +38,7 @@ public class FavouriteJourneysItem extends AbstractFlexibleItem<FavouriteJourney
 
     @Override
     public int getLayoutRes() {
-        return R.layout.item_favourite_journey;
+        return isPreferredInsteadOfRecent ? R.layout.item_favourite_journey : R.layout.item_recent_journey;
     }
 
     @Override
@@ -54,6 +56,10 @@ public class FavouriteJourneysItem extends AbstractFlexibleItem<FavouriteJourney
         return this.preferredJourney;
     }
 
+    public boolean isPreferredInsteadOfRecent() {
+        return this.isPreferredInsteadOfRecent;
+    }
+
     static final class SimpleViewHolder extends FlexibleViewHolder {
 
         @BindView(R.id.front_view)
@@ -67,7 +73,7 @@ public class FavouriteJourneysItem extends AbstractFlexibleItem<FavouriteJourney
         @BindView(R.id.tv_favourite_station_right)
         AutofitTextView tvPreferredStation2;
 
-        public boolean swiped = false;
+        boolean swiped = false;
 
         SimpleViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);

@@ -6,8 +6,6 @@ import org.joda.time.DateTime;
 
 import java.util.List;
 
-import trikita.log.Log;
-
 @SuppressWarnings("unused")
 public class Journey implements PostProcessingEnabler.PostProcessable {
 
@@ -110,6 +108,10 @@ public class Journey implements PostProcessingEnabler.PostProcessable {
             return departureStationId;
         }
 
+        public String getDepartureStationShortId() {
+            return departureStationId.replaceAll("(S|N)0+|(S|N)", "");
+        }
+
         public void setDepartureStationId(String departureStationId) {
             this.departureStationId = departureStationId;
         }
@@ -164,6 +166,10 @@ public class Journey implements PostProcessingEnabler.PostProcessable {
 
         public String getArrivalStationId() {
             return arrivalStationId;
+        }
+
+        public String getArrivalStationShortId() {
+            return arrivalStationId.replaceAll("(S|N)0+|(S|N)", "");
         }
 
         public void setArrivalStationId(String arrivalStationId) {
@@ -258,7 +264,6 @@ public class Journey implements PostProcessingEnabler.PostProcessable {
             if (hasChanges) {
                 boolean foundAny = false;
                 timeDifference = 0;
-                Log.d("refreshData:", changesList.toString());
                 for (int i = 0; i < changesList.size(); i++) {
                     if (changesList.get(i).getTimeDifference() != null) {
                         timeDifference += changesList.get(i).getTimeDifference();

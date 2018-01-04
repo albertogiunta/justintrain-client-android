@@ -8,9 +8,11 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import com.jaus.albertogiunta.justintrain_oraritreni.R;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
 import com.jaus.albertogiunta.justintrain_oraritreni.journeyResults.JourneyResultsActivity;
+import com.jaus.albertogiunta.justintrain_oraritreni.trainDetails.TrainDetailsActivity;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
@@ -36,6 +39,7 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_DATE_PLUS;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_REMOVE_FAVOURITE_FROM_SEARCH;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SEARCH_JOURNEY_FROM_SEARCH;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SEARCH_TRAIN_FROM_SEARCH;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SELECT_ARRIVAL;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SELECT_DEPARTURE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ACTION_SET_FAVOURITE_FROM_SEARCH;
@@ -59,31 +63,35 @@ public class JourneySearchActivity extends AppCompatActivity implements JourneyS
     Toolbar toolbar;
 
     @BindView(R.id.rl_departure)
-    RelativeLayout rlDeparture;
+    RelativeLayout       rlDeparture;
     @BindView(R.id.tv_departure)
-    TextView tvDeparture;
+    TextView             tvDeparture;
     @BindView(R.id.rl_arrival)
-    RelativeLayout rlArrival;
+    RelativeLayout       rlArrival;
     @BindView(R.id.tv_arrival)
-    TextView tvArrival;
+    TextView             tvArrival;
     @BindView(R.id.btn_swap_station_names)
-    ImageButton btnSwapStationNames;
+    ImageButton          btnSwapStationNames;
     @BindView(R.id.tv_minus_one_hour)
-    TextView tvMinusOneHour;
+    TextView             tvMinusOneHour;
     @BindView(R.id.tv_plus_one_hour)
-    TextView tvPlusOneHour;
+    TextView             tvPlusOneHour;
     @BindView(R.id.tv_time)
-    TextView tvTime;
+    TextView             tvTime;
     @BindView(R.id.tv_minus_one_day)
-    TextView tvMinusOneDay;
+    TextView             tvMinusOneDay;
     @BindView(R.id.tv_plus_one_day)
-    TextView tvPlusOneDay;
+    TextView             tvPlusOneDay;
     @BindView(R.id.tv_date)
-    TextView tvDate;
-    @BindView(R.id.btn_search)
-    Button btnSearchJourney;
+    TextView             tvDate;
     @BindView(R.id.btn_add_new_favourite)
-    ImageButton btnHeaderToggleFavorite;
+    FloatingActionButton btnHeaderToggleFavorite;
+    @BindView(R.id.btn_search_journey)
+    Button               btnSearchJourney;
+    @BindView(R.id.btn_search_train)
+    Button               btnSearchTrain;
+    @BindView(R.id.et_train_number)
+    AppCompatEditText    etTrainNumber;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -157,8 +165,16 @@ public class JourneySearchActivity extends AppCompatActivity implements JourneyS
         btnSearchJourney.setOnClickListener(v -> {
             AnimationUtils.animOnPress(v, AnimationUtils.ANIM_TYPE.LIGHT);
             analyticsHelper.logScreenEvent(SCREEN_SEARCH_JOURNEY, ACTION_SEARCH_JOURNEY_FROM_SEARCH);
-            presenter.onSearchButtonClick(tvDeparture.getText().toString(), tvArrival.getText().toString());
+            presenter.onJourneySearchButtonClick(tvDeparture.getText().toString(), tvArrival.getText().toString());
         });
+
+        btnSearchTrain.setOnClickListener(v -> {
+            AnimationUtils.animOnPress(v, AnimationUtils.ANIM_TYPE.LIGHT);
+            analyticsHelper.logScreenEvent(SCREEN_SEARCH_JOURNEY, ACTION_SEARCH_TRAIN_FROM_SEARCH);
+            presenter.onTrainSearchButtonClick(etTrainNumber.getText().toString());
+        });
+
+
     }
 
     @Override
@@ -285,9 +301,21 @@ public class JourneySearchActivity extends AppCompatActivity implements JourneyS
 
 
     @Override
-    public void onValidSearchParameters() {
+    public void onValidJourneySearchParameters() {
         Intent myIntent = new Intent(JourneySearchActivity.this, JourneyResultsActivity.class);
         myIntent.putExtras(presenter.getState(getIntent().getExtras()));
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(I_FROM_RESULTS, false)) {
+            setResult(RESULT_OK, myIntent);
+            finish();
+        } else {
+            startActivity(myIntent);
+        }
+    }
+
+    @Override
+    public void onValidTrainSearchParameters() {
+        Intent myIntent = new Intent(JourneySearchActivity.this, TrainDetailsActivity.class);
+        myIntent.putExtras(presenter.getTrainSearchState(null));
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(I_FROM_RESULTS, false)) {
             setResult(RESULT_OK, myIntent);
             finish();
@@ -327,11 +355,11 @@ public class JourneySearchActivity extends AppCompatActivity implements JourneyS
     public void setFavouriteButtonStatus(boolean isPreferred) {
         if (isPreferred) {
             analyticsHelper.logScreenEvent(SCREEN_SEARCH_JOURNEY, ACTION_SET_FAVOURITE_FROM_SEARCH);
-            this.btnHeaderToggleFavorite.setImageResource(R.drawable.ic_star_black);
+            this.btnHeaderToggleFavorite.setImageDrawable(ContextCompat.getDrawable(getViewContext(), R.drawable.ic_star_black));
             AnimationUtils.animOnPress(this.btnHeaderToggleFavorite, AnimationUtils.ANIM_TYPE.MEDIUM);
         } else {
             analyticsHelper.logScreenEvent(SCREEN_SEARCH_JOURNEY, ACTION_REMOVE_FAVOURITE_FROM_SEARCH);
-            this.btnHeaderToggleFavorite.setImageResource(R.drawable.ic_star_border);
+            this.btnHeaderToggleFavorite.setImageDrawable(ContextCompat.getDrawable(getViewContext(), R.drawable.ic_star_border));
         }
     }
 }

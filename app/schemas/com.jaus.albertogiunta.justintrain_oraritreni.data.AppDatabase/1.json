@@ -1,0 +1,52 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "683e1ed3d10f228b073aeff23a5d20e7",
+    "entities": [
+      {
+        "tableName": "station",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sid` INTEGER, `name_short` TEXT, `name_long` TEXT, `id_short` TEXT, `id_long` TEXT, PRIMARY KEY(`sid`))",
+        "fields": [
+          {
+            "fieldPath": "sid",
+            "columnName": "sid",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "nameShort",
+            "columnName": "name_short",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "nameLong",
+            "columnName": "name_long",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "stationShortId",
+            "columnName": "id_short",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "stationLongId",
+            "columnName": "id_long",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "sid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"683e1ed3d10f228b073aeff23a5d20e7\")"
+    ]
+  }
+}

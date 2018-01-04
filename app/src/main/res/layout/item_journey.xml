@@ -27,7 +27,10 @@
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/margin_default_minus"
+                android:layout_marginStart="@dimen/margin_default_minus"
+                android:layout_marginEnd="@dimen/margin_default_minus"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 >
 
             <!--/   LEFT    //////////////////////////////////////////////////////////////////-->
@@ -42,20 +45,20 @@
 
                 <LinearLayout
                         android:id="@+id/ll_train_identification"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="visible"
                         >
 
-                    <me.grantland.widget.AutofitTextView
+                    <TextView
                             android:id="@+id/tv_train_category"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:maxLines="1"
-                            android:text="FR"
-                            android:textSize="@dimen/text_size_bigger"
+                            android:text="RV"
+                            android:textSize="24sp"
                             android:textStyle="bold"
                             fontPath="@string/font_path_bold"
                             card_view:minTextSize="10sp"
@@ -86,7 +89,7 @@
                             android:layout_height="wrap_content"
                             android:text="1"
                             android:textAlignment="center"
-                            android:textSize="@dimen/text_size_bigger"
+                            android:textSize="24sp"
                             android:textStyle="bold"
                             fontPath="@string/font_path_bold"
                             />
@@ -192,7 +195,7 @@
                     <ImageView
                             android:id="@+id/iv_from_to"
                             android:layout_width="26dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="30dp"
                             android:layout_marginStart="@dimen/margin_small"
                             android:layout_marginEnd="@dimen/margin_small"
                             android:layout_centerVertical="true"
@@ -201,14 +204,14 @@
                             />
 
 
-                    <me.grantland.widget.AutofitTextView
+                    <TextView
                             android:id="@+id/tv_departure_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toStartOf="@id/iv_from_to"
                             android:maxLines="1"
                             android:text="17:20"
-                            android:textSize="@dimen/text_size_bigger"
+                            android:textSize="26sp"
                             android:textStyle="normal"
                             android:textAllCaps="true"
                             fontPath="@string/font_path_numbers_standard"
@@ -216,14 +219,14 @@
                             />
 
 
-                    <me.grantland.widget.AutofitTextView
+                    <TextView
                             android:id="@+id/tv_arrival_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@id/iv_from_to"
                             android:maxLines="1"
                             android:text="10:24"
-                            android:textSize="@dimen/text_size_bigger"
+                            android:textSize="26sp"
                             android:textStyle="normal"
                             fontPath="@string/font_path_numbers_standard"
                             card_view:minTextSize="25sp"

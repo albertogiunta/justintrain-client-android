@@ -12,6 +12,7 @@ public class CONST_INTENT {
     public static final String I_FROM_RESULTS = "fromResults";
 
     public static final String I_SOLUTION      = "solution";
+    public static final String I_TRAIN         = "train";
     public static final String I_TRAIN_DETAILS = "trainDetails";
 
 }

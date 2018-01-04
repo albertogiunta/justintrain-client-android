@@ -38,6 +38,8 @@ public interface TrainDetailsContract {
         String getShareableString();
 
         String getShareableString(int index);
+
+        boolean isOnlyTrainSearch();
     }
 
     interface View extends BaseView {

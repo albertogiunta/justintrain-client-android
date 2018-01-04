@@ -1,5 +1,7 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.data;
 
+import com.jaus.albertogiunta.justintrain_oraritreni.db.Station;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +19,7 @@ public class PreferredStation {
         preferredSolutions = new HashMap<>();
     }
 
-    public PreferredStation(Station4Database station) {
+    public PreferredStation(Station station) {
         this.stationShortId = station.getStationShortId();
         this.stationLongId = station.getStationLongId();
         this.nameShort = station.getNameShort();

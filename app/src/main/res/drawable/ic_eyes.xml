@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="244dp"
+        android:height="176dp"
+        android:viewportWidth="244"
+        android:viewportHeight="176">
+
+    <group
+            android:translateX="125"
+            android:translateY="4">
+        <path
+                android:fillColor="#F2F2F2"
+                android:fillType="evenOdd"
+                android:strokeColor="#979797"
+                android:strokeWidth="6"
+                android:pathData="M56.75,0 C88.0922,0,113.5,37.8767,113.5,84.6
+C113.5,131.323,88.0922,169.2,56.75,169.2 C25.4078,169.2,0,131.323,0,84.6
+C0,37.8767,25.4078,0,56.75,0 Z"/>
+        <path
+                android:fillColor="#000000"
+                android:fillType="evenOdd"
+                android:strokeWidth="1"
+                android:pathData="M56.1596,76.3121 C56.7075,79.0802,57,81.9931,57,85
+C57,103.225,46.2548,118,33,118 C19.7452,118,9,103.225,9,85
+C9,66.7746,19.7452,52,33,52 C35.4442,52,37.803,52.5024,40.0249,53.4361
+C39.9253,53.5323,39.8263,53.6295,39.7279,53.7279
+C32.6985,60.7574,31.4322,70.888,36.8995,76.3553
+C41.5418,80.9977,49.5463,80.7852,56.1596,76.3121 Z"/>
+    </group>
+
+    <group
+            android:translateX="3"
+            android:translateY="4">
+        <path
+                android:fillColor="#F2F2F2"
+                android:fillType="evenOdd"
+                android:strokeColor="#979797"
+                android:strokeWidth="6"
+                android:pathData="M56.75,0 C88.0922,0,113.5,37.8767,113.5,84.6
+C113.5,131.323,88.0922,169.2,56.75,169.2 C25.4078,169.2,0,131.323,0,84.6
+C0,37.8767,25.4078,0,56.75,0 Z"/>
+        <path
+                android:fillColor="#000000"
+                android:fillType="evenOdd"
+                android:strokeWidth="1"
+                android:pathData="M56.1596,76.3121 C56.7075,79.0802,57,81.9931,57,85
+C57,103.225,46.2548,118,33,118 C19.7452,118,9,103.225,9,85
+C9,66.7746,19.7452,52,33,52 C35.4442,52,37.803,52.5024,40.0249,53.4361
+C39.9253,53.5323,39.8263,53.6295,39.7279,53.7279
+C32.6985,60.7574,31.4322,70.888,36.8995,76.3553
+C41.5418,80.9977,49.5463,80.7852,56.1596,76.3121 Z"/>
+    </group>
+
+</vector>

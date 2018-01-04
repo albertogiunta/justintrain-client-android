@@ -31,16 +31,17 @@ public class AboutActivity extends AppCompatActivity {
         }
 
         String text = "Ciao, sono Alberto, lo sviluppatore di JustInTrain - Orari Trenitalia." +
-                "\nProprio come te, anche io sono un pendolare, e ho sviluppato quest'app con l'obiettivo di rendere a tutti noi la vita un po' più semplice. Ho cercato principalmente di ridurre al minimo le perdite di tempo dovute a interfacce poco ottimizzate o che non tenessero in considerazione le nostre necessità." +
-                "\nPer questo ho speso una quantità considerevole di tempo nella realizzazione di ciò che vedi, oltre a un server che fa funzionare il tutto, che non vedi ma che ha un costo vivo mensile." +
-                "\nTi chiedo quindi, dato l'impegno e la dedizione che ho versato in questo progetto, di aiutarmi nella sua manutenzione e sviluppo se trovi l'app utile, o se reputi che se lo meriti." +
-                "\nCosa puoi fare? Anche un piccolo gesto come una buona recensione o il passaparola fanno una grande differenza :)";
+                "\n\nProprio come te, anche io sono un pendolare, e ho sviluppato quest'app con l'obiettivo di rendere a tutti noi la vita un po' più semplice. Ho cercato principalmente di ridurre al minimo le perdite di tempo dovute a interfacce poco ottimizzate o che non tenessero in considerazione le nostre necessità." +
+                "\n\nPer questo ho speso una quantità considerevole di tempo nella realizzazione di ciò che vedi, oltre ad un Server che fa funzionare il tutto, che non vedi ma che ha un costo vivo mensile." +
+                "\n\nTi chiedo quindi, dato l'impegno e la dedizione che ho versato in questo progetto, di aiutarmi nella sua manutenzione e sviluppo se trovi l'app utile, o se reputi che se lo meriti." +
+                "\n\nCosa puoi fare? Anche un piccolo gesto come una buona recensione o il passaparola, o acquistare la versione PRO fanno una grande differenza." +
+                "\n\nBuon viaggio!";
 
         View           view1;
         LinearLayout   linearLayout;
         LayoutInflater inflater = LayoutInflater.from(this);
         view1 = inflater.inflate(R.layout.activity_about_settings, null);
-        linearLayout = (LinearLayout) view1.findViewById(R.id.ll_container);
+        linearLayout = view1.findViewById(R.id.ll_container);
 
         View aboutPage = new AboutPageBuilder(this)
 
@@ -66,7 +67,7 @@ public class AboutActivity extends AppCompatActivity {
                         }).build())
                 .addSeparator() //-----------------------------------------//
                 .addItem(new ItemBuilder(this, linearLayout)
-                        .addItemWithTitleSubtitle("Consiglia l'app ad un amico!", "GO #TeamJustInTrainers")
+                        .addItemWithTitleSubtitle("Condividi l'app con un amico!", "GO #TeamJustInTrainers")
                         .addOnClickListener(view -> {
                             Intent sendIntent = new Intent();
                             sendIntent.setAction(Intent.ACTION_SEND);

@@ -24,4 +24,20 @@
         <key>maintenance_news</key>
         <value></value>
     </entry>
+    <entry>
+        <key>pro_users</key>
+        <value>7</value>
+    </entry>
+    <entry>
+        <key>upgrade_btn_home_message</key>
+        <value>Ottieni le nuove feature esclusive!\nEntra a far parte del Fan Club</value>
+    </entry>
+    <entry>
+        <key>iap_btn_message</key>
+        <value>Upgrade PREMIUM a vita</value>
+    </entry>
+    <entry>
+        <key>show_money_in_iap</key>
+        <value>true</value>
+    </entry>
 </defaultsMap>

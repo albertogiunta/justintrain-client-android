@@ -1,28 +1,24 @@
 package com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences;
 
 import com.google.firebase.crash.FirebaseCrash;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import android.content.Context;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Journey;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredJourney;
 import com.jaus.albertogiunta.justintrain_oraritreni.data.PreferredStation;
-import com.jaus.albertogiunta.justintrain_oraritreni.networking.DateTimeAdapter;
-import com.jaus.albertogiunta.justintrain_oraritreni.networking.PostProcessingEnabler;
 
-import org.joda.time.DateTime;
-
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
-import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.PREFIX_PREF_JOURNEY;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_SP_V0.SEPARATOR;
-import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.SharedPreferencesHelper.getSharedPreferenceObject;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_HOME_HEADER.FAVOURITES;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.StationsPreferences.buildSavedJourneyId;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.StationsPreferences.getAllSavedJourneys;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.StationsPreferences.getSavedJourney;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.StationsPreferences.isJourneyAlreadySaved;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.StationsPreferences.removeSavedJourney;
+import static com.jaus.albertogiunta.justintrain_oraritreni.utils.sharedPreferences.StationsPreferences.setSavedJourney;
 
 public class PreferredStationsPreferences {
 
@@ -35,31 +31,24 @@ public class PreferredStationsPreferences {
     }
 
     public static boolean isJourneyAlreadyPreferred(Context context, String id1, String id2) {
-        return getSharedPreferenceObject(context, buildPreferredJourneyId(id1, id2)) != null;
+        return isJourneyAlreadySaved(context, FAVOURITES, id1, id2);
     }
-
 //    ------------------------------------------------------------------------------------------------------------------------
 
     public static void setPreferredJourney(Context context, PreferredJourney journey) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
-                .registerTypeAdapterFactory(new PostProcessingEnabler())
-                .create();
-        SharedPreferencesHelper.setSharedPreferenceObject(context,
-                buildPreferredJourneyId(journey.getStation1().getStationShortId(),
-                        journey.getStation2().getStationShortId()),
-                gson.toJson(journey));
+        setSavedJourney(context, FAVOURITES, journey);
+        RecentStationsPreferences.removeRecentJourney(context, journey);
     }
 
 //    ------------------------------------------------------------------------------------------------------------------------
 
-    public static boolean isPossibleToSaveMoreJourneys(Context context) {
+    public static boolean isPossibleToSaveMorePreferredJourneys(Context context) {
         return getAllPreferredJourneys(context).size() < 5;
     }
 
 //    ------------------------------------------------------------------------------------------------------------------------
 
-    public static boolean isPossibleToSaveMoreSolutions(PreferredStation station) {
+    public static boolean isPossibleToSaveMorePreferredSolutions(PreferredStation station) {
         return station.getPreferredSolutions().size() < 3;
     }
 
@@ -101,7 +90,7 @@ public class PreferredStationsPreferences {
                 return;
             }
 
-            if (!isPossibleToSaveMoreSolutions(station)) {
+            if (!isPossibleToSaveMorePreferredSolutions(station)) {
                 throw new IndexOutOfBoundsException("Impossible to save more than 3 solutions for this journey station");
             }
 
@@ -127,7 +116,7 @@ public class PreferredStationsPreferences {
     }
 
     public static void removePreferredJourney(Context context, String id1, String id2) {
-        SharedPreferencesHelper.removeSharedPreferenceObject(context, buildPreferredJourneyId(id1, id2));
+        removeSavedJourney(context, FAVOURITES, id1, id2);
     }
 
 //    ------------------------------------------------------------------------------------------------------------------------
@@ -147,35 +136,11 @@ public class PreferredStationsPreferences {
     //    ------------------------------------------------------------------------------------------------------------------------
 
     public static List<PreferredJourney> getAllPreferredJourneys(Context context) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
-                .registerTypeAdapterFactory(new PostProcessingEnabler())
-                .create();
-        List<PreferredJourney> list = new LinkedList<>();
-        Map<String, ?>         m    = SharedPreferencesHelper.getAllMatchingPrefix(context, PREFIX_PREF_JOURNEY);
-        for (String el : m.keySet()) {
-            PreferredJourney temp = gson.fromJson(((String) m.get(el)), PreferredJourney.class);
-            if (temp.getStation1() != null && temp.getStation2() != null) {
-                list.add(temp);
-            }
-        }
-        Collections.sort(list, (o1, o2) -> {
-            if (o1.getTimestamp() < o2.getTimestamp()) {
-                return -1;
-            } else if (o1.getTimestamp() > o2.getTimestamp()) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-        return list;
+        return getAllSavedJourneys(context, FAVOURITES);
     }
 
     public static PreferredJourney getPreferredJourney(Context context, PreferredJourney journey) {
-        return new GsonBuilder()
-                .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
-                .registerTypeAdapterFactory(new PostProcessingEnabler())
-                .create().fromJson(getSharedPreferenceObject(context, buildPreferredJourneyId(journey)), PreferredJourney.class);
+        return getSavedJourney(context, FAVOURITES, journey);
     }
 
 //    ------------------------------------------------------------------------------------------------------------------------
@@ -189,9 +154,7 @@ public class PreferredStationsPreferences {
     }
 
     public static String buildPreferredJourneyId(String id1, String id2) {
-        int cod1 = Integer.parseInt(id1);
-        int cod2 = Integer.parseInt(id2);
-        return PREFIX_PREF_JOURNEY + Math.min(cod1, cod2) + SEPARATOR + Math.max(cod1, cod2);
+        return buildSavedJourneyId(FAVOURITES, id1, id2);
     }
 
 //    ------------------------------------------------------------------------------------------------------------------------

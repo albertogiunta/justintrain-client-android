@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -40,12 +41,15 @@ public class TrainNotification {
      * The unique identifier for this type of notification.
      */
     private static final String TRAIN_NOTIFICATION_TAG = "trainNotification";
+    private static final int    NOTIFICATION_ID        = 0;
+    private static final String CHANNEL_ID             = "trainNotification";
 
     /**
      * Shows the notification, or updates a previously shown notification of
      * this type, with the given parameters.
      */
-    static void notify(final Context context, TrainHeader trainHeader, boolean hasVibration) {
+
+    static void notify(final Context context, TrainHeader trainHeader, boolean hasVibration, boolean shouldPriorityBeHigh, boolean isCompatNotificationEnabled) {
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
@@ -56,8 +60,8 @@ public class TrainNotification {
         // This image is used as the notification's large icon (thumbnail).
 //        final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.example_picture);
 
-        final String title = buildTitle(trainHeader);
-        final String text = buildBody(trainHeader);
+        final String title     = buildTitle(trainHeader);
+        final String text      = buildBody(trainHeader, isCompatNotificationEnabled);
         final String smallText = buildSmallText(trainHeader);
 
         Intent iUpdate = new Intent(context, NotificationService.class);
@@ -75,20 +79,18 @@ public class TrainNotification {
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         int refreshIc = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.drawable.ic_refresh : R.drawable.ic_refresh2;
-        int closeIc = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.drawable.ic_close : R.drawable.ic_close2;
+        int closeIc   = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.drawable.ic_close : R.drawable.ic_close2;
 
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        initChannels(context, shouldPriorityBeHigh);
+
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setDefaults(Notification.DEFAULT_SOUND)
                 // Set required fields, including the small icon, the notification title, and text.
                 .setSmallIcon(R.drawable.ic_notification2)
                 .setColor(ViewsUtils.getColor(context, R.color.btn_dark_cyan))
                 .setContentTitle(title)
                 .setContentText(text)
-                // Use a default priority (recognized on devices running Android 4.1 or later)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                // Set ticker text (preview) information for this notification.
                 .setTicker(buildTicker(trainHeader))
-                // Show expanded text content on devices running Android 4.1 or later.
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(text)
                         .setBigContentTitle(title)
@@ -101,11 +103,16 @@ public class TrainNotification {
                         closeIc,
                         res.getString(R.string.action_end),
                         PendingIntent.getService(context, 1001, iStop, PendingIntent.FLAG_UPDATE_CURRENT))
-                // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(false)
                 .setOngoing(true)
-                .setContentIntent(intent);
+                .setContentIntent(intent)
+                .setChannelId(CHANNEL_ID);
 
+        if (shouldPriorityBeHigh) {
+            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+        } else {
+            builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        }
 
         if (!hasVibration || !SettingsPreferences.isVibrationEnabled(context)) {
             builder.setVibrate(new long[]{-1});
@@ -118,11 +125,20 @@ public class TrainNotification {
     private static void notify(final Context context, final Notification notification) {
         final NotificationManager nm = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            nm.notify(TRAIN_NOTIFICATION_TAG, 0, notification);
+        nm.notify(TRAIN_NOTIFICATION_TAG, NOTIFICATION_ID, notification);
+    }
+
+    public static void initChannels(Context context, boolean shouldPriorityBeHigh) {
+        if (Build.VERSION.SDK_INT < 26) return;
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel channel;
+        if (shouldPriorityBeHigh) {
+            channel = new NotificationChannel(CHANNEL_ID, "Train Notification", NotificationManager.IMPORTANCE_HIGH);
         } else {
-            nm.notify(TRAIN_NOTIFICATION_TAG.hashCode(), notification);
+            channel = new NotificationChannel(CHANNEL_ID, "Train Notification", NotificationManager.IMPORTANCE_DEFAULT);
         }
+        channel.setDescription("Queste notifiche servono a fornire informazioni sul treno che stai seguendo.");
+        notificationManager.createNotificationChannel(channel);
     }
 
     /**
@@ -139,7 +155,7 @@ public class TrainNotification {
         }
     }
 
-    public static String buildTitle(TrainHeader data) {
+    private static String buildTitle(TrainHeader data) {
         return new Builder()
                 .withString(data.getTrainCategory())
                 .withSpace()
@@ -149,21 +165,39 @@ public class TrainNotification {
                 .build();
     }
 
-    private static String buildBody(TrainHeader data) {
-        String delayPlusProgress = "";
-        if (data.isDeparted()) {
-            delayPlusProgress = new Builder()
-                    .withString(buildTimeDifferenceString(data.getTimeDifference()))
-                    .withEndingSymbol("|")
-                    .withString(buildProgressString(data.getProgress()))
-                    .build();
-
+    private static String buildBody(TrainHeader data, boolean isCompatNotificationEnabled) {
+        String delayPlusProgress;
+        if (isCompatNotificationEnabled) {
+            if (data.isDeparted()) {
+                delayPlusProgress = new Builder()
+                        .withString(buildTimeDifferenceStringPro(data.getTimeDifference()))
+                        .withEndingSymbol("|")
+                        .withString(buildPredictorPro(data))
+                        .withEndingSymbol("|")
+                        .withString(buildProgressStringPro(data.getProgress()))
+                        .build();
+            } else {
+                delayPlusProgress = new Builder()
+                        .withString("Non partito")
+                        .withEndingSymbol("|")
+                        .withString(buildPredictorPro(data))
+                        .build();
+            }
+            return delayPlusProgress;
         } else {
-            delayPlusProgress = new Builder()
-                    .withString("Il treno non è ancora partito")
-                    .build();
+            if (data.isDeparted()) {
+                delayPlusProgress = new Builder()
+                        .withString(buildTimeDifferenceStringNormal(data.getTimeDifference()))
+                        .withEndingSymbol("|")
+                        .withString(buildProgressStringNormal(data.getProgress()))
+                        .build();
+            } else {
+                delayPlusProgress = new Builder()
+                        .withString("Il treno non è ancora partito")
+                        .build();
+            }
+            return delayPlusProgress + "\n" + buildPredictorNormal(data);
         }
-        return delayPlusProgress + "\n" + buildPredictor(data);
     }
 
     private static String buildSmallText(TrainHeader data) {
@@ -172,9 +206,9 @@ public class TrainNotification {
 
     private static String buildTicker(TrainHeader data) {
         return new Builder()
-                .withString(buildTimeDifferenceString(data.getTimeDifference()))
+                .withString(buildTimeDifferenceStringNormal(data.getTimeDifference()))
                 .withEndingSymbol("|")
-                .withString(buildProgressString(data.getProgress()))
+                .withString(buildProgressStringNormal(data.getProgress()))
                 .build();
     }
 
@@ -182,9 +216,9 @@ public class TrainNotification {
         return (stationName.length() > 5 ? stationName.substring(0, 3) + "." : stationName).toUpperCase();
     }
 
-    private static String buildTimeDifferenceString(int timeDifference) {
-        String time = Integer.toString(Math.abs(timeDifference)) + "'";
-        String delay = "Ritardo: ";
+    private static String buildTimeDifferenceStringNormal(int timeDifference) {
+        String time   = Integer.toString(Math.abs(timeDifference)) + "'";
+        String delay  = "Ritardo: ";
         String ontime = "Anticipo: ";
         if (timeDifference > 0) {
             time = delay + time;
@@ -196,7 +230,17 @@ public class TrainNotification {
         return time;
     }
 
-    private static String buildProgressString(int progress) {
+    private static String buildTimeDifferenceStringPro(int timeDifference) {
+        String time = Integer.toString(Math.abs(timeDifference)) + "'";
+        if (timeDifference > 0) {
+            time = "+" + time;
+        } else if (timeDifference < 0) {
+            time = "-" + time;
+        }
+        return time;
+    }
+
+    private static String buildProgressStringNormal(int progress) {
         String progr = "Andamento: ";
         switch (progress) {
             case 0:
@@ -210,7 +254,21 @@ public class TrainNotification {
         }
     }
 
-    private static String buildPredictor(TrainHeader data) {
+    private static String buildProgressStringPro(int progress) {
+        String progr = "";
+        switch (progress) {
+            case 0:
+                return progr + "Costante";
+            case 1:
+                return progr + "Recuperando";
+            case 2:
+                return progr + "Rallentando";
+            default:
+                return "";
+        }
+    }
+
+    private static String buildPredictorNormal(TrainHeader data) {
         String prediction = "Probabile arrivo a ";
         String station;
 
@@ -241,10 +299,42 @@ public class TrainNotification {
                 prediction += (" tra più di " + hours + " ore");
             }
         }
-
         return prediction;
     }
 
+    private static String buildPredictorPro(TrainHeader data) {
+        String prediction = "";
+        String station;
+
+        if (!data.getJourneyDepartureStationVisited()) {
+            station = data.getJourneyDepartureStationName();
+            if (data.getDeparturePlatform() != null && !data.getDeparturePlatform().equalsIgnoreCase(""))
+                station += " (Bin. " + data.getDeparturePlatform() + ")";
+        } else if (!data.getJourneyArrivalStationVisited()) {
+            station = data.getJourneyArrivalStationName();
+        } else {
+            return "Treno arrivato a " + data.getJourneyArrivalStationName();
+        }
+
+
+        int eta = data.getETAToNextJourneyStation();
+        if (eta == 0) {
+            prediction += "Adesso";
+        } else if (eta == 1) {
+            prediction += ("Tra " + eta + "'");
+        } else if (eta > 1) {
+            if (eta < 60) {
+                prediction += ("Tra " + eta + "'");
+            } else if (eta / 60 < 2) {
+                prediction += ("Tra più di " + 1 + " ora");
+            } else {
+                int hours = eta / 60;
+                prediction += ("Tra più di " + hours + " ore");
+            }
+        }
+        prediction += " a " + station;
+        return prediction;
+    }
 
     private static String buildLastSeenString(String time, String station) {
         return time.length() > 0 && station.length() > 0 ? "Visto alle " + time + " a " + station : "";

@@ -26,8 +26,8 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
 public class ItemBuilder {
 
     private final LayoutInflater inflater;
-    private       View           view;
     private final LinearLayout   parent;
+    private       View           view;
 
     public ItemBuilder(Context context, LinearLayout parent) {
         this.inflater = LayoutInflater.from(context);
@@ -78,7 +78,7 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder addItemPrefWithToggle(Context context, String title, String subtitle, boolean isChecked, boolean useSwitch, String preferenceCONST, String settingsEnabledAction, String settingsDisabledAction) {
+    public ItemBuilder addItemPrefWithToggle(Context context, String title, String subtitle, boolean isChecked, boolean useSwitch, boolean isProFeature, boolean userIsPro, String preferenceCONST, String settingsEnabledAction, String settingsDisabledAction) {
         view = inflater.inflate(R.layout.item_element_title_subtitle_checkbox, parent, false);
         TextView tv = (TextView) view.findViewById(R.id.tv_title);
         tv.setText(title);
@@ -108,9 +108,18 @@ public class ItemBuilder {
                 switchButton.setChecked(true);
             }
         };
-        checkboxButton.setOnClickListener(listener);
-        switchButton.setOnClickListener(listener);
-        view.setOnClickListener(listener);
+        if (!isProFeature || userIsPro) {
+            checkboxButton.setEnabled(true);
+            switchButton.setEnabled(true);
+            checkboxButton.setOnClickListener(listener);
+            switchButton.setOnClickListener(listener);
+            view.setOnClickListener(listener);
+        } else {
+            checkboxButton.setChecked(true);
+            switchButton.setChecked(true);
+            checkboxButton.setEnabled(false);
+            switchButton.setEnabled(false);
+        }
         return this;
     }
 

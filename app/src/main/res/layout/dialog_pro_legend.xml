@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:locale="it"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#303030"
+        >
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/txt_white"
+                fontPath="@string/font_path_bold"
+                android:text="Scopri come usare tutte le funzionalità PRO!\n\nRicorda che puoi abilitarle/disabilitarle comodamente dalla schermata delle impostazioni."
+                android:layout_margin="@dimen/margin_default"
+                android:textSize="@dimen/text_size_default_minus"
+                android:textAlignment="center"
+                />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_default"
+                >
+
+            <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/view_fav_solution"
+                    android:contentDescription="No Ads"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_bold"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="Ritardi istantanei"
+                    android:textAlignment="center"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_standard"
+                    android:textSize="@dimen/text_size_smaller"
+                    android:text="All'apertura l'app calcolerà i ritardi dei treni preferiti che sono in procinto di arrivare alla tua stazione di partenza o arrivo.\n\nIn questo modo potrai saperne il ritardo in tempi ridicolmente veloci, e senza dover fisicamente cliccare su alcun bottone."
+                    android:layout_marginTop="@dimen/margin_small"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_default"
+                >
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_fast"
+                    android:contentDescription="No Ads"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_bold"
+                    android:text="Notifiche LIVE"
+                    android:textAlignment="center"
+                    android:layout_marginTop="@dimen/margin_small"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_standard"
+                    android:textSize="@dimen/text_size_smaller"
+                    android:text="Quando impostate e con l\'app in background, le notifiche si aggiorneranno in automatico ogni volta che accendi lo schermo, anche a schermo bloccato. \n\nIn questo modo potrai controllare i ritardi anche mentre sei di corsa o hai le mani impegnate, non dovendo far altro che accendere lo schermo per richiedere l\'aggiornamento.\n\nNB: per problemi di Android, per funzionare è necessario che l\'app rimanga in background (e quindi che rimanga presente nella schermata del multitasking) e che non ci sia il Risparmio Energetico attivo per quest\'app.\n\nNB 2: se la vibrazione ti infastidisce puoi toglierla dalla schermata delle impostazioni!"
+                    android:layout_marginTop="@dimen/margin_small"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_default"
+                >
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_compact_notif"
+                    android:contentDescription="Compact Notifications"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_bold"
+                    android:text="Notifiche COMPATTE"
+                    android:textAlignment="center"
+                    android:layout_marginTop="@dimen/margin_small"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_standard"
+                    android:textSize="@dimen/text_size_smaller"
+                    android:text="Tutte le informazioni nella notifica appariranno in una sola riga, in maniera più compatta ed intuitiva.\n\nIn questo modo avrai accesso a tutte le informazioni di cui potresti aver bisogno in maniera istantanea."
+                    android:layout_marginTop="@dimen/margin_small"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_default"
+                >
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_smart_notif"
+                    android:contentDescription="Compact Notifications"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_bold"
+                    android:text="Notifiche SMART"
+                    android:textAlignment="center"
+                    android:layout_marginTop="@dimen/margin_small"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_standard"
+                    android:textSize="@dimen/text_size_smaller"
+                    android:text="Ogni volta che la notifica si aggiorna, essa controllerà se il tuo treno è arrivato alla tua destinazione. Se sì, allora si rimuoverà da sola dalle notifiche.\n\nQuesta funzionalità, combinata con le notifiche LIVE ti permette potenzialmente di non dover mai interagire fisicamente con la notifica. Farà sempre tutto da sola! Non è fichissimo?!"
+                    android:layout_marginTop="@dimen/margin_small"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_default"
+                >
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_no_ads"
+                    android:contentDescription="No Ads"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_bold"
+                    android:text="Nessuna pubblicità"
+                    android:textAlignment="center"
+                    />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txt_white"
+                    fontPath="@string/font_path_standard"
+                    android:textSize="@dimen/text_size_smaller"
+                    android:text="Goditi l'applicazione senza mai dover essere infastidito da banner pubblicitari."
+                    android:layout_marginTop="@dimen/margin_small"
+                    />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>
