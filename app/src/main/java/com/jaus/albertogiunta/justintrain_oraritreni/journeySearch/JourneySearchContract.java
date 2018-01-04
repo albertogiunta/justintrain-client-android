@@ -114,7 +114,7 @@ interface JourneySearchContract {
          * @param departureStationName departureStationName
          * @param arrivalStationName arrivalStationName
          */
-        void setStationNames(String departureStationName, String arrivalStationName);
+        void setStationNames(PreferredStation departureStationName, PreferredStation arrivalStationName);
 
         /**
          * Called whenever there's the need to set the time (on start up of the activity or after
@@ -148,6 +148,8 @@ interface JourneySearchContract {
         void onInvalidSearchParameters();
 
         void setFavouriteButtonStatus(boolean isPreferred);
+
+        void setStationNames(String departureStationName, String arrivalStationName);
 
         void setDepartureStationNames(String departureStationName);
 
