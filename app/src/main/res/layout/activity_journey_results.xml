@@ -127,12 +127,12 @@
                                 android:focusable="true"
                                 android:focusableInTouchMode="true"
                                 android:marqueeRepeatLimit="marquee_forever"
-                                android:maxLines="1"
                                 android:scrollHorizontally="true"
                                 tools:text="Pesaro"
                                 android:textColor="@color/txt_white"
                                 android:textSize="@dimen/text_size_default_minus"
                                 android:textAllCaps="true"
+                                android:singleLine="true"
                                 />
                     </HorizontalScrollView>
 
@@ -161,58 +161,17 @@
                                 android:focusable="true"
                                 android:focusableInTouchMode="true"
                                 android:marqueeRepeatLimit="marquee_forever"
-                                android:maxLines="1"
                                 android:scrollHorizontally="true"
                                 tools:text="Cesena"
                                 android:textColor="@color/txt_white"
                                 android:textSize="@dimen/text_size_default_minus"
                                 android:textAllCaps="true"
+                                android:singleLine="true"
                                 />
                     </HorizontalScrollView>
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                        android:id="@+id/rl_banner_placeholder"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_below="@id/rl_header_2_top"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:background="@color/bg_dark"
-                        android:visibility="visible"
-                        >
-
-                    <ProgressBar
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginStart="24dp"
-                            android:layout_centerVertical="true"
-                            android:indeterminateTint="@color/bg_grey_lighter"
-                            />
-
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Carico Banner..."
-                            android:textSize="@dimen/text_size_default"
-                            android:layout_centerInParent="true"
-                            android:textColor="@color/txt_grey"
-                            />
-
-                </RelativeLayout>
-
-                <com.google.android.gms.ads.AdView
-                        android:id="@+id/adView2"
-                        xmlns:ads="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/rl_header_2_top"
-                        android:layout_marginTop="@dimen/margin_small"
-                        ads:adUnitId="@string/journey_id_real"
-                        ads:adSize="SMART_BANNER"
-                        android:visibility="gone"
-                        />
 
             </RelativeLayout>
 
@@ -270,25 +229,71 @@
                     />
         </RelativeLayout>
 
+
         <RelativeLayout
+                android:id="@+id/rl_footer"
+                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:visibility="visible"
+                tools:visibility="visible"
                 >
-            <ImageButton
-                    android:id="@+id/btn_refresh"
+
+            <RelativeLayout
+                    android:id="@+id/rl_banner_placeholder"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/btn_height_default"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="@dimen/margin_default"
-                    android:layout_marginEnd="@dimen/margin_default"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/border_filled_5"
-                    android:clickable="true"
-                    android:elevation="@dimen/elevation_default"
-                    app:srcCompat="@drawable/ic_refresh"
-                    android:contentDescription="Aggiorna soluzioni"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="0dp"
+                    android:background="@color/bg_dark"
+                    android:visibility="visible"
+                    >
+
+                <ProgressBar
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="24dp"
+                        android:layout_centerVertical="true"
+                        android:indeterminateTint="@color/bg_grey_lighter"
+                        />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Carico Banner..."
+                        android:textSize="@dimen/text_size_default"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/txt_grey"
+                        />
+
+            </RelativeLayout>
+
+            <com.google.android.gms.ads.AdView
+                    xmlns:ads="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/adView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    ads:adUnitId="@string/journey_id_real"
+                    ads:adSize="SMART_BANNER"
+                    android:visibility="gone"
+                    tools:visibility="gone"
                     />
         </RelativeLayout>
+
+        <ImageButton
+                android:id="@+id/btn_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btn_height_default"
+                android:layout_above="@id/rl_footer"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/border_filled_5"
+                android:clickable="true"
+                android:elevation="@dimen/elevation_default"
+                app:srcCompat="@drawable/ic_refresh"
+                android:contentDescription="Aggiorna soluzioni"
+                />
+
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

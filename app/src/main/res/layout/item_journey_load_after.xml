@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         tools:locale="it"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="170dp"
         tools:background="#FFD1F7FF"
         >
 
@@ -14,7 +14,6 @@
             android:background="#a2e3f1"
             android:layout_margin="@dimen/margin_small"
             >
-
 
         <ImageButton
             android:id="@+id/btn_search_after"
