@@ -31,7 +31,7 @@ public class Ads {
     public static int BOTTOM_MARGIN_WITHOUT_ADS = 16;
     public static int BOTTOM_MARGIN_ACTUAL      = 16;
 
-    public static boolean ignoreBeingProAndShowAds = BuildConfig.DEBUG && false;
+    public static boolean ignoreBeingProAndShowAds = BuildConfig.DEBUG && true;
 
     public static void initializeAds(Context context, NativeExpressAdView adView) {
         MobileAds.initialize(context, "ca-app-pub-8963908741443055~4285788324");

@@ -202,8 +202,8 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         rvFavouriteJourneys.addOnScrollListener(new HideShowScrollListener() {
             @Override
             public void onHide() {
-                btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(450).setDuration(150);
-                btnIAP.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(450).setDuration(150);
+                btnSearch.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(600).setDuration(150);
+                btnIAP.animate().setInterpolator(new AccelerateDecelerateInterpolator()).translationY(600).setDuration(150);
             }
 
             @Override

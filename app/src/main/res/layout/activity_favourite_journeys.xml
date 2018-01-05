@@ -12,160 +12,154 @@
         android:fitsSystemWindows="true"
         >
 
-    <RelativeLayout
+    <include
+            android:id="@+id/ll_no_favourites"
+            layout="@layout/activity_no_favourites"
+            android:visibility="visible"
+            />
+
+    <android.support.v7.widget.CardView
+            android:id="@+id/rl_message"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_white"
+            card_view:cardElevation="4dp"
+            android:layout_alignParentTop="true"
+            android:visibility="gone"
+            tools:visibility="gone"
+            card_view:cardCornerRadius="0dp"
+            card_view:contentPadding="@dimen/margin_smaller"
             >
 
-        <include
-                android:id="@+id/ll_no_favourites"
-                layout="@layout/activity_no_favourites"
+        <TextView
+                android:id="@+id/tv_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_default"
+                android:layout_marginBottom="@dimen/margin_default"
+                android:textStyle="bold"
+                fontPath="@string/font_path_bold"
+                tools:text="SERVER IN MANUTENZIONE. \nJUSTINTRAIN TORNERÀ OPERATIVA AL PIÙ PRESTO"
+                android:textAlignment="center"
                 android:visibility="visible"
                 />
 
-        <android.support.v7.widget.CardView
-                android:id="@+id/rl_message"
+    </android.support.v7.widget.CardView>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/rl_message"
+            android:layout_centerHorizontal="true"
+            android:visibility="visible"
+            >
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_favourite_journeys"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_white"
-                card_view:cardElevation="4dp"
-                android:layout_alignParentTop="true"
-                android:visibility="gone"
-                tools:visibility="gone"
-                card_view:cardCornerRadius="0dp"
-                card_view:contentPadding="@dimen/margin_smaller"
-                >
-
-            <TextView
-                    android:id="@+id/tv_message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/margin_default"
-                    android:layout_marginBottom="@dimen/margin_default"
-                    android:textStyle="bold"
-                    fontPath="@string/font_path_bold"
-                    tools:text="SERVER IN MANUTENZIONE. \nJUSTINTRAIN TORNERÀ OPERATIVA AL PIÙ PRESTO"
-                    android:textAlignment="center"
-                    android:visibility="visible"
-                    />
-
-        </android.support.v7.widget.CardView>
-
-        <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/rl_message"
-                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="0dp"
+                android:overScrollMode="never"
                 android:visibility="visible"
+                tools:listitem="@layout/item_favourite_journey"
+                android:paddingBottom="70dp"
+                android:clipToPadding="false"
                 >
+        </android.support.v7.widget.RecyclerView>
 
-            <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_favourite_journeys"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginTop="0dp"
-                    android:overScrollMode="never"
-                    android:visibility="visible"
-                    tools:listitem="@layout/item_favourite_journey"
-                    android:paddingBottom="70dp"
-                    android:clipToPadding="false"
-                    >
-            </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 
-        </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            >
 
         <RelativeLayout
+                android:id="@+id/rl_footer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:visibility="visible"
+                tools:visibility="visible"
                 >
 
             <RelativeLayout
-                    android:id="@+id/rl_footer"
+                    android:id="@+id/rl_banner_placeholder"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
+                    android:layout_height="50dp"
+                    android:background="@color/bg_dark"
                     android:visibility="visible"
-                    tools:visibility="visible"
                     >
 
-                <RelativeLayout
-                        android:id="@+id/rl_banner_placeholder"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@color/bg_dark"
-                        android:visibility="visible"
-                        >
+                <ProgressBar
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="24dp"
+                        android:layout_centerVertical="true"
+                        android:indeterminateTint="@color/bg_grey_lighter"
+                        />
 
-                    <ProgressBar
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginStart="24dp"
-                            android:layout_centerVertical="true"
-                            android:indeterminateTint="@color/bg_grey_lighter"
-                            />
-
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Carico Banner..."
-                            android:textSize="@dimen/text_size_default"
-                            android:layout_centerInParent="true"
-                            android:textColor="@color/txt_grey"
-                            />
-
-                </RelativeLayout>
-
-                <com.google.android.gms.ads.AdView
-                        android:id="@+id/adView2"
-                        xmlns:ads="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="match_parent"
+                <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        ads:adUnitId="@string/favourites_id_real"
-                        ads:adSize="SMART_BANNER"
-                        android:visibility="gone"
+                        android:text="Carico Banner..."
+                        android:textSize="@dimen/text_size_default"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/txt_grey"
                         />
 
             </RelativeLayout>
 
-            <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/fab_search_journey"
-                    android:layout_width="wrap_content"
+            <com.google.android.gms.ads.AdView
+                    xmlns:ads="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/adView2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/rl_footer"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerHorizontal="false"
-                    app:useCompatPadding="true"
-                    app:fabSize="normal"
-                    app:srcCompat="@drawable/ic_search"
-                    android:visibility="visible"
+                    ads:adUnitId="@string/favourites_id_real"
+                    ads:adSize="SMART_BANNER"
+                    android:visibility="gone"
                     />
 
-            <Button
-                    android:id="@+id/btn_iap"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/rl_footer"
-                    android:layout_marginStart="@dimen/margin_default"
-                    android:layout_marginEnd="@dimen/margin_default"
-                    android:layout_marginBottom="@dimen/margin_default_plus"
-                    android:layout_alignParentStart="true"
-                    android:textAllCaps="false"
-                    android:text="Ottieni le nuove feature esclusive!\nEntra a far parte del Fan Club"
-                    android:paddingStart="@dimen/margin_default_minus"
-                    android:paddingEnd="@dimen/margin_default_minus"
-                    android:paddingTop="@dimen/margin_small"
-                    android:paddingBottom="@dimen/margin_small"
-                    android:background="@drawable/bg_button_selector_green"
-                    android:lines="2"
-                    android:maxLines="4"
-                    android:visibility="visible"
-                    />
         </RelativeLayout>
 
+        <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_search_journey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/rl_footer"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="false"
+                app:useCompatPadding="true"
+                app:fabSize="normal"
+                app:srcCompat="@drawable/ic_search"
+                android:visibility="visible"
+                />
+
+        <Button
+                android:id="@+id/btn_iap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/rl_footer"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_marginBottom="@dimen/margin_default_plus"
+                android:layout_alignParentStart="true"
+                android:textAllCaps="false"
+                android:text="Ottieni le nuove feature esclusive!\nEntra a far parte del Fan Club"
+                android:paddingStart="@dimen/margin_default_minus"
+                android:paddingEnd="@dimen/margin_default_minus"
+                android:paddingTop="@dimen/margin_small"
+                android:paddingBottom="@dimen/margin_small"
+                android:background="@drawable/bg_button_selector_green"
+                android:lines="2"
+                android:maxLines="4"
+                android:visibility="visible"
+                />
     </RelativeLayout>
 
 </RelativeLayout>
+

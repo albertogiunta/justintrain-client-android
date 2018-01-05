@@ -148,7 +148,7 @@ public class TrainDetailsActivity extends AppCompatActivity implements
         rvTrainDetails.addOnScrollListener(new HideShowScrollListener() {
             @Override
             public void onHide() {
-                btnRefresh.animate().setInterpolator(new LinearInterpolator()).translationY(450).setDuration(100);
+                btnRefresh.animate().setInterpolator(new LinearInterpolator()).translationY(600).setDuration(100);
             }
 
             @Override

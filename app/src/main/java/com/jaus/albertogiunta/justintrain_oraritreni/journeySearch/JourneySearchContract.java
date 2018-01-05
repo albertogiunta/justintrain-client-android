@@ -106,8 +106,6 @@ interface JourneySearchContract {
 
     interface View extends BaseView {
 
-        void setStationNames(PreferredStation departureStationName, PreferredStation arrivalStationName);
-
         /**
          * Should be used when restoring the state of the activity or launching the search from
          * an activity where this values are already set (see Journey Results)
