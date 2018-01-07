@@ -10,10 +10,10 @@ android {
     defaultConfig {
         applicationId "com.jaus.albertogiunta.justintrain_oraritreni"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
         multiDexEnabled true
-        versionCode 57
-        versionName "1.2.2"
+        versionCode 58
+        versionName "1.2.5"
         vectorDrawables.useSupportLibrary = true
 
         javaCompileOptions {

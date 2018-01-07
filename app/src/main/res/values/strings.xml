@@ -76,17 +76,9 @@
 
     <!--  FAI SEMPRE L'ESCAPE DEGLI APOSTROFI! '   -->
     <string name="changelog">
-        • NUOVO (PRO): <b>Notifiche SMART</b>: ora si rimuovono da sole quando arrivi a destizione
-        \n\n
-        • NUOVO: Quando condividi il treno ora verrà <b>condiviso anche il binario</b> a cui il treno arriverà
-        \n\n
-        • Migliorie grafiche alla schermata di ricerca
-        \n\n
-        • Aggiornata la lista delle stazioni
-        \n\n
-        • Cambiata la disposizione della <b>pubblicità</b> e aggiunto un banner alla schermata iniziale: spero nella vostra comprensione, sto sperimentando un po\' perché vorrei riuscire a pagare la quota mensile del server tramite i pochi euro raccolti dalle pubblicità, e sto cercando il modo migliore per farlo che non sia d\'intralcio per nessuno
-        \n\n
-        • Bug fix e UI fix generali
+        • <b>FIX</b> (PRO): il Natale ha portato consiglio, ed ora le <b>notifiche LIVE</b> funzionano meglio che mai!\nNon solo è stato <b>risolto il bug</b> per cui smettevano di aggiornarsi, ma ora <b>funzionano anche se l\'app non è in background</b>!\n\n
+        • Migliorata la stabilità in alcune parti più critiche dell\'app\n\n
+        • Aggiustamenti all\'interfaccia per supportare anche i formati di display più grandi\n\n
     </string>
     <string name="play_store_native_url">market://details?id=</string>
     <string name="play_store_web_url">https://play.google.com/store/apps/details?id=</string>

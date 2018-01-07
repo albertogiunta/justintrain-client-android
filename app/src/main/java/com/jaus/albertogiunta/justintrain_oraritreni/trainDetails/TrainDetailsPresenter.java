@@ -408,7 +408,11 @@ class TrainDetailsPresenter implements TrainDetailsContract.Presenter {
         } else {
             if (solution != null && solution.getChangesList() != null) {
                 for (Integer busIndex : busesIndexList) {
-                    trainList.add(busIndex, new Train(solution.getChangesList().get(busIndex)));
+                    if (solution.getChangesList().size() == 0) {
+                        trainList.add(new Train(solution.getChangesList().get(busIndex)));
+                    } else {
+                        trainList.add(busIndex, new Train(solution.getChangesList().get(busIndex)));
+                    }
                 }
             }
         }
