@@ -111,7 +111,7 @@ public class SettingsActivity extends AppCompatActivity implements IabHelper.Que
                 .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Vibrazione nella notifica", "Quando la attivi o la aggiorni", SettingsPreferences.isVibrationEnabled(this), true, false, isPro, SP_SETT_NOTIF_VIBRATION, SETTINGS_ENABLE_VIBRATION, SETTINGS_DISABLE_VIBRATION)
                         .build())
                 // LIVE NOTIFICATION
-                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Notifiche LIVE (PRO)", "Sempre aggiornate all'ultimo secondo (con app in background)", ProPreferences.isLiveNotificationEnabled(this), true, true, isPro, SP_SETT_NOTIF_LIVE, SETTINGS_ENABLE_LIVE_NOTIFICATION, SETTINGS_DISABLE_LIVE_NOTIFICATION)
+                .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Notifiche LIVE (PRO)", "Sempre aggiornate all'ultimo secondo, ogni volta che accendi lo schermo", ProPreferences.isLiveNotificationEnabled(this), true, true, isPro, SP_SETT_NOTIF_LIVE, SETTINGS_ENABLE_LIVE_NOTIFICATION, SETTINGS_DISABLE_LIVE_NOTIFICATION)
                         .build())
                 // LIVE NOTIFICATION
                 .addItem(new ItemBuilder(this, linearLayout).addItemPrefWithToggle(this, "Notifiche COMPATTE (PRO)", "Per vedere tutte le informazioni che ti servono in maniera sempre più veloce", ProPreferences.isCompactNotificationEnabled(this), true, true, isPro, SP_SETT_NOTIF_COMPACT, SETTINGS_ENABLE_COMPACT_NOTIFICATION, SETTINGS_DISABLE_COMPACT_NOTIFICATION)

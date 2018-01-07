@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.util.Pair;
@@ -42,6 +43,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import retrofit2.HttpException;
 import trikita.log.Log;
 
+import static com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService.ACTION_START_NOTIFICATION;
+import static com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService.EXTRA_NOTIFICATION_ARRIVAL;
+import static com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService.EXTRA_NOTIFICATION_DEPARTURE;
+import static com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService.EXTRA_NOTIFICATION_SOLUTION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_NOT_FOUND_JOURNEY_AFTER;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_NOT_FOUND_JOURNEY_BEFORE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_ANALYTICS.ERROR_NOT_FOUND_SOLUTION;
@@ -217,11 +222,13 @@ class JourneyResultsPresenter implements JourneyResultsContract.Presenter, OnJou
         journeySolutions.get(elementIndex).setArrivalStationId(arrivalStation.getStationLongId());
 
         NotificationPreferences.setNotificationData(view.getViewContext(), new PreferredJourney(departureStation, arrivalStation), journeySolutions.get(elementIndex));
-        NotificationService.startActionStartNotification(view.getViewContext(),
-                departureStation,
-                arrivalStation,
-                journeySolutions.get(elementIndex),
-                null, true, true);
+
+        Intent newNotif = new Intent(view.getViewContext(), NotificationService.class);
+        newNotif.putExtra(EXTRA_NOTIFICATION_DEPARTURE, gson.toJson(departureStation));
+        newNotif.putExtra(EXTRA_NOTIFICATION_ARRIVAL, gson.toJson(arrivalStation));
+        newNotif.putExtra(EXTRA_NOTIFICATION_SOLUTION, gson.toJson(journeySolutions.get(elementIndex)));
+        newNotif.setAction(ACTION_START_NOTIFICATION);
+        view.getViewContext().startService(newNotif);
     }
 
     @Override

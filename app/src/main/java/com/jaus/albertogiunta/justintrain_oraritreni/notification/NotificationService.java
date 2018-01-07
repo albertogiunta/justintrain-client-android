@@ -5,10 +5,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import android.app.IntentService;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.jaus.albertogiunta.justintrain_oraritreni.data.Journey;
@@ -37,33 +40,38 @@ import static com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONS
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread
  */
-public class NotificationService extends IntentService {
-    public static final String ACTION_START_NOTIFICATION                    = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.action.START_NOTIFICATION";
-    public static final String ACTION_STOP_NOTIFICATION                     = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.action.STOP_NOTIFICATION";
-    public static final String ACTION_UPDATE_NOTIFICATION                   = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.action.UPDATE_NOTIFICATION";
-    public static final String EXTRA_NOTIFICATION_DATA                      = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.extra.NOTIFICATION_DATA";
-    public static final String NOTIFICATION_ERROR_EVENT                     = "EVENT_NOTIFICATION_ERROR";
-    public static final String NOTIFICATION_ERROR_MESSAGE                   = "NOTIFICATION_ERROR_MESSAGE";
-    public static final String NOTIFICATION_ERROR_MESSAGE_TRAIN_NOT_FOUND   = "Impossibile settare la notifica. \nIl treno potrebbe aver cambiato numero od orario.";
-    public static final String NOTIFICATION_ERROR_MESSAGE_STATION_NOT_FOUND = "Impossibile settare la notifica a causa di un problema con le stazioni di partenza o arrivo.";
+public class NotificationService extends Service {
+    public static final String ACTION_START_NOTIFICATION                        = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.action.START_NOTIFICATION";
+    public static final String ACTION_STOP_NOTIFICATION                         = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.action.STOP_NOTIFICATION";
+    public static final String ACTION_UPDATE_NOTIFICATION                       = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.action.UPDATE_NOTIFICATION";
+    public static final String EXTRA_NOTIFICATION_DATA                          = "com.jaus.albertogiunta.justintrain_oraripendolaritrenitalia.extra.NOTIFICATION_DATA";
+    public static final String EXTRA_NOTIFICATION_DEPARTURE                     = "departureData";
+    public static final String EXTRA_NOTIFICATION_ARRIVAL                       = "arrivalData";
+    public static final String EXTRA_NOTIFICATION_SOLUTION                      = "solutionData";
+    public static final String EXTRA_NOTIFICATION_INDEXOUTOFJOURNEYTOBENOTIFIED = "indexoutofjourneytobenotifiedData";
+    public static final String EXTRA_NOTIFICATION_SHOULDPRIORITYBEHIGH          = "shouldprioritybehighData";
+    public static final String NOTIFICATION_ERROR_EVENT                         = "EVENT_NOTIFICATION_ERROR";
+    public static final String NOTIFICATION_ERROR_MESSAGE                       = "NOTIFICATION_ERROR_MESSAGE";
+    public static final String NOTIFICATION_ERROR_MESSAGE_TRAIN_NOT_FOUND       = "Impossibile settare la notifica. \nIl treno potrebbe aver cambiato numero od orario.";
+    public static final String NOTIFICATION_ERROR_MESSAGE_STATION_NOT_FOUND     = "Impossibile settare la notifica a causa di un problema con le stazioni di partenza o arrivo.";
 
     AnalyticsHelper analyticsHelper;
 
-    static BroadcastReceiver mReceiver = new ScreenOnReceiver();
+    BroadcastReceiver mReceiver;
 
     Gson gson = new GsonBuilder()
             .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
             .create();
 
-    public NotificationService() {
-        super("NotificationService");
-    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         analyticsHelper = AnalyticsHelper.getInstance(getBaseContext());
-        registerScreenOnReceiver(true, NotificationService.this);
+        mReceiver = new ScreenOnReceiver();
+        if (ProPreferences.isLiveNotificationEnabled(NotificationService.this)) {
+            registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
+        }
     }
 
     @Override
@@ -79,20 +87,17 @@ public class NotificationService extends IntentService {
         super.onDestroy();
     }
 
-    public static void registerScreenOnReceiver(boolean registerScreenOnIfPro, Context context) {
-        if (registerScreenOnIfPro && ProPreferences.isLiveNotificationEnabled(context)) {
-            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-            context.registerReceiver(mReceiver, filter);
-        }
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
-    public static void startActionStartNotification(Context context, PreferredStation journeyDepartureStation, PreferredStation journeyArrivalStation, Journey.Solution sol, Integer indexOfJourneyToBeNotified, Boolean shouldPriorityBeHigh, Boolean registerScreenOnIfPro) {
+    public void startActionStartNotification(PreferredStation journeyDepartureStation, PreferredStation journeyArrivalStation, Journey.Solution sol, Integer indexOfJourneyToBeNotified, Boolean shouldPriorityBeHigh) {
         String  trainId;
         String  journeyDepartureStationId = journeyDepartureStation.getStationShortId();
         String  journeyArrivalStationId   = journeyArrivalStation.getStationShortId();
         boolean justUpdate                = indexOfJourneyToBeNotified != null;
-
-        registerScreenOnReceiver(registerScreenOnIfPro, context);
 
         if (sol.hasChanges()) {
             if (indexOfJourneyToBeNotified == null) {
@@ -114,24 +119,23 @@ public class NotificationService extends IntentService {
 
                 getData(journeyDepartureStationId,
                         journeyArrivalStationId,
-                        trainId, context, justUpdate, shouldPriorityBeHigh);
-
+                        trainId, this, justUpdate, shouldPriorityBeHigh);
             } catch (Exception e) {
                 FirebaseCrash.report(new Exception("Requested notification and Station was not found. SOLUTION IS " + sol.toString() + " AND REQUESTED STATIONSs ARE " + sol.getChangesList().get(indexOfJourneyToBeNotified).getDepartureStationName() + " " + sol.getChangesList().get(indexOfJourneyToBeNotified).getArrivalStationName()));
                 Intent notificationErrorIntent = new Intent(NOTIFICATION_ERROR_EVENT);
                 notificationErrorIntent.putExtra(NOTIFICATION_ERROR_MESSAGE, NOTIFICATION_ERROR_MESSAGE_STATION_NOT_FOUND);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(notificationErrorIntent);
+                LocalBroadcastManager.getInstance(this.getApplicationContext()).sendBroadcast(notificationErrorIntent);
             }
         } else {
             trainId = sol.getTrainId();
 
             getData(journeyDepartureStationId,
                     journeyArrivalStationId,
-                    trainId, context, justUpdate, shouldPriorityBeHigh);
+                    trainId, getApplicationContext(), justUpdate, shouldPriorityBeHigh);
         }
     }
 
-    private static void getData(String journeyDepartureStationId, String journeyArrivalStationId, String trainId, Context context, boolean justUpdate, boolean shouldPriorityBeHigh) {
+    private void getData(String journeyDepartureStationId, String journeyArrivalStationId, String trainId, Context context, boolean justUpdate, boolean shouldPriorityBeHigh) {
         Log.d("getData:", journeyDepartureStationId, journeyArrivalStationId, trainId, justUpdate, shouldPriorityBeHigh);
         Intent  notificationErrorIntent           = new Intent(NOTIFICATION_ERROR_EVENT);
         boolean isPro                             = ProPreferences.isPro(context);
@@ -197,23 +201,32 @@ public class NotificationService extends IntentService {
                 });
     }
 
-    private static void cancelNotification(Context context) {
+    private void cancelNotification(Context context) {
         Intent i = new Intent(context, NotificationService.class);
         i.setAction(ACTION_STOP_NOTIFICATION);
         context.startService(i);
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             final String action = intent.getAction();
             Log.d(action);
             if (ACTION_START_NOTIFICATION.equals(action)) {
+                PreferredStation departureStation              = gson.fromJson(intent.getStringExtra(EXTRA_NOTIFICATION_DEPARTURE), PreferredStation.class);
+                PreferredStation arrivalStation                = gson.fromJson(intent.getStringExtra(EXTRA_NOTIFICATION_ARRIVAL), PreferredStation.class);
+                Journey.Solution solution                      = gson.fromJson(intent.getStringExtra(EXTRA_NOTIFICATION_SOLUTION), Journey.Solution.class);
+                Integer          indexoutofjourneytobenotified = intent.getIntExtra(EXTRA_NOTIFICATION_INDEXOUTOFJOURNEYTOBENOTIFIED, -1);
+
+                indexoutofjourneytobenotified = indexoutofjourneytobenotified == -1 ? null : indexoutofjourneytobenotified;
+
+                startActionStartNotification(departureStation, arrivalStation, solution, indexoutofjourneytobenotified, true);
+
             } else if (ACTION_STOP_NOTIFICATION.equals(action)) {
                 analyticsHelper.logScreenEvent(SCREEN_NOTIFICATION, ACTION_REMOVE_NOTIFICATION);
-//                unregisterReceiver(mReceiver);
                 NotificationPreferences.removeNotificationData(getBaseContext());
                 TrainNotification.cancel(this);
+                this.stopSelf();
             } else if (ACTION_UPDATE_NOTIFICATION.equals(action)) {
                 analyticsHelper.logScreenEvent(SCREEN_NOTIFICATION, ACTION_REFRESH_NOTIFICAITON);
                 if (intent.getStringExtra(EXTRA_NOTIFICATION_DATA) != null) {
@@ -225,10 +238,9 @@ public class NotificationService extends IntentService {
                     Journey.Solution s = gson.fromJson(NotificationPreferences.getNotificationSolutionString(getBaseContext()), Journey.Solution.class);
                     if (s != null) {
                         if (s.hasChanges()) {
-                            startActionStartNotification(getApplicationContext(),
-                                    new PreferredStation(s.getDepartureStationShortId(), s.getDepartureStationId(), s.getDepartureStationName(), s.getDepartureStationName()),
+                            startActionStartNotification(new PreferredStation(s.getDepartureStationShortId(), s.getDepartureStationId(), s.getDepartureStationName(), s.getDepartureStationName()),
                                     new PreferredStation(s.getArrivalStationShortId(), s.getArrivalStationId(), s.getArrivalStationName(), s.getArrivalStationName()),
-                                    s, null, false, false);
+                                    s, null, false);
                         } else {
                             getData(s.getDepartureStationShortId(),
                                     s.getArrivalStationShortId(),
@@ -238,5 +250,6 @@ public class NotificationService extends IntentService {
                 }
             }
         }
+        return START_STICKY;
     }
 }

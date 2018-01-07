@@ -49,6 +49,10 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static butterknife.ButterKnife.apply;
+import static com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService.ACTION_START_NOTIFICATION;
+import static com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService.EXTRA_NOTIFICATION_ARRIVAL;
+import static com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService.EXTRA_NOTIFICATION_DEPARTURE;
+import static com.jaus.albertogiunta.justintrain_oraritreni.notification.NotificationService.EXTRA_NOTIFICATION_SOLUTION;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.GONE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.VISIBLE;
 import static com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils.getTimeDifferenceColor;
@@ -148,15 +152,16 @@ public class FavouriteSolutionsItem extends AbstractFlexibleItem<FavouriteSoluti
                 notificationIV.setOnClickListener(v -> {
                     analyticsHelper.logScreenEvent(SCREEN_FAVOURITE_JOURNEYS, ACTION_CLICK_ON_FAV_SOLUTION_NOTIF);
                     NotificationPreferences.setNotificationData(context, preferredJourney, solution);
-                    NotificationService.startActionStartNotification(context,
-                            departureStation,
-                            arrivalStation,
-                            solution,
-                            null, true, true);
+
+                    Intent newNotif = new Intent(context, NotificationService.class);
+                    newNotif.putExtra(EXTRA_NOTIFICATION_DEPARTURE, gson.toJson(departureStation));
+                    newNotif.putExtra(EXTRA_NOTIFICATION_ARRIVAL, gson.toJson(arrivalStation));
+                    newNotif.putExtra(EXTRA_NOTIFICATION_SOLUTION, gson.toJson(solution));
+                    newNotif.setAction(ACTION_START_NOTIFICATION);
+                    context.startService(newNotif);
+
                     AnimationUtils.animOnPress(v, AnimationUtils.ANIM_TYPE.MEDIUM);
                 });
-
-//                AnimationUtils.onCompare(notificationIV);
 
                 if (ProPreferences.isInstantDelayEnabled(context) &&
                         DateTime.now().toLocalTime().isBefore(solution.getDepartureTime().toLocalTime())) {
