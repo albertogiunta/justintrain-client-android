@@ -49,7 +49,7 @@ public class TrainNotification {
      * this type, with the given parameters.
      */
 
-    static void notify(final Context context, TrainHeader trainHeader, boolean hasVibration, boolean shouldPriorityBeHigh, boolean isCompatNotificationEnabled) {
+    static Notification notify(final Context context, TrainHeader trainHeader, boolean hasVibration, boolean shouldPriorityBeHigh, boolean isCompatNotificationEnabled) {
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
@@ -118,7 +118,8 @@ public class TrainNotification {
             builder.setVibrate(new long[]{-1});
         }
 
-        notify(context, builder.build());
+//        notify(context, builder.build());
+        return builder.build();
     }
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)

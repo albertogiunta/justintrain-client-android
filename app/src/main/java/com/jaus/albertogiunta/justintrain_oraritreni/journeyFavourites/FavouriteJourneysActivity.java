@@ -59,6 +59,7 @@ import com.jaus.albertogiunta.justintrain_oraritreni.utils.Ads;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.AnimationUtils;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.HideShowScrollListener;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.components.ViewsUtils;
+import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.CONST_VERSION_TAG;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.constants.ENUM_SNACKBAR_ACTIONS;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.AnalyticsHelper;
 import com.jaus.albertogiunta.justintrain_oraritreni.utils.helpers.CustomIABHelper;
@@ -233,6 +234,8 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
         }
 
         AsyncTask task = new LoadCursorTask(this).execute();
+
+        startService(new Intent(this, NotificationService.class));
     }
 
     @Override
@@ -531,9 +534,9 @@ public class FavouriteJourneysActivity extends AppCompatActivity implements Favo
     }
 
     Handler handler = new Handler(message -> {
-//        if (SettingsPreferences.getPreviouslySavedVersionCode(getViewContext()) < CONST_VERSION_TAG.V100) {
-        AboutPageUtils.showChangelog(this);
-//        }
+        if (SettingsPreferences.getPreviouslySavedVersionCode(getViewContext()) < CONST_VERSION_TAG.V125) {
+            AboutPageUtils.showChangelog(this);
+        }
         return false;
     });
 

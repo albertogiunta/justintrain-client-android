@@ -54,6 +54,7 @@ public class NotificationService extends Service {
     public static final String NOTIFICATION_ERROR_MESSAGE                       = "NOTIFICATION_ERROR_MESSAGE";
     public static final String NOTIFICATION_ERROR_MESSAGE_TRAIN_NOT_FOUND       = "Impossibile settare la notifica. \nIl treno potrebbe aver cambiato numero od orario.";
     public static final String NOTIFICATION_ERROR_MESSAGE_STATION_NOT_FOUND     = "Impossibile settare la notifica a causa di un problema con le stazioni di partenza o arrivo.";
+    public static final String NOTIFICATION_ERROR_MESSAGE_TRAIN_ARRIVED_TO_DEST = "Il treno è già arrivato alla destinazione da te selezionata";
 
     AnalyticsHelper analyticsHelper;
 
@@ -76,6 +77,7 @@ public class NotificationService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.d("onDestroy: DESTROYED SERVICE, UNSUBBED FROM RECEIVER");
         try {
             if (mReceiver != null) {
                 unregisterReceiver(mReceiver);
@@ -148,7 +150,7 @@ public class NotificationService extends Service {
                 .subscribe(trainHeader -> {
                     if (justUpdate) {
                         Log.d("onNext: just updating for a specific train from train details screen");
-                        TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
+                        startForeground(1337, TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled));
                         return;
                     }
                     if (trainHeader.getJourneyArrivalStationVisited()) {
@@ -174,9 +176,11 @@ public class NotificationService extends Service {
                                     } else {
                                         Log.d("onNext: displaying the last train of the solution (which has arrived)");
                                         if (isAutoRemovingNotificationEnabled) {
+                                            notificationErrorIntent.putExtra(NOTIFICATION_ERROR_MESSAGE, NOTIFICATION_ERROR_MESSAGE_TRAIN_ARRIVED_TO_DEST);
+                                            LocalBroadcastManager.getInstance(context).sendBroadcast(notificationErrorIntent);
                                             cancelNotification(context);
                                         } else {
-                                            TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
+                                            startForeground(1337, TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled));
                                         }
                                     }
                                 }
@@ -184,14 +188,16 @@ public class NotificationService extends Service {
                         } else {
                             Log.d("onNext: displaying a single train solution which has arrived");
                             if (isAutoRemovingNotificationEnabled) {
+                                notificationErrorIntent.putExtra(NOTIFICATION_ERROR_MESSAGE, NOTIFICATION_ERROR_MESSAGE_TRAIN_ARRIVED_TO_DEST);
+                                LocalBroadcastManager.getInstance(context).sendBroadcast(notificationErrorIntent);
                                 cancelNotification(context);
                             } else {
-                                TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
+                                startForeground(1337, TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled));
                             }
                         }
                     } else {
                         Log.d("onNext: displaying a train of a solution which hasn't arrived yet");
-                        TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled);
+                        startForeground(1337, TrainNotification.notify(context, trainHeader, true, shouldPriorityBeHigh, isCompactNotificationEnabled));
                     }
                 }, throwable -> {
                     Log.d(throwable.getMessage());
